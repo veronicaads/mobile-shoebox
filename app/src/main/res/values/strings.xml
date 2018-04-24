@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">ShoeBox</string>
+    <string name="title_home">Home</string>
+    <string name="title_order">Order Service</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_help">Help</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_order">OrderActivity</string>
+    <string-array name="listcabang">
+        <item>UMN</item>
+        <item>Mercubuana</item>
+        <item>Atma Jaya</item>
+        <item>Pertamina</item>
+    </string-array>
+    <string-array name="listservice">
+        <item>Reclean</item>
+        <item>Repaint</item>
+        <item>Repair</item>
+        <item>Repair dan Repaint</item>
+    </string-array>
+    <string-array name="listreclean">
+        <item>Deep Clean (50000) </item>
+        <item>Unyellowing (20000)</item>
+    </string-array>
+    <string-array name="listrepair">
+        <item>Ordinary Sizing (10000) </item>
+        <item>Full Sizing (15000)</item>
+        <item>Ordinary Sewing (30000)</item>
+        <item>Full Sewing (30000)</item>
+        <item>Remove Out Sol (100000)</item>
+        <item>Leather Patch (30000)</item>
+        <item>Remove in Sol (20000)</item>
+        <item>LeatherPressing (50000)</item>
+    </string-array>
+    <string-array name="listrepaint">
+        <item>Full Repaint : Dress Shoes (120000)</item>
+        <item>Full Repaint : Casual Shoes (120000)</item>
+        <item>Workshoes (120000) </item>
+        <item>Dance Shoes (250000) </item>
+        <item>Boots (150000) </item>
+        <item>Sandals (50000)</item>
+        <item>Slippers (80000) </item>
+        <item>Running Shoes (250000)</item>
+        <item>Basketball Shoes (250000)</item>
+    </string-array>
+    <string name="title_activity_help2">Help2Activity</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+    <string name="title_activity_bukti_upload">Upload Bukti Transfer</string>
+    <string name="title_activity_detail">Detail Order</string>
+    <string name="title_activity_list_order_admin">ListOrderAdminActivity</string>
+
+</resources>
