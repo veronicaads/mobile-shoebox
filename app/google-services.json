@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "805361436262",
+    "firebase_url": "https://mobile-shoebox.firebaseio.com",
+    "project_id": "mobile-shoebox",
+    "storage_bucket": "mobile-shoebox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805361436262:android:1356fcdf39f7c38a",
+        "android_client_info": {
+          "package_name": "id.ac.umn.shoebox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805361436262-m3a29f4gr9dad9s8tshvs2fvp09aq9vp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.umn.shoebox",
+            "certificate_hash": "4edf46285085d032619c62e941a262a70dc1dd3e"
+          }
+        },
+        {
+          "client_id": "805361436262-g34rsbj29rktv0tc4sn7ggfqpev53vtb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzEetWWNGGG4PpU6F991tPNE0zfBgXs_Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805361436262-g34rsbj29rktv0tc4sn7ggfqpev53vtb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
