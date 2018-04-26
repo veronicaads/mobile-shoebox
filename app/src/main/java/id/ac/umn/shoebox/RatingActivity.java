@@ -1,6 +1,7 @@
 package id.ac.umn.shoebox;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -65,7 +66,7 @@ public class RatingActivity extends AppCompatActivity {
                 Toast.makeText(RatingActivity.this,
                         String.valueOf(ratingBar.getRating()),
                         Toast.LENGTH_SHORT).show();
-
+                startActivity(new Intent(RatingActivity.this, UtamaActivity.class));
             }
 
         });

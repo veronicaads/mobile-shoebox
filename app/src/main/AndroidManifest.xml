@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.ac.umn.shoebox">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-feature android:name="android.hardware.camera2" android:required="true"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,18 +22,6 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_home" />
-        <activity
-            android:name=".OrderActivity"
-            android:label="@string/title_order" />
-        <activity
-            android:name=".Help2Activity"
-            android:label="@string/title_help" />
-        <activity
-            android:name=".NotificationActivity"
-            android:label="@string/title_notifications" />
         <activity
             android:name=".BuktiUploadActivity"
             android:label="@string/title_activity_bukti_upload" />
