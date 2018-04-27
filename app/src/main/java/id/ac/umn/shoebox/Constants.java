@@ -4,7 +4,7 @@ package id.ac.umn.shoebox;
  * Created by Stefanus K on 4/26/2018.
  */
 
-public class Constants {
+public class  Constants {
 
     public static final String FIREBASE_URL = "https://mobile-shoebox.firebaseio.com/";
     public static final String FIREBASE_LOCATION_USERS = "users";

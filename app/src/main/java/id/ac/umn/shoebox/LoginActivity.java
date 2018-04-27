@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,9 +31,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.ServerValue;
 import id.ac.umn.shoebox.Constants;
-//import com.tutorial.authentication.utils.SharedPrefManager;
+import id.ac.umn.shoebox.SharedPrefManager;
 import id.ac.umn.shoebox.Utils;
-//import com.tutorial.authentication.model.User;
+import id.ac.umn.shoebox.User;
 import com.firebase.client.Firebase;
 
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "LoginActivity";
     private String idToken;
-    //public SharedPrefManager sharedPrefManager;
+    public SharedPrefManager sharedPrefManager;
     private final Context mContext = this;
 
     private String name, email;
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
         mSignInButton.setOnClickListener(this); //waktu di click supaya user pilih akun
-        //configureSignIn();
+        configureSignIn();
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
@@ -76,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 //jika user sign in , maka panggil method untuk save detail user ke Firebase
                 if (user != null){
+                    Intent i = new Intent(LoginActivity.this,SignUpActivity.class);
                     createUserInFireBaseHelper();
                     Log.d(TAG,"onAuthStateChange:signed_in" + user.getUid());
                 }
@@ -101,11 +103,157 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void createUserInFireBaseHelper(){
         final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
         final Firebase userlocation = new Firebase (Constants.FIREBASE_URL_USERS).child(encodeEmail);
+
+        //add listener ke lokasi diatas
+        userlocation.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener(){
+            @Override
+            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null){
+                    //ambil timestamp dari server masukin ke hashmap
+                    HashMap<String,Object> timestampJoined = new HashMap<>();
+                    timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP,ServerValue.TIMESTAMP);
+
+                    //Insert ke firebase database
+                    User newUser = new User(name,photo,encodeEmail,timestampJoined);
+                    userlocation.setValue(newUser);
+                    Toast.makeText(LoginActivity.this,"Account created", Toast.LENGTH_SHORT).show();
+
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                if (firebaseError.getCode() == FirebaseError.EMAIL_TAKEN){
+
+                }
+                else {
+                    Toast.makeText(LoginActivity.this,firebaseError.getDetails(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void configureSignIn(){
+    // Configure sign-in to request the user's basic profile like name and email
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(LoginActivity.this.getResources().getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
+        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, options)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    //user pilih account google untuk signin
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    // Method yang handle saat button sign in di click dan masukin ke sharedpreference untuk selanjutnya
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, save Token and a state then authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+
+                idToken = account.getIdToken();
+
+                name = account.getDisplayName();
+                email = account.getEmail();
+                photoUri = account.getPhotoUrl();
+                photo = photoUri.toString();
+
+                // Save Data to SharedPreference
+                sharedPrefManager = new SharedPrefManager(mContext);
+                sharedPrefManager.saveIsLoggedIn(mContext, true);
+
+                sharedPrefManager.saveEmail(mContext, email);
+                sharedPrefManager.saveName(mContext, name);
+                sharedPrefManager.savePhoto(mContext, photo);
+
+                sharedPrefManager.saveToken(mContext, idToken);
+                //sharedPrefManager.saveIsLoggedIn(mContext, true);
+
+                AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+                firebaseAuthWithGoogle(credential);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                Log.e(TAG, "Login Unsuccessful. ");
+                Toast.makeText(this, "Login Unsuccessful", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+    }
+
+    //Keamanan layer 2 : firebase auntheticate
+    private void firebaseAuthWithGoogle(AuthCredential credential){
+        //showProgressDialog();
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential" + task.getException().getMessage());
+                            task.getException().printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }else {
+                            createUserInFireBaseHelper();
+                            Toast.makeText(LoginActivity.this, "Login successful",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                        //hideProgressDialog();
+                    }
+                });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mAuthListener != null){
+            FirebaseAuth.getInstance().signOut();
+        }
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null){
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
     @Override
     public void onClick(View view) {
+        Utils utils = new Utils(this);
+        int id = view.getId();
 
+        if (id == R.id.sign_in_button){
+            if (utils.isNetworkAvailable()){
+                signIn();
+            }else {
+                Toast.makeText(LoginActivity.this, "Oops! no internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
