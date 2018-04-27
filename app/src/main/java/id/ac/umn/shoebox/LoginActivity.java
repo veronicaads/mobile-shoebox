@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private String idToken;
     public SharedPrefManager sharedPrefManager;
     private final Context mContext = this;
+    //public String getStatusCode
 
     private String name, email;
     private String photo;
@@ -60,11 +61,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Firebase.setAndroidContext(this);
 
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
         mSignInButton.setOnClickListener(this); //waktu di click supaya user pilih akun
         configureSignIn();
+
+
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
@@ -165,6 +169,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            //Toast.makeText(this,requestCode,Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this,result.toString(),Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "handleSignInResult:"  + result.getStatus().toString() + result.isSuccess());
             if (result.isSuccess()) {
                 // Google Sign In was successful, save Token and a state then authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();

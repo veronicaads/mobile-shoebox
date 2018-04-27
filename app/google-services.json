@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "805361436262-m9a3cd8hfrnmv9ea1fkhi92loup4f66g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.umn.shoebox",
+            "certificate_hash": "f57118a13b66bc56b90f2b891af8c8c23fdef089"
+          }
+        },
+        {
+          "client_id": "805361436262-rkosilqrektfgv47cgrf6aq39enhjq4u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.umn.shoebox",
+            "certificate_hash": "ae732329578f0d7972813163c02c0cbf6851e68e"
+          }
+        },
+        {
           "client_id": "805361436262-m3a29f4gr9dad9s8tshvs2fvp09aq9vp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
