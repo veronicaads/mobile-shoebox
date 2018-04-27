@@ -69,7 +69,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
             finish();
         }
         else if(id==R.id.navigation_edit_profile){
-            Intent intent = new Intent(UtamaActivity.this, LoginActivity.class);
+            Intent intent = new Intent(UtamaActivity.this, SignUpActivity.class);
             startActivity(intent);
             finish();
         }

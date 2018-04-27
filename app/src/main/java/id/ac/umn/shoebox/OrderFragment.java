@@ -3,6 +3,8 @@ package id.ac.umn.shoebox;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -21,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -77,30 +82,34 @@ public class OrderFragment extends Fragment {
 
 
     }
-
+    ImageView sepatu;
+    private static final int PICK_IMAGE = 100;
+    private static final int TAKE_PHOTOS = 50;
+    Uri imageUri;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
+
         Button camera = (Button) view.findViewById(R.id.camerabutton);
-        ImageView imageView = (ImageView) view.findViewById(R.id.image);
+        sepatu = view.findViewById(R.id.pict_sepatu);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, TAKE_PHOTOS);
             }
         });
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE);
             }
         });
+
+
         Button order_but = (Button) view.findViewById(R.id.order_btn);
         order_but.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,20 +117,35 @@ public class OrderFragment extends Fragment {
                 startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
+        final EditText merek = view.findViewById(R.id.merek_edit);
+        final EditText comment = view.findViewById(R.id.keterangan_edit);
+
+        Button cancelBut = view.findViewById(R.id.back_btn);
+        cancelBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                merek.setText("");
+                comment.setText("");
+                sepatu.setImageResource(R.drawable.ic_image_black_24dp);
+            }
+        });
         return view;
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
+                imageUri=data.getData();
+                sepatu.setImageURI(imageUri);
+        }
+        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
+            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+            sepatu.setImageBitmap(bitmap);
         }
     }
+
 
     @Override
     public void onStart() {
@@ -190,16 +214,6 @@ public class OrderFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
