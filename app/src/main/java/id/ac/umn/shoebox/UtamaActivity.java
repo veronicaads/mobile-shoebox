@@ -15,9 +15,43 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-public class UtamaActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, OrderFragment.OnFragmentInteractionListener, NotifFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener{
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.widget.DrawerLayout;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.support.design.widget.NavigationView;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
+
+
+public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, HomeFragment.OnFragmentInteractionListener, OrderFragment.OnFragmentInteractionListener, NotifFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener{
+
+    Context mContext = this;
+
+    private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mAuth;
+
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -25,8 +59,7 @@ public class UtamaActivity extends AppCompatActivity implements HomeFragment.OnF
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==R.id.navigation_logout){
-            Intent intent = new Intent(UtamaActivity.this, LoginActivity.class);
-            startActivity(intent);
+            signOut();
             Toast.makeText(getApplicationContext(),"Logout Berhasil",Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -44,6 +77,9 @@ public class UtamaActivity extends AppCompatActivity implements HomeFragment.OnF
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -55,6 +91,8 @@ public class UtamaActivity extends AppCompatActivity implements HomeFragment.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utama);
+
+        mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
         setSupportActionBar(toolbar);
@@ -88,6 +126,39 @@ public class UtamaActivity extends AppCompatActivity implements HomeFragment.OnF
             }
         });
 
+        configureSignIn();
+
         }
+
+    public void configureSignIn(){
+// Configure sign-in to request the user's basic profile like name and email
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
+        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, options)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    private void signOut(){
+        new SharedPrefManager(mContext).clear();
+        mAuth.signOut();
+
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        Intent intent = new Intent(UtamaActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+    }
+
+
     }
 
