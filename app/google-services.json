@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "805361436262-udkicimutlt75bmtani1re6mtrli12f3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.umn.shoebox",
+            "certificate_hash": "81ba7e37604c12ef942f358603ff2893b2820454"
+          }
+        },
+        {
           "client_id": "805361436262-m9a3cd8hfrnmv9ea1fkhi92loup4f66g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
