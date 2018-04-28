@@ -1,6 +1,7 @@
 package id.ac.umn.shoebox;
 
 
+        import android.content.Intent;
         import android.os.Bundle;
         import android.app.Activity;
         import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,14 @@ public class DetailOrderActivity extends AppCompatActivity {
                 popup.show();//showing popup menu
             }
         });//closing the setOnClickListener method
+
+        Button back_button = findViewById(R.id.back_btn);
+        back_button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DetailOrderActivity.this, ListOrderActivity.class));
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
