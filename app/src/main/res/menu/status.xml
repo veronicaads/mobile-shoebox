@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/diambil"
-        android:title="Telah diambil dari Lemari" />
+        android:title="Lunas Telah diambil dari Lemari" />
     <item
         android:id="@+id/beradaditoko"
         android:title="Sepatu berada di showroom" />

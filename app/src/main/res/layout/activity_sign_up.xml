@@ -14,57 +14,80 @@
         android:src="@drawable/icon"
         android:layout_centerVertical="true"
         />
-
-    <TextView
-        android:layout_width="10dp"
-        android:layout_height="50dp" />
-
-    <EditText
-        android:drawableRight="@drawable/usericon"
-        android:background="@drawable/edittextbox"
+    <TableLayout
         android:layout_width="match_parent"
-        android:textColor="@color/black"
-        android:hint="Name"
-        android:paddingLeft="60dp"
-        android:layout_height="60dp"
-        />
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="50dp" />
 
-    <TextView
-        android:layout_width="10dp"
-        android:layout_height="10dp" />
+        <EditText
+            android:drawableRight="@drawable/usericon"
+            android:background="@drawable/edittextbox"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:hint="Name"
+            android:paddingLeft="60dp"
+            android:layout_height="60dp"
+            />
 
-    <EditText
-        android:drawableRight="@drawable/location"
-        android:background="@drawable/edittextbox"
-        android:layout_width="match_parent"
-        android:textColor="@color/black"
-        android:hint="Address"
-        android:paddingLeft="60dp"
-        android:layout_height="60dp"/>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
 
-    <TextView
-        android:layout_width="10dp"
-        android:layout_height="10dp" />
+        <EditText
+            android:drawableRight="@drawable/location"
+            android:background="@drawable/edittextbox"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:hint="Address"
+            android:paddingLeft="60dp"
+            android:layout_height="60dp"/>
 
-    <EditText
-        android:drawableRight="@drawable/hp"
-        android:background="@drawable/edittextbox"
-        android:layout_width="match_parent"
-        android:textColor="@color/black"
-        android:hint="Mobile Number"
-        android:paddingLeft="60dp"
-        android:layout_height="60dp"/>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
 
-    <TextView
-        android:layout_width="10dp"
-        android:layout_height="10dp" />
+        <EditText
+            android:drawableRight="@drawable/hp"
+            android:background="@drawable/edittextbox"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:hint="Mobile Number"
+            android:paddingLeft="60dp"
+            android:layout_height="60dp"/>
 
-    <Button
-        android:id="@+id/edit_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/purple"
-        android:textColor="@color/white"
-        android:text="Confirm"/>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+        <TableRow>
+            <Button
+                android:id="@+id/edit_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/purple"
+                android:textColor="@color/white"
+                android:text="Confirm"
+                android:paddingRight="1dp"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/purple"
+                android:paddingLeft="1dp"
+                android:text="Back"
+                android:textColor="@color/white" />
+        </TableRow>
+    </TableLayout>
+
+
+
 
 </LinearLayout>

@@ -63,11 +63,6 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
             Toast.makeText(getApplicationContext(),"Logout Berhasil",Toast.LENGTH_SHORT).show();
             finish();
         }
-        else if(id==R.id.navigation_bukti_trans){
-            Intent intent = new Intent(UtamaActivity.this, BuktiUploadActivity.class);
-            startActivity(intent);
-            finish();
-        }
         else if(id==R.id.navigation_edit_profile){
             Intent intent = new Intent(UtamaActivity.this, SignUpActivity.class);
             startActivity(intent);

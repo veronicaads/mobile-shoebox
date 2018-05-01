@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_bukti_trans"
-        android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Upload Bukti Transfer" />
-    <item
         android:id="@+id/navigation_edit_profile"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="Edit Profile" />

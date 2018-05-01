@@ -36,7 +36,7 @@
         <activity
             android:name=".DetailOrderActivity"
             android:label="Detail Order" />
-        <activity android:name=".UtamaActivity"></activity>
+        <activity android:name=".UtamaActivity"/>
 
         <!--Firebase instance ID service untuk mendapatkan token-->
         <service
