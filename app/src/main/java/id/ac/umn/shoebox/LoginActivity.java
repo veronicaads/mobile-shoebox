@@ -61,6 +61,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private String photo;
     private Uri photoUri;
     private SignInButton mSignInButton;
+    private String pNumber;
+    private String address;
 
     private FirebaseDatabase mDatabase;
     private String privilege_flag;
@@ -121,6 +123,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         final Firebase userlocation = new Firebase (Constants.FIREBASE_URL_USERS).child(encodeEmail);
         final String pNumber ="null";
         final String privilege = "user";
+        final String address = "null";
 
         //add listener ke lokasi diatas
         userlocation.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener(){
@@ -132,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP,ServerValue.TIMESTAMP);
 
                     //Insert ke firebase database
-                    User newUser = new User(name,photo,encodeEmail,pNumber,privilege,timestampJoined);
+                    User newUser = new User(name,photo,encodeEmail,pNumber,address,privilege,timestampJoined);
                     userlocation.setValue(newUser);
                     Toast.makeText(LoginActivity.this,"Account created", Toast.LENGTH_SHORT).show();
 
@@ -195,6 +198,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 photoUri = account.getPhotoUrl();
                 photo = photoUri.toString();
 
+
+
+
                 // Save Data to SharedPreference
                 sharedPrefManager = new SharedPrefManager(mContext);
                 sharedPrefManager.saveIsLoggedIn(mContext, true);
@@ -202,6 +208,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 sharedPrefManager.saveEmail(mContext, email);
                 sharedPrefManager.saveName(mContext, name);
                 sharedPrefManager.savePhoto(mContext, photo);
+
 
                 sharedPrefManager.saveToken(mContext, idToken);
                 //sharedPrefManager.saveIsLoggedIn(mContext, true);
@@ -240,9 +247,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                                     User getuserdata = dataSnapshot.getValue(User.class);
                                     privilege_flag = getuserdata.getPrivilege();
+                                    pNumber = getuserdata.getpNumber();
+                                    sharedPrefManager.savepNumber(mContext,pNumber);
                                     Log.d(TAG,"MESSAGE" +privilege_flag);
                                     if (privilege_flag.toString().equals("admin")){
                                         Intent intent = new Intent(LoginActivity.this,ListOrderActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else if (privilege_flag.toString().equals("user") && pNumber.toString().equals("null")){
+                                        Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                         finish();

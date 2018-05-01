@@ -29,6 +29,8 @@
             android:hint="Name"
             android:paddingLeft="60dp"
             android:layout_height="60dp"
+            android:id="@+id/nama"
+            android:text=""
             />
 
         <TextView
@@ -42,7 +44,8 @@
             android:textColor="@color/black"
             android:hint="Address"
             android:paddingLeft="60dp"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:id="@+id/address"/>
 
         <TextView
             android:layout_width="10dp"
@@ -55,7 +58,8 @@
             android:textColor="@color/black"
             android:hint="Mobile Number"
             android:paddingLeft="60dp"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:id="@+id/pNumber"/>
 
         <TextView
             android:layout_width="10dp"

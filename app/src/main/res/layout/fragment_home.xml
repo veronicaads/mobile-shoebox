@@ -6,10 +6,31 @@
 <ScrollView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/purple"
+            >
+            <com.github.siyamed.shapeimageview.CircularImageView
+                android:layout_marginTop="30dp"
+                android:layout_width="150dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="150dp"
+                android:id="@+id/photo"
+                android:background="@color/purple"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:layout_centerHorizontal="true" />
+        </LinearLayout>
+
+
+
 
         <TextView
             android:id="@+id/nama_user"
@@ -21,6 +42,7 @@
             android:background="@color/purple"
             android:textSize="30sp" />
 
+
         <TextView
             android:id="@+id/email_user"
             android:layout_width="match_parent"
@@ -29,16 +51,16 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:background="@color/purple"
-            android:textSize="20sp"/>
+            android:textSize="23sp"/>
 
         <TextView
             android:id="@+id/notlp_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="08xxxxxxxxxx"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:background="@color/purple"/>
 
         <TextView

@@ -32,6 +32,9 @@ dependencies {
     api 'com.firebase:firebase-client-android:2.5.0'
     api 'com.google.firebase:firebase-database:15.0.0'
     api 'com.google.firebase:firebase-auth:15.0.0'
+    implementation group:'com.squareup.picasso', name:'picasso', version:'2.5.0'
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
