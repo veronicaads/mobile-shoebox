@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -126,6 +127,12 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         configureSignIn();
 
         }
+
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+        AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(UtamaActivity.this);
+    }*/
 
     public void configureSignIn(){
 // Configure sign-in to request the user's basic profile like name and email
