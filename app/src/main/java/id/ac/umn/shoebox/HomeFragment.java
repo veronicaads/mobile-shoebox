@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
         ListView listView = (ListView) view.findViewById(R.id.list_order);
-        String[] array = new String[] {"Tidak ada order"};
+        String[] array = new String[] {"U001","U002"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

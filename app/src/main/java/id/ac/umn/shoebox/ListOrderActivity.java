@@ -48,7 +48,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id==R.id.edit_button){
+        if (id==R.id.navigation_edit_profile){
             Intent intent=new Intent(ListOrderActivity.this, SignUpActivity.class);
             startActivity(intent);
             finish();
