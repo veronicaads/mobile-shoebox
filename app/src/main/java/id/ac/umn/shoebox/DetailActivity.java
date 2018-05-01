@@ -20,8 +20,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         TextView tv= (TextView)findViewById(R.id.text_view);
-        tv.setText(" Silahkan lakukan pembayaran melalui  \n bank CBA ke nomor rekening xxxxxxxx \n " +
-                "Setelah itu, silahkan upload bukti \n transfer  di menu yang telah tersedia");
+       // tv.setText(" Silahkan lakukan pembayaran melalui  \n bank CBA ke nomor rekening xxxxxxxx \n Setelah itu, silahkan upload bukti \n transfer  di menu yang telah tersedia");
         Button pembayaran = findViewById(R.id.bayar_btn);
         pembayaran.setOnClickListener(new View.OnClickListener() {
             @Override

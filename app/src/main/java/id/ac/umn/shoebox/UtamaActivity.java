@@ -1,14 +1,19 @@
 package id.ac.umn.shoebox;
 
+import android.*;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -88,8 +93,15 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utama);
 
+        VerifyPermission();
+        }
 
-
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+        AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(UtamaActivity.this);
+    }*/
+    public void Menu(){
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
@@ -126,14 +138,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
 
         configureSignIn();
 
-        }
-
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(UtamaActivity.this);
-    }*/
-
+    }
     public void configureSignIn(){
 // Configure sign-in to request the user's basic profile like name and email
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -146,6 +151,24 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, options)
                 .build();
         mGoogleApiClient.connect();
+    }
+    private static final int REQUEST_CODE = 1;
+
+    public void VerifyPermission(){
+        Log.d("MyTag", "Verify Permission");
+        String[] permission = {android.Manifest.permission.CAMERA};
+
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),permission[0])== PackageManager.PERMISSION_GRANTED){
+                Menu();
+        }
+        else {
+            ActivityCompat.requestPermissions(UtamaActivity.this, permission, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        VerifyPermission();
     }
 
     private void signOut(){

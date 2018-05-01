@@ -1,15 +1,24 @@
 package id.ac.umn.shoebox;
 
+import android.*;
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +28,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -85,21 +107,29 @@ public class OrderFragment extends Fragment {
     ImageView sepatu;
     private static final int PICK_IMAGE = 100;
     private static final int TAKE_PHOTOS = 50;
-    Uri imageUri;
+    Uri imageUri, cameraUri;
+    private StorageReference IStorage;
+    private ProgressDialog progressDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
+        IStorage = FirebaseStorage.getInstance().getReference();
 
         Button camera = (Button) view.findViewById(R.id.camerabutton);
         sepatu = view.findViewById(R.id.pict_sepatu);
+        progressDialog = new ProgressDialog(getActivity());
         camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, TAKE_PHOTOS);
-            }
-        });
+          @Override
+          public void onClick(View view) {
+              Intent camera = new Intent();
+              camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+             camera.putExtra(MediaStore.EXTRA_OUTPUT,cameraUri);
+
+              startActivityForResult(camera, TAKE_PHOTOS);
+          }
+      });
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,18 +161,54 @@ public class OrderFragment extends Fragment {
         });
         return view;
     }
-
+    String filename;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
-                imageUri=data.getData();
-                sepatu.setImageURI(imageUri);
+            progressDialog.setMessage("Uploading ....");
+            progressDialog.show();
+
+            imageUri=data.getData();
+            filename = imageUri.getPath();
+            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+            storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+                    Uri download = taskSnapshot.getDownloadUrl();
+                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                }
+            });
+            sepatu.setImageURI(imageUri);
         }
         if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
+            progressDialog.setMessage("Uploading ....");
+            progressDialog.show();
             Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+            //cameraUri= data.getData();
             sepatu.setImageBitmap(bitmap);
+            progressDialog.dismiss();
+            /*StorageReference storageReference = IStorage.child("image_shoes/"+cameraUri);
+            storageReference.putFile(cameraUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+                    Uri download = taskSnapshot.getDownloadUrl();
+                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                }
+            });*/
         }
     }
 

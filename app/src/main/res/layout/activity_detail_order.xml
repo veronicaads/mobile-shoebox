@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="id.ac.umn.shoebox.DetailOrderActivity">
+    <ImageView
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:id="@+id/sepatu"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:src="@drawable/shoes" />s
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <ImageView
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:id="@+id/sepatu"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:src="@drawable/shoes" />
+
 
         <TableLayout
             android:layout_width="match_parent"
@@ -152,12 +153,10 @@
                     android:layout_marginTop="10dp"/>
             </TableRow>
             <TableRow
-                android:paddingLeft="60dp"
-                android:paddingRight="40dp"
                 android:paddingTop="15dp">
                 <Button
                     android:id="@+id/status_btn"
-                    android:layout_width="0dp"
+                    android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Change Status"
@@ -167,7 +166,7 @@
                     />
                 <Button
                     android:id="@+id/back_btn"
-                    android:layout_width="0dp"
+                    android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Back"

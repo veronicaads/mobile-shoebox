@@ -1,5 +1,6 @@
 package id.ac.umn.shoebox;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -64,14 +65,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private FirebaseDatabase mDatabase;
     private String privilege_flag;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Firebase.setAndroidContext(this);
-
+        progressDialog = new ProgressDialog(this);
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
         mSignInButton.setOnClickListener(this); //waktu di click supaya user pilih akun
@@ -231,7 +232,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }else {
+                            progressDialog.setMessage("Login...");
+                            progressDialog.show();
                             createUserInFireBaseHelper();
+                            progressDialog.dismiss();
+                            progressDialog.setMessage("Login Coba...");
+                            progressDialog.show();
                             final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
                             mDatabase = FirebaseDatabase.getInstance();
                             final DatabaseReference reference = mDatabase.getReference("users").child(encodeEmail);
@@ -253,8 +259,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         startActivity(intent);
                                         finish();
                                     }
+                                    progressDialog.dismiss();
                                     Toast.makeText(LoginActivity.this, "Login successful",
                                             Toast.LENGTH_SHORT).show();
+
 
                                 }
                                 @Override
