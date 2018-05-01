@@ -1,7 +1,10 @@
 package id.ac.umn.shoebox;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,9 +15,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
 
+import id.ac.umn.shoebox.SharedPrefManager;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -32,8 +44,16 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView mFullNameTextView, mEmailTextView;
+    private String mUsername, mEmail;
 
     private OnFragmentInteractionListener mListener;
+
+    SharedPrefManager sharedPrefManager;
+    private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mAuth;
+
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,6 +84,22 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+        mFullNameTextView = getView().findViewById(R.id.nama_user);
+        mEmailTextView = getView().findViewById(R.id.email_user);
+        sharedPrefManager = new SharedPrefManager(getContext());
+        mUsername = sharedPrefManager.getName();
+        mEmail = sharedPrefManager.getUserEmail();
+        mFullNameTextView.setText(mUsername);
+        mEmailTextView.setText(mEmail);
 
     }
 
