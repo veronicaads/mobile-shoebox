@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
+
+
 
 import id.ac.umn.shoebox.SharedPrefManager;
 /**
@@ -44,14 +48,16 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView mFullNameTextView, mEmailTextView;
-    private String mUsername, mEmail;
+    private TextView mFullNameTextView, mEmailTextView,mPhoneNumberView;
+    private String mUsername, mEmail,mPhoneNumber;
+    //private CircleImageView mProfileImageView;
 
     private OnFragmentInteractionListener mListener;
 
     SharedPrefManager sharedPrefManager;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
+
 
 
 
@@ -84,8 +90,6 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
 
     @Override
@@ -95,11 +99,24 @@ public class HomeFragment extends Fragment {
 
         mFullNameTextView = getView().findViewById(R.id.nama_user);
         mEmailTextView = getView().findViewById(R.id.email_user);
+        mPhoneNumberView = getView().findViewById(R.id.notlp_user);
+        final com.github.siyamed.shapeimageview.CircularImageView photo = (com.github.siyamed.shapeimageview.CircularImageView) getView().findViewById(R.id.photo);
+        //mProfileImageView = (CircleImageView) getView().findViewById(R.id.photo);
         sharedPrefManager = new SharedPrefManager(getContext());
-        mUsername = sharedPrefManager.getName();
         mEmail = sharedPrefManager.getUserEmail();
+        mUsername = sharedPrefManager.getName();
+        mPhoneNumber = sharedPrefManager.getpNumber();
         mFullNameTextView.setText(mUsername);
         mEmailTextView.setText(mEmail);
+        mPhoneNumberView.setText(mPhoneNumber);
+        String uri = sharedPrefManager.getPhoto();
+        Uri mPhotoUri = Uri.parse(uri);
+
+        Picasso.with(getContext())
+                .load(mPhotoUri)
+                .placeholder(android.R.drawable.sym_def_app_icon)
+                .error(android.R.drawable.sym_def_app_icon)
+                .into(photo);
 
     }
 
@@ -108,6 +125,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home,container,false);
+
         ListView listView = (ListView) view.findViewById(R.id.list_order);
         String[] array = new String[] {"U001","U002"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);

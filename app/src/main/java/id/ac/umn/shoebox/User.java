@@ -5,7 +5,10 @@ package id.ac.umn.shoebox;
  */
 
 
+import com.google.firebase.database.Exclude;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public class User {
 
@@ -14,6 +17,7 @@ public class User {
     private String email;
     private String pNumber;
     private String privilege;
+    private String address;
     private HashMap<String,Object> timestampJoined;
 
     public User() {
@@ -25,14 +29,22 @@ public class User {
      *
      * @param timestampJoined
      */
-    public User(String mFullName, String mPhoneNo, String mEmail,String mPNumber,String mPrivilege , HashMap<String, Object> timestampJoined) {
+    public User(String mFullName, String mPhoneNo, String mEmail,String mPNumber,String mAddress,String mPrivilege , HashMap<String, Object> timestampJoined) {
         this.fullName = mFullName;
         this.photo = mPhoneNo;
         this.email = mEmail;
         this.pNumber = mPNumber;
+        this.address = mAddress;
         this.timestampJoined = timestampJoined;
         this.privilege = mPrivilege;
+    }
 
+
+
+
+    public void UpdateUser(String mAddress,String mPNumber){
+        this.address = mAddress;
+        this.pNumber = mPNumber;
     }
 
 
@@ -41,8 +53,10 @@ public class User {
     }
 
     public String getpNumber(){
-        return "null";
+        return pNumber;
     }
+
+    public String getAddress(){return address;}
 
     public String getFullName() {
         return fullName;

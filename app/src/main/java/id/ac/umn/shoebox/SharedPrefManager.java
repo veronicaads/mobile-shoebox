@@ -91,6 +91,19 @@ public class SharedPrefManager {
         editor.commit();
     }
 
+    public String getpNumber(){
+        sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        return sharedPreferences.getString("NUMBER", null);
+    }
+
+    public void savepNumber(Context context, String pNumber){
+        mContext = context;
+        sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("NUMBER", pNumber);
+        editor.commit();
+    }
+
     public String getPhoto(){
         sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         return sharedPreferences.getString("PHOTO", null);
