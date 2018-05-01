@@ -92,6 +92,8 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utama);
 
+
+
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);

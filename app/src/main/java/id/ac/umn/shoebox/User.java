@@ -12,6 +12,8 @@ public class User {
     private String fullName;
     private String photo;
     private String email;
+    private String pNumber;
+    private String privilege;
     private HashMap<String,Object> timestampJoined;
 
     public User() {
@@ -23,13 +25,24 @@ public class User {
      *
      * @param timestampJoined
      */
-    public User(String mFullName, String mPhoneNo, String mEmail, HashMap<String, Object> timestampJoined) {
+    public User(String mFullName, String mPhoneNo, String mEmail,String mPNumber,String mPrivilege , HashMap<String, Object> timestampJoined) {
         this.fullName = mFullName;
         this.photo = mPhoneNo;
         this.email = mEmail;
+        this.pNumber = mPNumber;
         this.timestampJoined = timestampJoined;
+        this.privilege = mPrivilege;
+
     }
 
+
+    public String getPrivilege(){
+        return privilege;
+    }
+
+    public String getpNumber(){
+        return "null";
+    }
 
     public String getFullName() {
         return fullName;
@@ -46,4 +59,5 @@ public class User {
     public HashMap<String, Object> getTimestampJoined() {
         return timestampJoined;
     }
+
 }

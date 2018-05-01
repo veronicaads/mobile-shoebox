@@ -29,12 +29,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import id.ac.umn.shoebox.Constants;
 import id.ac.umn.shoebox.SharedPrefManager;
 import id.ac.umn.shoebox.Utils;
 import id.ac.umn.shoebox.User;
 import com.firebase.client.Firebase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -57,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private Uri photoUri;
     private SignInButton mSignInButton;
 
+    private FirebaseDatabase mDatabase;
+    private String privilege_flag;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +76,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
         mSignInButton.setOnClickListener(this); //waktu di click supaya user pilih akun
         configureSignIn();
+
+
 
 
 
@@ -81,9 +92,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 //jika user sign in , maka panggil method untuk save detail user ke Firebase
                 if (user != null){
-                    Intent i = new Intent(LoginActivity.this,SignUpActivity.class);
+
                     createUserInFireBaseHelper();
                     Log.d(TAG,"onAuthStateChange:signed_in" + user.getUid());
+
                 }
                 else {
                     Log.d(TAG,"onAuthStateChange:signed_out");
@@ -107,6 +119,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void createUserInFireBaseHelper(){
         final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
         final Firebase userlocation = new Firebase (Constants.FIREBASE_URL_USERS).child(encodeEmail);
+        final String pNumber ="null";
+        final String privilege = "user";
 
         //add listener ke lokasi diatas
         userlocation.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener(){
@@ -118,11 +132,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP,ServerValue.TIMESTAMP);
 
                     //Insert ke firebase database
-                    User newUser = new User(name,photo,encodeEmail,timestampJoined);
+                    User newUser = new User(name,photo,encodeEmail,pNumber,privilege,timestampJoined);
                     userlocation.setValue(newUser);
                     Toast.makeText(LoginActivity.this,"Account created", Toast.LENGTH_SHORT).show();
-
-
 
                 }
 
@@ -220,12 +232,38 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     Toast.LENGTH_SHORT).show();
                         }else {
                             createUserInFireBaseHelper();
-                            Toast.makeText(LoginActivity.this, "Login successful",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this,UtamaActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
+                            final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
+                            mDatabase = FirebaseDatabase.getInstance();
+                            final DatabaseReference reference = mDatabase.getReference("users").child(encodeEmail);
+                            reference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                                    User getuserdata = dataSnapshot.getValue(User.class);
+                                    privilege_flag = getuserdata.getPrivilege();
+                                    Log.d(TAG,"MESSAGE" +privilege_flag);
+                                    if (privilege_flag.toString().equals("admin")){
+                                        Intent intent = new Intent(LoginActivity.this,ListOrderActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else {
+                                        Intent intent = new Intent(LoginActivity.this,UtamaActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    Toast.makeText(LoginActivity.this, "Login successful",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
                         }
                         //hideProgressDialog();
                     }

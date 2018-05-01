@@ -20,6 +20,7 @@ public class SplashActivity extends Activity {
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
+
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
