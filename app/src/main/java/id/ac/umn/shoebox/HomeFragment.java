@@ -3,6 +3,7 @@ package id.ac.umn.shoebox;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.gms.auth.api.Auth;
@@ -107,6 +109,8 @@ public class HomeFragment extends Fragment {
         mUsername = sharedPrefManager.getName();
         mPhoneNumber = sharedPrefManager.getpNumber();
         mFullNameTextView.setText(mUsername);
+        mEmailTextView.setText(mEmail);
+        mPhoneNumberView.setText(mPhoneNumber);
         String uri = sharedPrefManager.getPhoto();
         Uri mPhotoUri = Uri.parse(uri);
 
@@ -131,7 +135,10 @@ public class HomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Toast.makeText(view.getContext(), "Order No"+i, Toast.LENGTH_SHORT).show();
+                if(i==0){
+                    startActivity(new Intent(view.getContext(), DetailActivity.class));
+                }
             }
         });
         setHasOptionsMenu(true);

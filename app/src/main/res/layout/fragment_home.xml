@@ -19,10 +19,9 @@
             android:background="@color/purple"
             >
             <com.github.siyamed.shapeimageview.CircularImageView
-                android:layout_marginTop="30dp"
-                android:layout_width="150dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="150dp"
+                android:layout_width="50dp"
+                android:layout_gravity="center"
+                android:layout_height="50dp"
                 android:id="@+id/photo"
                 android:background="@color/purple"
                 android:paddingTop="@dimen/activity_vertical_margin"
@@ -40,7 +39,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:background="@color/purple"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
 
         <TextView
@@ -51,7 +50,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:background="@color/purple"
-            android:textSize="23sp"/>
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/notlp_user"
@@ -60,8 +59,10 @@
             android:text=""
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:background="@color/purple"/>
+            android:textSize="12sp"
+            android:background="@color/purple"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:layout_width="match_parent"

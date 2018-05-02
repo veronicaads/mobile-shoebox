@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="20dp"
         >
 
         <TableRow
@@ -22,6 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:text="Cabang"
+                android:textSize="18dp"
                 />
             <Spinner
                 android:id="@+id/cabang"
@@ -37,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:text="Service"
+                android:textSize="18dp"
                 />
             <Spinner
                 android:id="@+id/service"
@@ -53,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:text="Sub Service"
+                android:textSize="18dp"
                 />
             <Spinner
                 android:id="@+id/subservice"
@@ -66,7 +70,8 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:text="Merk Sepatu :"
+                android:textSize="18dp"
+                android:text="Merk Sepatu"
                 />
             <EditText
                 android:id="@+id/merek_edit"
@@ -77,11 +82,13 @@
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
             <TextView
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:textSize="18dp"
                 android:text="Upload Shoes Image"
                 />
 
@@ -91,7 +98,9 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:id="@+id/camerabutton"
+                android:background="@color/purple"
                 android:text="Take from Camera"
+                android:textColor="@color/white"
                 />
 
         </TableRow>
@@ -106,6 +115,8 @@
                 android:layout_weight="1"
                 android:id="@+id/gallerybutton"
                 android:layout_width="0dp"
+                android:background="@color/purple"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:text="Choose from Gallery"
                 >
@@ -116,6 +127,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:textSize="18dp"
                 android:text="Comment :"
                 />
             <EditText
@@ -130,8 +142,8 @@
 
             <ImageView
                 android:id="@+id/pict_sepatu"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_image_black_24dp" />
@@ -143,13 +155,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Order"
+                android:background="@color/purple"
+                android:textColor="@color/white"
                 />
             <Button
                 android:id="@+id/back_btn"
                 android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Cancel"
+                android:background="@color/purple"
+                android:textColor="@color/white"
                 />
         </TableRow>
 
@@ -160,8 +177,10 @@
                 android:id="@+id/text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
+                android:textSize="13dp"
                 android:background=" @drawable/border"
+                android:paddingBottom="15dp"
+                android:layout_marginBottom="10dp"
                 />
         </TableRow>
 

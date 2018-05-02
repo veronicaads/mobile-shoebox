@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,33 +66,38 @@ public class HelpFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    String[] web = {
-            "  Reclean",
-            "  Repaint",
-            "  Repair",
-            "  How To Order",
-            "  Contact Us"
-    } ;
-    Integer[] imageId = {
-            R.drawable.clean,
-            R.drawable.paint,
-            R.drawable.repair,
-            R.drawable.ic_shopping_cart_black_24dp,
-            R.drawable.ic_contact_mail_black_24dp
 
-    };
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public static ArrayList<Model> getList(){
+        ArrayList<Model> helplist = new ArrayList<>();
+        helplist.add(new Model(R.drawable.clean,"Reclean"));
+        helplist.add(new Model(R.drawable.paint,"Repaint"));
+        helplist.add(new Model(R.drawable.repair,"Repair"));
+        helplist.add(new Model(R.drawable.ic_shopping_cart_black_24dp,"How to Order"));
+        helplist.add(new Model(R.drawable.ic_contact_mail_black_24dp,"About Us"));
+        return helplist;
+    }
+    private ArrayList<Model> models;
+    private ModelAdapter modelAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_help,container,false);
+        View view=inflater.inflate(R.layout.fragment_help,container,false);
         ListView listView = (ListView) view.findViewById(R.id.listhelp);
-        CustomList adapter = new CustomList(getActivity(), web, imageId);
-        listView.setAdapter(adapter);
+        models = getList();
+
+        modelAdapter = new ModelAdapter(getActivity(),models);
+        listView.setAdapter(modelAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), "You Clicked at " +web[+ i], Toast.LENGTH_SHORT).show();
+                Model model= models.get(i);
+                Toast.makeText(view.getContext(), "You Clicked at " +model.getTitle(), Toast.LENGTH_SHORT).show();
                 if(i==0){
                     startActivity(new Intent(view.getContext(), RatingActivity.class));
                 }
