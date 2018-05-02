@@ -107,8 +107,6 @@ public class HomeFragment extends Fragment {
         mUsername = sharedPrefManager.getName();
         mPhoneNumber = sharedPrefManager.getpNumber();
         mFullNameTextView.setText(mUsername);
-        mEmailTextView.setText(mEmail);
-        mPhoneNumberView.setText(mPhoneNumber);
         String uri = sharedPrefManager.getPhoto();
         Uri mPhotoUri = Uri.parse(uri);
 

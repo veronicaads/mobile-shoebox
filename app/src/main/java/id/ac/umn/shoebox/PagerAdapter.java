@@ -27,9 +27,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 OrderFragment orderFragment = new OrderFragment();
                 return orderFragment;
             case 2:
-                NotifFragment notifFragment = new NotifFragment();
-                return notifFragment;
-            case 3:
                 HelpFragment helpFragment = new HelpFragment();
                 return helpFragment;
             default:

@@ -1,6 +1,7 @@
 package id.ac.umn.shoebox;
 
 import android.*;
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -43,8 +44,11 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, HomeFragment.OnFragmentInteractionListener, OrderFragment.OnFragmentInteractionListener, NotifFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener{
+
+public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, HomeFragment.OnFragmentInteractionListener, OrderFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener{
 
     Context mContext = this;
 
@@ -110,7 +114,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         TabLayout tabLayout = (TabLayout) findViewById(R.id.layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_reorder_black_24dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_notifications_black_24dp));
+        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_notifications_black_24dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_help_black_24dp));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -154,21 +158,51 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
     }
     private static final int REQUEST_CODE = 1;
 
-    public void VerifyPermission(){
+    public boolean VerifyPermission(){
         Log.d("MyTag", "Verify Permission");
-        String[] permission = {android.Manifest.permission.CAMERA};
+       // int camera = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+        int storage = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),permission[0])== PackageManager.PERMISSION_GRANTED){
-                Menu();
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+
+        if (storage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
-        else {
-            ActivityCompat.requestPermissions(UtamaActivity.this, permission, REQUEST_CODE);
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_CODE);
+            return false;
         }
+        return true;
+    }
+
+    public static List<String> needPermissions(Context context, String... permissions) {
+        List<String> neededPermission = new ArrayList<>();
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    neededPermission.add(permission);
+                }
+            }
+        }
+        return neededPermission;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        VerifyPermission();
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Menu();
+                } else {
+                    Menu();
+                    Toast.makeText(getApplicationContext(), "TES", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+        //VerifyPermission();
     }
 
     private void signOut(){

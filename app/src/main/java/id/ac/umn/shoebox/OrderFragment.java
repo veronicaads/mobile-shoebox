@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
@@ -13,6 +14,7 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -101,7 +103,8 @@ public class OrderFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
     }
     ImageView sepatu;
@@ -110,7 +113,24 @@ public class OrderFragment extends Fragment {
     Uri imageUri, cameraUri;
     private StorageReference IStorage;
     private ProgressDialog progressDialog;
-
+    String filename, CurrentPath;
+    private File CreateFile() throws IOException{
+        //String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFilename = "JPEG_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        Toast.makeText(getContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getContext(), "GA DAPET IJIN", Toast.LENGTH_SHORT).show();
+        }
+        File image = File.createTempFile(imageFilename,".jpg");
+        CurrentPath = "file:"+image.getAbsolutePath();
+        return image;
+    }
+    private void galleryAddPic(){
+        Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediascan.setData(cameraUri);
+        getActivity().sendBroadcast(mediascan);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -125,8 +145,23 @@ public class OrderFragment extends Fragment {
           public void onClick(View view) {
               Intent camera = new Intent();
               camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-             camera.putExtra(MediaStore.EXTRA_OUTPUT,cameraUri);
-
+//              if(camera.resolveActivity(getActivity().getPackageManager())!=null){
+//                  File photofile = null;
+//                  try{
+//                      photofile = CreateFile();
+//                      Toast.makeText(getContext(), CurrentPath.toString(),Toast.LENGTH_SHORT).show();
+//                  }catch (IOException e){
+//                      Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                  }
+//                  if(photofile!=null){
+//                      cameraUri = FileProvider.getUriForFile(getContext(),"id.ac.umn.shoebox.provider", photofile);
+//                      camera.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
+//                  }else{
+//                      Log.d("BODO AMAT", "onClick: NULL JIR");
+//                      Toast.makeText(getContext(), "NULL JIR", Toast.LENGTH_SHORT).show();
+//                  }
+//                  startActivityForResult(camera, TAKE_PHOTOS);
+//              }
               startActivityForResult(camera, TAKE_PHOTOS);
           }
       });
@@ -161,7 +196,6 @@ public class OrderFragment extends Fragment {
         });
         return view;
     }
-    String filename;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -189,11 +223,15 @@ public class OrderFragment extends Fragment {
             sepatu.setImageURI(imageUri);
         }
         if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
-            progressDialog.setMessage("Uploading ....");
-            progressDialog.show();
+            //galleryAddPic();
             Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-            //cameraUri= data.getData();
             sepatu.setImageBitmap(bitmap);
+        }
+            /*progressDialog.setMessage("Uploading ....");
+            progressDialog.show();
+
+            //cameraUri= data.getData();
+
             progressDialog.dismiss();
             /*StorageReference storageReference = IStorage.child("image_shoes/"+cameraUri);
             storageReference.putFile(cameraUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -208,8 +246,8 @@ public class OrderFragment extends Fragment {
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
                 }
-            });*/
-        }
+            });
+        }*/
     }
 
 
