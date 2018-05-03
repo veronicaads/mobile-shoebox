@@ -23,15 +23,15 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:support-vector-drawable:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
-    api 'com.google.firebase:firebase-messaging:15.0.0'
+    api 'com.google.firebase:firebase-messaging:15.0.2'
 
     // dari gradlenya bilang "configurations compile is obsolete"
     // jadi harus diganti sm imlementation atau api
-    api 'com.google.android.gms:play-services-auth:15.0.0'
-    api 'com.google.firebase:firebase-core:15.0.0'
-    api 'com.firebase:firebase-client-android:2.5.0'
+    api 'com.google.android.gms:play-services-auth:15.0.1'
+    api 'com.google.firebase:firebase-core:15.0.2'
+    api 'com.firebase:firebase-client-android:2.5.2'
     api 'com.google.firebase:firebase-database:15.0.0'
-    api 'com.google.firebase:firebase-auth:15.0.0'
+    api 'com.google.firebase:firebase-auth:15.1.0'
     implementation group:'com.squareup.picasso', name:'picasso', version:'2.5.0'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 
@@ -41,8 +41,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
-    implementation 'com.google.firebase:firebase-storage:15.0.0'
-    implementation 'com.google.firebase:firebase-auth:15.0.0'
+    implementation 'com.google.firebase:firebase-storage:15.0.2'
+    implementation 'com.google.firebase:firebase-auth:15.1.0'
     //implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:0.5'

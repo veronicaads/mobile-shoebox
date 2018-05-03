@@ -198,7 +198,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
                     Menu();
                 } else {
                     Menu();
-                    Toast.makeText(getApplicationContext(), "TES", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "TES", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
