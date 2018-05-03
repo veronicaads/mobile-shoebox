@@ -97,10 +97,13 @@ public class HelpFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Model model= models.get(i);
-                Toast.makeText(view.getContext(), "You Clicked at " +model.getTitle(), Toast.LENGTH_SHORT).show();
-                if(i==0){
-                    startActivity(new Intent(view.getContext(), RatingActivity.class));
-                }
+                //Toast.makeText(view.getContext(), "You Clicked at " +model.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), HelpDetailActivity.class);
+                intent.putExtra("position", i);
+                //intent.putExtra("id", id);
+                startActivity(intent);
+
             }
         });
         return view;

@@ -49,6 +49,71 @@
     <string name="title_activity_bukti_upload">Upload Bukti Transfer</string>
     <string name="title_activity_detail">Detail Order</string>
     <string name="title_activity_list_order_admin">ListOrderAdminActivity</string>
+    <string name="Products">
+        <b>What do we Use?</b>\n\n
+        <b>Sabun 3in1</b>\n
+        Sabun ini dapat membersihkan tiga bagian sepatu. Bagian sol luar, bagian atas sepatu, dan bagian dalam sepatu.
+        3in1 ini terbuat dari 70% herbal dan 30% kimia jadi sangat aman untuk semua jenis bahan sepatu dan kulit Anda. \n\n
+
+        <b>Antibacterial</b>\n
+        Berguna dalam menghilangkan bau tidak sedap pada sepatu.
+        Antibacterial yang terbuat dari antiseptic dan bahan herbal ini dapat mengurangi jamur yang menempel dalam sepatu Anda.\n\n
+
+        Antibacterial varian: aroma jasmine, peppermint, sereh
+
+    </string>
+    <string name="header_Repair">REPAIR</string>
+    <string name="Repair">
+        \n\n\n
+        <b>Ordinary Sizing</b>
+        \n Untuk Anda yang ingin mengelem sepatu dengan wilayah  lem kecil\n\n
+        <b>Full sizing</b>
+        \n Untuk Anda yang ingin mengelem sepatu secara  keseluruhan\n\n
+        <b>Ordinary sewing</b>
+        \n Untuk Anda yang Ingin menjahit sepatu dengan wilayah  jahit kecil\n\n
+        <b>Full sewing</b>
+        \n Untuk Anda yang ingin menjahit sepatu secara  keseluruhan\n\n
+        <b>Remove out soll</b>
+        \n Untuk Anda yang ingin mengganti soll luar sepatu\n\n
+        <b>Remove in soll</b>
+        \n Untuk Anda yang ingin mengganti soll dalam sepatu\n\n
+        <b>Leather patch</b>
+        \n Untuk Anda yng ingin menambal kulit pada sepatu kulit\n\n
+        <b>Leather pressing</b>
+        \n Untuk Anda yang ingin merapikan dan melekatkan bagian  dalam/luar pada sepatu kulit. \n\n
+    </string>
+    <string name="header_Reclean">RECLEAN</string>
+    <string name="Reclean">
+        <b>RECLEAN</b>\n\n
+        <b>Deep cleaning</b>
+        \nMembersihkan sepatu bagian luar dan dalam.
+        Membersihkan sepatu Anda secara detail hingga menghilangkan bakteri jamur yang menyebabkan bau pada sepatu kesayangan Anda.\n\n
+        <b>Fast cleaning</b>
+        \nMembersihkan sepatu Anda dengan cepat.
+        Membersihkan sepatu hanya bagian luar tanpa meninggalkan pembersihan secara teliti agar sepatu Anda terlihat segar kembali.\n
+    </string>
+    <string name="header_Repaint">REPAINT</string>
+    <string name="Repaint">
+        <b>Repaint</b>\n\n
+        <b>Dress shoes</b>\n
+        Sepatu kantor atau sepatu yang biasa dipakai untuk acara resmi\n\n
+        <b>Casual shoes</b>\n
+        Sepatu yang dipakai untuk berpergian santai tanpa meninggakan kesan santai\n\n
+        <b>Workshoes</b>\n
+        Sepatu yang dipakai untuk pekerjaan lapangan\n\n
+        <b>Dance shoes</b>\n
+        sepatu yang digunakan untuk berdansa atau menari\n\n
+        <b>Boots</b>\n
+        Sepatu dengan ukuran tinggi\n\n
+        <b>Sandals</b>\n
+        Alaskaki jepit santai\n\n
+        <b>Slipers</b>\n
+        Sepatu pipih yang digunakan untuk santai\n\n
+        <b>Running shoes</b>\n
+        Sepatu yang digunakan untuk olahraga lari\n\n
+        <b>Basketball shoes</b>\n
+        Sepatu yang digunakan untuk bermain basket\n\n
+    </string>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

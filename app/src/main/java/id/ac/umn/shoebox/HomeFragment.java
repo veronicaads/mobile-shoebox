@@ -135,10 +135,11 @@ public class HomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(view.getContext(), "Order No"+i, Toast.LENGTH_SHORT).show();
-                if(i==0){
-                    startActivity(new Intent(view.getContext(), DetailActivity.class));
-                }
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), DetailActivity.class);
+                //intent.putExtra("position", i);
+                //intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
         setHasOptionsMenu(true);
