@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -143,8 +144,15 @@ public class OrderFragment extends Fragment {
         camera.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-              Intent camera = new Intent();
-              camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+              if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+                  String[] permissionGallery = new String[] {Manifest.permission.CAMERA};
+                  ActivityCompat.requestPermissions(getActivity(), permissionGallery, 0);
+              }
+              else if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED) {
+                  Intent camera = new Intent();
+                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                  startActivityForResult(camera, TAKE_PHOTOS);
+              }
 //              if(camera.resolveActivity(getActivity().getPackageManager())!=null){
 //                  File photofile = null;
 //                  try{
@@ -162,15 +170,21 @@ public class OrderFragment extends Fragment {
 //                  }
 //                  startActivityForResult(camera, TAKE_PHOTOS);
 //              }
-              startActivityForResult(camera, TAKE_PHOTOS);
+
           }
       });
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE);
+                if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+                    String[] permissionGallery = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    ActivityCompat.requestPermissions(getActivity(), permissionGallery, 0);
+                }
+                else if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, PICK_IMAGE);
+                }
             }
         });
 

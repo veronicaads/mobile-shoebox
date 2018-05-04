@@ -97,7 +97,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utama);
 
-        VerifyPermission();
+        Menu();
         }
 
     /*@Override
@@ -156,54 +156,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
         mGoogleApiClient.connect();
     }
-    private static final int REQUEST_CODE = 1;
 
-    public boolean VerifyPermission(){
-        Log.d("MyTag", "Verify Permission");
-       // int camera = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
-        int storage = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        List<String> listPermissionsNeeded = new ArrayList<>();
-
-
-        if (storage != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this,
-                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_CODE);
-            return false;
-        }
-        return true;
-    }
-
-    public static List<String> needPermissions(Context context, String... permissions) {
-        List<String> neededPermission = new ArrayList<>();
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    neededPermission.add(permission);
-                }
-            }
-        }
-        return neededPermission;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Menu();
-                } else {
-                    Menu();
-                    //Toast.makeText(getApplicationContext(), "TES", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
-        //VerifyPermission();
-    }
 
     private void signOut(){
         new SharedPrefManager(mContext).clear();
