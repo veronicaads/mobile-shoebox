@@ -19,9 +19,9 @@
             android:background="@color/purple"
             >
             <com.github.siyamed.shapeimageview.CircularImageView
-                android:layout_width="50dp"
+                android:layout_width="50dip"
                 android:layout_gravity="center"
-                android:layout_height="50dp"
+                android:layout_height="50dip"
                 android:id="@+id/photo"
                 android:background="@color/purple"
                 android:paddingTop="@dimen/activity_vertical_margin"

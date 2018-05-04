@@ -144,9 +144,13 @@ public class OrderFragment extends Fragment {
         camera.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-              if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
-                  String[] permissionGallery = new String[] {Manifest.permission.CAMERA};
-                  ActivityCompat.requestPermissions(getActivity(), permissionGallery, 0);
+              if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED ||
+                      ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+                  String[] permissionCamera = new String[] {Manifest.permission.CAMERA};
+                  ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
+                  Intent camera = new Intent();
+                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                  startActivityForResult(camera, TAKE_PHOTOS);
               }
               else if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED) {
                   Intent camera = new Intent();
@@ -177,14 +181,9 @@ public class OrderFragment extends Fragment {
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-                    String[] permissionGallery = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                    ActivityCompat.requestPermissions(getActivity(), permissionGallery, 0);
-                }
-                else if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                     startActivityForResult(intent, PICK_IMAGE);
-                }
+
             }
         });
 

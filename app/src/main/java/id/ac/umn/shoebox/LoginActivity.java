@@ -243,7 +243,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             progressDialog.show();
                             createUserInFireBaseHelper();
                             progressDialog.dismiss();
-                            progressDialog.setMessage("Login Coba...");
+                            progressDialog.setMessage("Login...");
                             progressDialog.show();
                             final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
                             mDatabase = FirebaseDatabase.getInstance();
