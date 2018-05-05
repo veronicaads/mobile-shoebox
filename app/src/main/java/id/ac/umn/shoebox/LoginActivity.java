@@ -241,6 +241,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }else {
                             progressDialog.setMessage("Login...");
                             progressDialog.show();
+                            progressDialog.setCancelable(false);
                             createUserInFireBaseHelper();
                             progressDialog.dismiss();
                             progressDialog.setMessage("Login...");

@@ -19,7 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="20sp"
+                android:textSize="25sp"
+                android:textStyle="bold"
                 android:layout_weight="1"
                 android:text="Upload Bukti Transfer" />
             <TextView
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:textSize="18sp"
                 android:layout_weight="1"
                 android:text="Comment : "/>
 
@@ -53,7 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/commenttext"
-            android:inputType="textMultiLine"/>
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="20dp"/>
             <Button
                 android:id="@+id/btnTakeImage"
                 android:layout_width="wrap_content"

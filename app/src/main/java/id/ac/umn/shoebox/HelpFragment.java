@@ -9,9 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -99,7 +97,7 @@ public class HelpFragment extends Fragment {
                 Model model= models.get(i);
                 //Toast.makeText(view.getContext(), "You Clicked at " +model.getTitle(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), HelpDetailActivity.class);
+                intent.setClass(getActivity(), ExpendableActivity.class);
                 intent.putExtra("position", i);
                 //intent.putExtra("id", id);
                 startActivity(intent);

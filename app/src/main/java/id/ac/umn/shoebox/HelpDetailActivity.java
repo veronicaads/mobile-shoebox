@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 public class HelpDetailActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

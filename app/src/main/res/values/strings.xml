@@ -117,5 +117,15 @@
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="Bersih"><b>RECLEAN</b>\n\n</string>
+    <string name="Deep">
+        <b>Deep cleaning</b>
+        \nMembersihkan sepatu bagian luar dan dalam.
+        Membersihkan sepatu Anda secara detail hingga menghilangkan bakteri jamur yang menyebabkan bau pada sepatu kesayangan Anda.\n\n
+    </string>
+    <string name="Fast">
+        <b>Fast cleaning</b>
+        \nMembersihkan sepatu Anda dengan cepat.
+        Membersihkan sepatu hanya bagian luar tanpa meninggalkan pembersihan secara teliti agar sepatu Anda terlihat segar kembali.\n
+    </string>
 </resources>

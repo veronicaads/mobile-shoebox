@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ExpendableActivity">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/judul"
+            android:background="@color/purple"
+            android:textSize="27sp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:padding="15dp"
+            android:textStyle="bold"/>
+        <ExpandableListView
+            android:id="@+id/submenu_expandablelistview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ExpandableListView>
+
+</LinearLayout>

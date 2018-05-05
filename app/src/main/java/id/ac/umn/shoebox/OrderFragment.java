@@ -114,23 +114,36 @@ public class OrderFragment extends Fragment {
     Uri imageUri, cameraUri;
     private StorageReference IStorage;
     private ProgressDialog progressDialog;
-    String filename, CurrentPath;
-    private File CreateFile() throws IOException{
-        //String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFilename = "JPEG_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        Toast.makeText(getContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getContext(), "GA DAPET IJIN", Toast.LENGTH_SHORT).show();
-        }
+    String filename, currentPath;
+    private File createImageFile() throws IOException{
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFilename = "JPEG_"+timestamp;
+        Log.d("Camera", "Bisa Create");
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM+"/Camera");
+        Log.d("Camera", "Bisa dapet file");
         File image = File.createTempFile(imageFilename,".jpg");
-        CurrentPath = "file:"+image.getAbsolutePath();
+        Log.d("Camera", image.toString());
+        Toast.makeText(getContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        Log.d("Camera", storageDir.getAbsolutePath());
+        currentPath = "file:"+image.getAbsolutePath();
         return image;
     }
-    private void galleryAddPic(){
-        Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediascan.setData(cameraUri);
-        getActivity().sendBroadcast(mediascan);
+    private void dispatchTakePicture() {
+        Intent takePict = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+        Log.d("Camera", "Bisa foto");
+        if (takePict.resolveActivity(getActivity().getPackageManager()) != null) {
+            File photo = null;
+            try {
+                photo = createImageFile();
+                //Toast.makeText(getContext(), currentPath.toString(), Toast.LENGTH_SHORT).show();
+            } catch (IOException ec) {
+                //Toast.makeText(getContext(), ec.getMessage(), Toast.LENGTH_SHORT);
+            }
+            if (photo != null) {
+                takePict.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                startActivityForResult(takePict, TAKE_PHOTOS);
+            }
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -144,37 +157,16 @@ public class OrderFragment extends Fragment {
         camera.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-              if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED ||
-                      ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
-                  String[] permissionCamera = new String[] {Manifest.permission.CAMERA};
+              if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                  String[] permissionCamera = new String[]{Manifest.permission.CAMERA};
                   ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
-                  Intent camera = new Intent();
-                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                  startActivityForResult(camera, TAKE_PHOTOS);
+                  dispatchTakePicture();
+              } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//                  Intent camera = new Intent();
+//                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+//                  startActivityForResult(camera, TAKE_PHOTOS;
+                  dispatchTakePicture();
               }
-              else if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED) {
-                  Intent camera = new Intent();
-                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                  startActivityForResult(camera, TAKE_PHOTOS);
-              }
-//              if(camera.resolveActivity(getActivity().getPackageManager())!=null){
-//                  File photofile = null;
-//                  try{
-//                      photofile = CreateFile();
-//                      Toast.makeText(getContext(), CurrentPath.toString(),Toast.LENGTH_SHORT).show();
-//                  }catch (IOException e){
-//                      Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                  }
-//                  if(photofile!=null){
-//                      cameraUri = FileProvider.getUriForFile(getContext(),"id.ac.umn.shoebox.provider", photofile);
-//                      camera.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
-//                  }else{
-//                      Log.d("BODO AMAT", "onClick: NULL JIR");
-//                      Toast.makeText(getContext(), "NULL JIR", Toast.LENGTH_SHORT).show();
-//                  }
-//                  startActivityForResult(camera, TAKE_PHOTOS);
-//              }
-
           }
       });
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
@@ -216,7 +208,7 @@ public class OrderFragment extends Fragment {
         if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
             progressDialog.setMessage("Uploading ....");
             progressDialog.show();
-
+            progressDialog.setCancelable(false);
             imageUri=data.getData();
             filename = imageUri.getPath();
             StorageReference storageReference = IStorage.child("image_shoes/"+filename);
@@ -236,18 +228,16 @@ public class OrderFragment extends Fragment {
             sepatu.setImageURI(imageUri);
         }
         if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
-            //galleryAddPic();
-            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-            sepatu.setImageBitmap(bitmap);
-        }
-            /*progressDialog.setMessage("Uploading ....");
-            progressDialog.show();
-
-            //cameraUri= data.getData();
-
-            progressDialog.dismiss();
-            /*StorageReference storageReference = IStorage.child("image_shoes/"+cameraUri);
-            storageReference.putFile(cameraUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            File f = new File(currentPath);
+            Uri cobaUri  = Uri.fromFile(f);
+            Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediascan.setData(cobaUri);
+            getActivity().sendBroadcast(mediascan);
+//            cameraUri=data.getData();
+//            filename = imageUri.getPath();
+//            sepatu.setImageURI(cameraUri);
+            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+            storageReference.putFile(cobaUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
@@ -260,7 +250,9 @@ public class OrderFragment extends Fragment {
                     Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
                 }
             });
-        }*/
+            sepatu.setImageURI(imageUri);
+
+        }
     }
 
 
