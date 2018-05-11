@@ -41,14 +41,14 @@ public class BuktiUploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bukti_upload);
         bukti = (ImageView) findViewById(R.id.buktibayar);
 
-        Button camera = (Button) findViewById(R.id.btnTakeImage);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, TAKE_PHOTOS);
-            }
-        });
+//        Button camera = (Button) findViewById(R.id.btnTakeImage);
+//        camera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, TAKE_PHOTOS);
+//            }
+//        });
         Button galery = (Button) findViewById(R.id.btnGalerryImage);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +63,24 @@ public class BuktiUploadActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setMessage("Uploading ....");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                filename = imageUri.getPath();
+                StorageReference storageReference = IStorage.child("bukti_transfer/"+filename);
+                storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Uri download = taskSnapshot.getDownloadUrl();
+                        Toast.makeText(getApplicationContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
                 Toast.makeText(getApplicationContext(), "Upload Selesai", Toast.LENGTH_SHORT).show();
             }
@@ -84,26 +102,6 @@ public class BuktiUploadActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
             imageUri=data.getData();
-            bukti.setImageURI(imageUri);
-            progressDialog.setMessage("Uploading ....");
-            progressDialog.show();
-            progressDialog.setCancelable(false);
-
-            filename = imageUri.getPath();
-            StorageReference storageReference = IStorage.child("bukti_transfer/"+filename);
-            storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    Uri download = taskSnapshot.getDownloadUrl();
-                    Toast.makeText(getApplicationContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                }
-            });
             bukti.setImageURI(imageUri);
         }
         if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){

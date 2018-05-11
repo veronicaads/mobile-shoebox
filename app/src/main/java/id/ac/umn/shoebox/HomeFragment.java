@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.ArrayList;
 
 import id.ac.umn.shoebox.SharedPrefManager;
 /**
@@ -122,13 +124,16 @@ public class HomeFragment extends Fragment {
 
     }
 
+    ArrayList<String> myArrayList = new ArrayList<>();
+    ListView listView;
+    Firebase myFirebase;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
-        ListView listView = (ListView) view.findViewById(R.id.list_order);
+        listView = (ListView) view.findViewById(R.id.list_order);
         String[] array = new String[] {"U001","U002"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);
         listView.setAdapter(arrayAdapter);

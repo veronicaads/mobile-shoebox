@@ -151,24 +151,24 @@ public class OrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         IStorage = FirebaseStorage.getInstance().getReference();
 
-        Button camera = (Button) view.findViewById(R.id.camerabutton);
+        //Button camera = (Button) view.findViewById(R.id.camerabutton);
         sepatu = view.findViewById(R.id.pict_sepatu);
         progressDialog = new ProgressDialog(getActivity());
-        camera.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                  String[] permissionCamera = new String[]{Manifest.permission.CAMERA};
-                  ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
-                  dispatchTakePicture();
-              } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                  Intent camera = new Intent();
-//                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-//                  startActivityForResult(camera, TAKE_PHOTOS;
-                  dispatchTakePicture();
-              }
-          }
-      });
+//        camera.setOnClickListener(new View.OnClickListener() {
+//          @Override
+//          public void onClick(View view) {
+//              if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                  String[] permissionCamera = new String[]{Manifest.permission.CAMERA};
+//                  ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
+//                  dispatchTakePicture();
+//              } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+////                  Intent camera = new Intent();
+////                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+////                  startActivityForResult(camera, TAKE_PHOTOS;
+//                  dispatchTakePicture();
+//              }
+//          }
+//      });
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +184,24 @@ public class OrderFragment extends Fragment {
         order_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setMessage("Uploading ....");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                filename = imageUri.getPath();
+                StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+                storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Uri download = taskSnapshot.getDownloadUrl();
+                        Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
@@ -206,53 +224,35 @@ public class OrderFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
-            progressDialog.setMessage("Uploading ....");
-            progressDialog.show();
-            progressDialog.setCancelable(false);
             imageUri=data.getData();
-            filename = imageUri.getPath();
-            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
-            storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    Uri download = taskSnapshot.getDownloadUrl();
-                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                }
-            });
             sepatu.setImageURI(imageUri);
         }
-        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
-            File f = new File(currentPath);
-            Uri cobaUri  = Uri.fromFile(f);
-            Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            mediascan.setData(cobaUri);
-            getActivity().sendBroadcast(mediascan);
-//            cameraUri=data.getData();
-//            filename = imageUri.getPath();
-//            sepatu.setImageURI(cameraUri);
-            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
-            storageReference.putFile(cobaUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    Uri download = taskSnapshot.getDownloadUrl();
-                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                }
-            });
-            sepatu.setImageURI(imageUri);
-
-        }
+//        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
+//            File f = new File(currentPath);
+//            Uri cobaUri  = Uri.fromFile(f);
+//            Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//            mediascan.setData(cobaUri);
+//            getActivity().sendBroadcast(mediascan);
+////            cameraUri=data.getData();
+////            filename = imageUri.getPath();
+////            sepatu.setImageURI(cameraUri);
+//            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+//            storageReference.putFile(cobaUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    progressDialog.dismiss();
+//                    Uri download = taskSnapshot.getDownloadUrl();
+//                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//            sepatu.setImageURI(imageUri);
+//
+//        }
     }
 
 
