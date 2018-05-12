@@ -36,7 +36,8 @@ public class SignUpActivity extends AppCompatActivity {
         mFullNameEditText = (EditText) findViewById(R.id.nama);
         mAddressEditText = findViewById(R.id.address);
         mPhoneNumberEditText = findViewById(R.id.pNumber);
-        sharedPrefManager = new SharedPrefManager(this);
+        //sharedPrefManager = new SharedPrefManager(getBaseContext());
+        sharedPrefManager = new SharedPrefManager(SignUpActivity.this);
         mUsername = sharedPrefManager.getName();
         mEmail = sharedPrefManager.getUserEmail();
         mFullNameEditText.setText(mUsername);

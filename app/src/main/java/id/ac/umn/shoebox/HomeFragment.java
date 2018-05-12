@@ -1,5 +1,6 @@
 package id.ac.umn.shoebox;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,11 +29,22 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.ArrayList;
+import java.util.List;
 
 import id.ac.umn.shoebox.SharedPrefManager;
+
+import static android.support.constraint.Constraints.TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -61,7 +73,9 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
 
 
-
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("orders");
+    private ListView listViewOrders;
+    private List<String> orderList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -92,12 +106,13 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        orderList = new ArrayList<>();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
 
         mFullNameTextView = getView().findViewById(R.id.nama_user);
         mEmailTextView = getView().findViewById(R.id.email_user);
@@ -120,6 +135,40 @@ public class HomeFragment extends Fragment {
                 .error(android.R.drawable.sym_def_app_icon)
                 .into(photo);
 
+        //
+        //ambil list order dari fragment_home
+        //
+        listViewOrders = (ListView) getView().findViewById(R.id.list_order);
+
+        //
+        //async listener task untuk update setiap order
+        //baru ditambahkan
+        //
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                orderList.clear();
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Order od = ds.getValue(Order.class);
+                    orderList.add(od.getOrderId());
+                    Log.d("ds",od.getOrderId());
+                }
+
+                try {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,orderList);
+                    listViewOrders.setAdapter(adapter);
+                }
+                catch (Exception io){
+                    io.getStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -128,23 +177,21 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
-        ListView listView = (ListView) view.findViewById(R.id.list_order);
-        String[] array = new String[] {"U001","U002"};
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);
-        listView.setAdapter(arrayAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), DetailActivity.class);
-                //intent.putExtra("position", i);
-                //intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
+//        String[] array = new String[] {"U001","U002"};
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);
+//        listView.setAdapter(arrayAdapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent();
+//                intent.setClass(getActivity(), DetailActivity.class);
+//                //intent.putExtra("position", i);
+//                //intent.putExtra("id", id);
+//                startActivity(intent);
+//            }
+//        });
         setHasOptionsMenu(true);
-
-
+        
         return view;
     }
 

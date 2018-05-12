@@ -4,6 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "id.ac.umn.shoebox"
+        //minSdkVersion 22 //tadinya 24 biar bisa jalan di hp miqdude
         minSdkVersion 24
         targetSdkVersion 26
         versionCode 1

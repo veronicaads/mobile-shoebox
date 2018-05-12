@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -72,6 +76,12 @@ public class OrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Spinner spinnerCabang;
+    private Spinner spinnerService;
+    private Spinner spinnerSubService;
+    private EditText merekSepatuEdit;
+    private EditText commentEdit;
 
     private OnFragmentInteractionListener mListener;
 
@@ -106,7 +116,6 @@ public class OrderFragment extends Fragment {
         }
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-
     }
     ImageView sepatu;
     private static final int PICK_IMAGE = 100;
@@ -179,11 +188,36 @@ public class OrderFragment extends Fragment {
             }
         });
 
-
+        //USER SUBMIT ORDER
         Button order_but = (Button) view.findViewById(R.id.order_btn);
         order_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                final String cabang = spinnerCabang.getSelectedItem().toString();
+                final String service = spinnerService.getSelectedItem().toString();
+                final String subService = spinnerSubService.getSelectedItem().toString();
+                merekSepatuEdit = (EditText) getActivity().findViewById(R.id.merek_edit);
+                final String merekSepatu = merekSepatuEdit.getText().toString();
+                commentEdit = (EditText) getActivity().findViewById(R.id.keterangan_edit);
+                final String comment = commentEdit.getText().toString();
+                final String imageString = "image";
+
+                String orderid = "000000";
+
+                SharedPrefManager sharedPrefManager = new SharedPrefManager(getContext());
+
+                //ambil email user yang disimpan di dalam shared preferences
+//                SharedPrefManager sharedPrefManager = new SharedPrefManager(OrderFragment.this);
+                final String userEmail = Utils.encodeEmail(sharedPrefManager.getUserEmail());
+
+                //buat object order
+                Order order = new Order(orderid,userEmail,cabang,service,subService,merekSepatu,
+                                imageString,comment);
+
+                FirebaseDb firebaseDb = new FirebaseDb();
+                firebaseDb.sendOrder(order);
+
                 startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
@@ -263,39 +297,39 @@ public class OrderFragment extends Fragment {
         TextView tv = (TextView) getActivity().findViewById(R.id.text_view);
         tv.setText(" Keterangan :\n Untuk pemesanan service Repaint ataupun \n Repair akan mendapatkan free service Reclean.");
 
-        Spinner spinner = getActivity().findViewById(R.id.cabang);
+        spinnerCabang = getActivity().findViewById(R.id.cabang);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.listcabang,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinnerCabang.setAdapter(adapter);
 
-        Spinner spinner2 = getActivity().findViewById(R.id.service);
+        spinnerService = getActivity().findViewById(R.id.service);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.listservice,
                 android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
+        spinnerService.setAdapter(adapter2);
 
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
+                    spinnerSubService = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listreclean,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner3.setAdapter(adapter3);
+                    spinnerSubService.setAdapter(adapter3);
                 } else if (position == 1) {
-                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
+                    spinnerSubService = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listrepaint,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner3.setAdapter(adapter3);
+                    spinnerSubService.setAdapter(adapter3);
                 } else if (position == 2) {
-                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
+                    spinnerSubService = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listrepair,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner3.setAdapter(adapter3);
+                    spinnerSubService.setAdapter(adapter3);
                 }
             }
 
