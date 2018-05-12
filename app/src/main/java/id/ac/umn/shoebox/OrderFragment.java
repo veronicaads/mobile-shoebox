@@ -5,7 +5,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,7 +22,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +41,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -76,12 +72,6 @@ public class OrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private Spinner spinnerCabang;
-    private Spinner spinnerService;
-    private Spinner spinnerSubService;
-    private EditText merekSepatuEdit;
-    private EditText commentEdit;
 
     private OnFragmentInteractionListener mListener;
 
@@ -116,6 +106,7 @@ public class OrderFragment extends Fragment {
         }
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+
     }
     ImageView sepatu;
     private static final int PICK_IMAGE = 100;
@@ -160,24 +151,24 @@ public class OrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         IStorage = FirebaseStorage.getInstance().getReference();
 
-        Button camera = (Button) view.findViewById(R.id.camerabutton);
+        //Button camera = (Button) view.findViewById(R.id.camerabutton);
         sepatu = view.findViewById(R.id.pict_sepatu);
         progressDialog = new ProgressDialog(getActivity());
-        camera.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                  String[] permissionCamera = new String[]{Manifest.permission.CAMERA};
-                  ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
-                  dispatchTakePicture();
-              } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                  Intent camera = new Intent();
-//                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-//                  startActivityForResult(camera, TAKE_PHOTOS;
-                  dispatchTakePicture();
-              }
-          }
-      });
+//        camera.setOnClickListener(new View.OnClickListener() {
+//          @Override
+//          public void onClick(View view) {
+//              if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                  String[] permissionCamera = new String[]{Manifest.permission.CAMERA};
+//                  ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
+//                  dispatchTakePicture();
+//              } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+////                  Intent camera = new Intent();
+////                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+////                  startActivityForResult(camera, TAKE_PHOTOS;
+//                  dispatchTakePicture();
+//              }
+//          }
+//      });
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,36 +179,29 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        //USER SUBMIT ORDER
+
         Button order_but = (Button) view.findViewById(R.id.order_btn);
         order_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                final String cabang = spinnerCabang.getSelectedItem().toString();
-                final String service = spinnerService.getSelectedItem().toString();
-                final String subService = spinnerSubService.getSelectedItem().toString();
-                merekSepatuEdit = (EditText) getActivity().findViewById(R.id.merek_edit);
-                final String merekSepatu = merekSepatuEdit.getText().toString();
-                commentEdit = (EditText) getActivity().findViewById(R.id.keterangan_edit);
-                final String comment = commentEdit.getText().toString();
-                final String imageString = "image";
-
-                String orderid = "000000";
-
-                SharedPrefManager sharedPrefManager = new SharedPrefManager(getContext());
-
-                //ambil email user yang disimpan di dalam shared preferences
-//                SharedPrefManager sharedPrefManager = new SharedPrefManager(OrderFragment.this);
-                final String userEmail = Utils.encodeEmail(sharedPrefManager.getUserEmail());
-
-                //buat object order
-                Order order = new Order(orderid,userEmail,cabang,service,subService,merekSepatu,
-                                imageString,comment);
-
-                FirebaseDb firebaseDb = new FirebaseDb();
-                firebaseDb.sendOrder(order);
-
+                progressDialog.setMessage("Uploading ....");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                filename = imageUri.getPath();
+                StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+                storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Uri download = taskSnapshot.getDownloadUrl();
+                        Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
@@ -240,53 +224,35 @@ public class OrderFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==PICK_IMAGE && resultCode==RESULT_OK){
-            progressDialog.setMessage("Uploading ....");
-            progressDialog.show();
-            progressDialog.setCancelable(false);
             imageUri=data.getData();
-            filename = imageUri.getPath();
-            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
-            storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    Uri download = taskSnapshot.getDownloadUrl();
-                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                }
-            });
             sepatu.setImageURI(imageUri);
         }
-        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
-            File f = new File(currentPath);
-            Uri cobaUri  = Uri.fromFile(f);
-            Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            mediascan.setData(cobaUri);
-            getActivity().sendBroadcast(mediascan);
-//            cameraUri=data.getData();
-//            filename = imageUri.getPath();
-//            sepatu.setImageURI(cameraUri);
-            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
-            storageReference.putFile(cobaUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    Uri download = taskSnapshot.getDownloadUrl();
-                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                }
-            });
-            sepatu.setImageURI(imageUri);
-
-        }
+//        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
+//            File f = new File(currentPath);
+//            Uri cobaUri  = Uri.fromFile(f);
+//            Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//            mediascan.setData(cobaUri);
+//            getActivity().sendBroadcast(mediascan);
+////            cameraUri=data.getData();
+////            filename = imageUri.getPath();
+////            sepatu.setImageURI(cameraUri);
+//            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+//            storageReference.putFile(cobaUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    progressDialog.dismiss();
+//                    Uri download = taskSnapshot.getDownloadUrl();
+//                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//            sepatu.setImageURI(imageUri);
+//
+//        }
     }
 
 
@@ -297,39 +263,39 @@ public class OrderFragment extends Fragment {
         TextView tv = (TextView) getActivity().findViewById(R.id.text_view);
         tv.setText(" Keterangan :\n Untuk pemesanan service Repaint ataupun \n Repair akan mendapatkan free service Reclean.");
 
-        spinnerCabang = getActivity().findViewById(R.id.cabang);
+        Spinner spinner = getActivity().findViewById(R.id.cabang);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.listcabang,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCabang.setAdapter(adapter);
+        spinner.setAdapter(adapter);
 
-        spinnerService = getActivity().findViewById(R.id.service);
+        Spinner spinner2 = getActivity().findViewById(R.id.service);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.listservice,
                 android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerService.setAdapter(adapter2);
+        spinner2.setAdapter(adapter2);
 
-        spinnerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    spinnerSubService = getActivity().findViewById(R.id.subservice);
+                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listreclean,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerSubService.setAdapter(adapter3);
+                    spinner3.setAdapter(adapter3);
                 } else if (position == 1) {
-                    spinnerSubService = getActivity().findViewById(R.id.subservice);
+                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listrepaint,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerSubService.setAdapter(adapter3);
+                    spinner3.setAdapter(adapter3);
                 } else if (position == 2) {
-                    spinnerSubService = getActivity().findViewById(R.id.subservice);
+                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listrepair,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerSubService.setAdapter(adapter3);
+                    spinner3.setAdapter(adapter3);
                 }
             }
 

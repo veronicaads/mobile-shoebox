@@ -92,25 +92,6 @@
                 android:text="Upload Shoes Image"
                 />
 
-
-            <Button
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:id="@+id/camerabutton"
-                android:background="@color/purple"
-                android:text="Take from Camera"
-                android:textColor="@color/white"
-                />
-
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text=""
-                />
             <Button
                 android:layout_weight="1"
                 android:id="@+id/gallerybutton"
@@ -121,6 +102,25 @@
                 android:text="Choose from Gallery"
                 >
             </Button>
+            <!--<Button-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:id="@+id/camerabutton"-->
+                <!--android:background="@color/purple"-->
+                <!--android:text="Take from Camera"-->
+                <!--android:textColor="@color/white"-->
+                <!--/>-->
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text=""
+                />
+
         </TableRow>
         <TableRow>
             <TextView
