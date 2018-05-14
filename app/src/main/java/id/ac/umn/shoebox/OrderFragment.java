@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -37,10 +38,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,9 +52,13 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
+import static android.support.constraint.Constraints.TAG;
+import static android.view.View.generateViewId;
 
 
 /**
@@ -74,6 +82,9 @@ public class OrderFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private Spinner cabang_spinner,service_spinner,subservice_spinner;
+    SharedPrefManager sharedPrefManager;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -108,13 +119,18 @@ public class OrderFragment extends Fragment {
         StrictMode.setVmPolicy(builder.build());
 
     }
+
     ImageView sepatu;
     private static final int PICK_IMAGE = 100;
     private static final int TAKE_PHOTOS = 50;
     Uri imageUri, cameraUri;
     private StorageReference IStorage;
     private ProgressDialog progressDialog;
+    private DatabaseReference database;
     String filename, currentPath;
+
+
+
     private File createImageFile() throws IOException{
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFilename = "JPEG_"+timestamp;
@@ -173,11 +189,19 @@ public class OrderFragment extends Fragment {
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, PICK_IMAGE);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE);
 
             }
         });
+
+
+        final EditText merek_edit = (EditText) view.findViewById(R.id.merek_edit);
+        final EditText comment_edit = (EditText) view.findViewById(R.id.keterangan_edit);
+        final String merek = merek_edit.getText().toString();
+        final String comment = comment_edit.getText().toString();
+
+        final String userEmail = new SharedPrefManager(getContext()).getUserEmail();
 
 
         Button order_but = (Button) view.findViewById(R.id.order_btn);
@@ -187,14 +211,21 @@ public class OrderFragment extends Fragment {
                 progressDialog.setMessage("Uploading ....");
                 progressDialog.show();
                 progressDialog.setCancelable(false);
-                filename = imageUri.getPath();
-                StorageReference storageReference = IStorage.child("image_shoes/"+filename);
+                filename = imageUri.getLastPathSegment();
+
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
+
+                FirebaseDb firebaseDb = new FirebaseDb();
+
+                StorageReference storageReference = IStorage.child(imagePath);
                 storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                        Uri download = taskSnapshot.getDownloadUrl();
-                        Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+//                        progressDialog.dismiss();
+//                        im[0] = taskSnapshot.getDownloadUrl();
+//                        Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -202,18 +233,33 @@ public class OrderFragment extends Fragment {
                         Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                final String cabang = cabang_spinner.getSelectedItem().toString();
+                final String service = service_spinner.getSelectedItem().toString();
+                final String subservice = subservice_spinner.getSelectedItem().toString();
+
+                Log.d(TAG, "onClick: ordered");
+
+                HashMap<String,Object> tanggal_pesan = new HashMap<>();
+                tanggal_pesan.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, com.google.firebase.database.ServerValue.TIMESTAMP);
+
+                Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
+                        imagePath,comment, tanggal_pesan,"",
+                        "pending","belum lunas",000);
+
+                firebaseDb.sendOrder(od);
+
+                progressDialog.dismiss();
                 startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
-        final EditText merek = view.findViewById(R.id.merek_edit);
-        final EditText comment = view.findViewById(R.id.keterangan_edit);
 
         Button cancelBut = view.findViewById(R.id.back_btn);
         cancelBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                merek.setText("");
-                comment.setText("");
+                merek_edit.setText("");
+                comment_edit.setText("");
                 sepatu.setImageResource(R.drawable.ic_image_black_24dp);
             }
         });
@@ -263,39 +309,39 @@ public class OrderFragment extends Fragment {
         TextView tv = (TextView) getActivity().findViewById(R.id.text_view);
         tv.setText(" Keterangan :\n Untuk pemesanan service Repaint ataupun \n Repair akan mendapatkan free service Reclean.");
 
-        Spinner spinner = getActivity().findViewById(R.id.cabang);
+        cabang_spinner = getActivity().findViewById(R.id.cabang);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.listcabang,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        cabang_spinner.setAdapter(adapter);
 
-        Spinner spinner2 = getActivity().findViewById(R.id.service);
+        service_spinner = getActivity().findViewById(R.id.service);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.listservice,
                 android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
+        service_spinner.setAdapter(adapter2);
 
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        service_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
+                    subservice_spinner = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listreclean,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner3.setAdapter(adapter3);
+                    subservice_spinner.setAdapter(adapter3);
                 } else if (position == 1) {
-                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
+                    subservice_spinner = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listrepaint,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner3.setAdapter(adapter3);
+                    subservice_spinner.setAdapter(adapter3);
                 } else if (position == 2) {
-                    Spinner spinner3 = getActivity().findViewById(R.id.subservice);
+                    subservice_spinner = getActivity().findViewById(R.id.subservice);
                     ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(getContext(), R.array.listrepair,
                             android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner3.setAdapter(adapter3);
+                    subservice_spinner.setAdapter(adapter3);
                 }
             }
 

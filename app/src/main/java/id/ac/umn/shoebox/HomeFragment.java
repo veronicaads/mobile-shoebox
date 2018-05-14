@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
 
 
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("orders");
+    private DatabaseReference databaseReference;
     private ListView listViewOrders;
     private List<String> orderList;
 
@@ -135,6 +135,9 @@ public class HomeFragment extends Fragment {
                 .error(android.R.drawable.sym_def_app_icon)
                 .into(photo);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("users")
+                .child(Utils.encodeEmail(mEmail)).child("orders");
+
         //
         //ambil list order dari fragment_home
         //
@@ -150,9 +153,9 @@ public class HomeFragment extends Fragment {
                 orderList.clear();
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Order od = ds.getValue(Order.class);
-                    orderList.add(od.getOrderId());
-                    Log.d("ds",od.getOrderId());
+                    String od = ds.getValue(String.class);
+                    orderList.add(od);
+                    Log.d("ds",od);
                 }
 
                 try {
@@ -167,6 +170,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+
+        listViewOrders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
     }
