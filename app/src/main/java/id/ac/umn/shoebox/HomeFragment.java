@@ -54,6 +54,7 @@ import static android.support.constraint.Constraints.TAG;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -190,21 +191,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.navigate);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//        String[] array = new String[] {"U001","U002"};
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);
-//        listView.setAdapter(arrayAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent();
-//                intent.setClass(getActivity(), DetailActivity.class);
-//                //intent.putExtra("position", i);
-//                //intent.putExtra("id", id);
-//                startActivity(intent);
-//            }
-//        });
         setHasOptionsMenu(true);
-        
         return view;
     }
 

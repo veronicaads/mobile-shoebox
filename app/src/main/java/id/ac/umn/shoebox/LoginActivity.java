@@ -193,24 +193,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 GoogleSignInAccount account = result.getSignInAccount();
 
                 idToken = account.getIdToken();
-
                 name = account.getDisplayName();
                 email = account.getEmail();
                 photoUri = account.getPhotoUrl();
                 photo = photoUri.toString();
 
-
-
-
                 // Save Data to SharedPreference
                 sharedPrefManager = new SharedPrefManager(mContext);
                 sharedPrefManager.saveIsLoggedIn(mContext, true);
-
                 sharedPrefManager.saveEmail(mContext, email);
                 sharedPrefManager.saveName(mContext, name);
                 sharedPrefManager.savePhoto(mContext, photo);
-
-
                 sharedPrefManager.saveToken(mContext, idToken);
                 //sharedPrefManager.saveIsLoggedIn(mContext, true);
 

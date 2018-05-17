@@ -31,12 +31,10 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        //Toast.makeText(this,mUsername,Toast.LENGTH_SHORT).show();
 
         mFullNameEditText = (EditText) findViewById(R.id.nama);
         mAddressEditText = findViewById(R.id.address);
         mPhoneNumberEditText = findViewById(R.id.pNumber);
-        //sharedPrefManager = new SharedPrefManager(getBaseContext());
         sharedPrefManager = new SharedPrefManager(SignUpActivity.this);
         mUsername = sharedPrefManager.getName();
         mEmail = sharedPrefManager.getUserEmail();
