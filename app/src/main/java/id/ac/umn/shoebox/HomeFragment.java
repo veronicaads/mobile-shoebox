@@ -130,11 +130,11 @@ public class HomeFragment extends Fragment {
         String uri = sharedPrefManager.getPhoto();
         Uri mPhotoUri = Uri.parse(uri);
 
-//        Picasso.with(getContext())
-//                .load(mPhotoUri)
-//                .placeholder(android.R.drawable.sym_def_app_icon)
-//                .error(android.R.drawable.sym_def_app_icon)
-//                .into(photo);
+       Picasso.with(getContext())
+               .load(mPhotoUri)
+                .placeholder(android.R.drawable.sym_def_app_icon)
+               .error(android.R.drawable.sym_def_app_icon)
+               .into(photo);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
                 .child(Utils.encodeEmail(mEmail)).child("orders");

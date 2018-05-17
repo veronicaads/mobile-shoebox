@@ -113,7 +113,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_reorder_black_24dp));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_add_black_24dp));
         //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_notifications_black_24dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_help_black_24dp));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

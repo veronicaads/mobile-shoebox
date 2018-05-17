@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/navigation_reorder"
-        android:icon="@drawable/ic_reorder_black_24dp"
+        android:icon="@drawable/ic_add_black_24dp"
         android:title="@string/title_order" />
 
     <item
