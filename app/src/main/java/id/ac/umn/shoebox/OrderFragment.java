@@ -213,6 +213,10 @@ public class OrderFragment extends Fragment {
                 progressDialog.setCancelable(false);
                 filename = imageUri.getLastPathSegment();
 
+
+                //
+                //kirim gambar
+                //
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
                 final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
@@ -243,11 +247,15 @@ public class OrderFragment extends Fragment {
                 HashMap<String,Object> tanggal_pesan = new HashMap<>();
                 tanggal_pesan.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, com.google.firebase.database.ServerValue.TIMESTAMP);
 
+
+                //
+                //kirim order baru
+                //
                 Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
                         imagePath,comment, tanggal_pesan,"",
                         "pending","belum lunas",000);
 
-                firebaseDb.sendOrder(od);
+                firebaseDb.sendOrder(od,getContext());
 
                 progressDialog.dismiss();
                 startActivity(new Intent(getActivity(),DetailActivity.class));
