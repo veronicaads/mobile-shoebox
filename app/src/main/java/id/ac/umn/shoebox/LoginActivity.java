@@ -78,7 +78,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
         mSignInButton.setOnClickListener(this); //waktu di click supaya user pilih akun
+        progressDialog.setMessage("Tes");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
         configureSignIn();
+        progressDialog.dismiss();
 
 
 

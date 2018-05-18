@@ -99,7 +99,6 @@ public class HelpFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ExpendableActivity.class);
                 intent.putExtra("position", i);
-                //intent.putExtra("id", id);
                 startActivity(intent);
 
             }

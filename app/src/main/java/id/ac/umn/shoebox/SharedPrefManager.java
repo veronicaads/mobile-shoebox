@@ -7,9 +7,6 @@ package id.ac.umn.shoebox;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by Gino Osahon on 04/03/2017.
- */
 public class SharedPrefManager {
 
     SharedPreferences sharedPreferences;

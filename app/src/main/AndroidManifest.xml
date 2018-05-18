@@ -70,7 +70,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".HelpDetailActivity" />
         <activity android:name=".ExpendableActivity"></activity>
     </application>
 

@@ -122,8 +122,7 @@ public class OrderFragment extends Fragment {
 
     ImageView sepatu;
     private static final int PICK_IMAGE = 100;
-    private static final int TAKE_PHOTOS = 50;
-    Uri imageUri, cameraUri;
+    Uri imageUri;
     private StorageReference IStorage;
     private ProgressDialog progressDialog;
     private DatabaseReference database;
@@ -131,60 +130,29 @@ public class OrderFragment extends Fragment {
 
 
 
-    private File createImageFile() throws IOException{
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFilename = "JPEG_"+timestamp;
-        Log.d("Camera", "Bisa Create");
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM+"/Camera");
-        Log.d("Camera", "Bisa dapet file");
-        File image = File.createTempFile(imageFilename,".jpg");
-        Log.d("Camera", image.toString());
-        Toast.makeText(getContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        Log.d("Camera", storageDir.getAbsolutePath());
-        currentPath = "file:"+image.getAbsolutePath();
-        return image;
-    }
-    private void dispatchTakePicture() {
-        Intent takePict = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
-        Log.d("Camera", "Bisa foto");
-        if (takePict.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photo = null;
-            try {
-                photo = createImageFile();
-                //Toast.makeText(getContext(), currentPath.toString(), Toast.LENGTH_SHORT).show();
-            } catch (IOException ec) {
-                //Toast.makeText(getContext(), ec.getMessage(), Toast.LENGTH_SHORT);
-            }
-            if (photo != null) {
-                takePict.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                startActivityForResult(takePict, TAKE_PHOTOS);
-            }
-        }
-    }
+//    private File createImageFile() throws IOException{
+//        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFilename = "JPEG_"+timestamp;
+//        Log.d("Camera", "Bisa Create");
+//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM+"/Camera");
+//        Log.d("Camera", "Bisa dapet file");
+//        File image = File.createTempFile(imageFilename,".jpg");
+//        Log.d("Camera", image.toString());
+//        Toast.makeText(getContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+//        Log.d("Camera", storageDir.getAbsolutePath());
+//        currentPath = "file:"+image.getAbsolutePath();
+//        return image;
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         IStorage = FirebaseStorage.getInstance().getReference();
 
-        //Button camera = (Button) view.findViewById(R.id.camerabutton);
         sepatu = view.findViewById(R.id.pict_sepatu);
         progressDialog = new ProgressDialog(getActivity());
-//        camera.setOnClickListener(new View.OnClickListener() {
-//          @Override
-//          public void onClick(View view) {
-//              if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                  String[] permissionCamera = new String[]{Manifest.permission.CAMERA};
-//                  ActivityCompat.requestPermissions(getActivity(), permissionCamera, 0);
-//                  dispatchTakePicture();
-//              } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-////                  Intent camera = new Intent();
-////                  camera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-////                  startActivityForResult(camera, TAKE_PHOTOS;
-//                  dispatchTakePicture();
-//              }
-//          }
-//      });
+
         Button galery = (Button) view.findViewById(R.id.gallerybutton);
         galery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,32 +241,6 @@ public class OrderFragment extends Fragment {
             imageUri=data.getData();
             sepatu.setImageURI(imageUri);
         }
-//        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
-//            File f = new File(currentPath);
-//            Uri cobaUri  = Uri.fromFile(f);
-//            Intent mediascan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//            mediascan.setData(cobaUri);
-//            getActivity().sendBroadcast(mediascan);
-////            cameraUri=data.getData();
-////            filename = imageUri.getPath();
-////            sepatu.setImageURI(cameraUri);
-//            StorageReference storageReference = IStorage.child("image_shoes/"+filename);
-//            storageReference.putFile(cobaUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    progressDialog.dismiss();
-//                    Uri download = taskSnapshot.getDownloadUrl();
-//                    Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            sepatu.setImageURI(imageUri);
-//
-//        }
     }
 
 
