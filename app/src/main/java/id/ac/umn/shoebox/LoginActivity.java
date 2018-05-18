@@ -78,7 +78,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
         mSignInButton.setOnClickListener(this); //waktu di click supaya user pilih akun
+        progressDialog.setMessage("Tes");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
         configureSignIn();
+        progressDialog.dismiss();
 
 
 
@@ -193,24 +197,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 GoogleSignInAccount account = result.getSignInAccount();
 
                 idToken = account.getIdToken();
-
                 name = account.getDisplayName();
                 email = account.getEmail();
                 photoUri = account.getPhotoUrl();
                 photo = photoUri.toString();
 
-
-
-
                 // Save Data to SharedPreference
                 sharedPrefManager = new SharedPrefManager(mContext);
                 sharedPrefManager.saveIsLoggedIn(mContext, true);
-
                 sharedPrefManager.saveEmail(mContext, email);
                 sharedPrefManager.saveName(mContext, name);
                 sharedPrefManager.savePhoto(mContext, photo);
-
-
                 sharedPrefManager.saveToken(mContext, idToken);
                 //sharedPrefManager.saveIsLoggedIn(mContext, true);
 

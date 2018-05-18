@@ -1,13 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    tools:context="id.ac.umn.shoebox.HomeFragment">
+    tools:context="id.ac.umn.shoebox.HomeFragment"
+    android:background="@drawable/background">
 <!--<ScrollView-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content">-->
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/navigate"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <LinearLayout
+        android:layout_marginTop="80dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -15,31 +24,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/purple"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
             >
             <com.github.siyamed.shapeimageview.CircularImageView
                 android:layout_width="50dip"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:layout_height="50dip"
                 android:id="@+id/photo"
-                android:background="@color/purple"
-                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_vertical_margin"
                 android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_width="55dip"
+                android:layout_height="wrap_content"
+                android:text="Hai,"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="30sp" />
+            <TextView
+                android:id="@+id/nama_user"
+                android:layout_width="250dip"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="30sp" />
         </LinearLayout>
-
-
-
-
         <TextView
-            android:id="@+id/nama_user"
+            android:layout_marginLeft="85dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:background="@color/purple"
-            android:textSize="20sp" />
+            android:text="Lihat progres sepatumu di sini."
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+
+
 
 
         <TextView
@@ -48,8 +69,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:background="@color/purple"
+            android:textColor="@color/black"
             android:textSize="15sp"/>
 
         <TextView
@@ -58,9 +78,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="12sp"
-            android:background="@color/purple"
+
             android:paddingBottom="10dp"
             android:layout_marginBottom="10dp"/>
 

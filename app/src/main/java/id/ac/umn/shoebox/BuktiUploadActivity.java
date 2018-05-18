@@ -32,7 +32,7 @@ import java.util.Date;
 
 public class BuktiUploadActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
-    private static final int TAKE_PHOTOS = 50;
+//    private static final int TAKE_PHOTOS = 50;
     Uri imageUri;
     ImageView bukti ;
     @Override
@@ -104,41 +104,41 @@ public class BuktiUploadActivity extends AppCompatActivity {
             imageUri=data.getData();
             bukti.setImageURI(imageUri);
         }
-        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
-            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-            bukti.setImageBitmap(bitmap);
-        }
+//        if(requestCode==TAKE_PHOTOS && resultCode==RESULT_OK){
+//            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+//            bukti.setImageBitmap(bitmap);
+//        }
     }
-    private File createImageFile() throws IOException {
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFilename = "JPEG_"+timestamp;
-        Log.d("Camera", "Bisa Create");
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM+"/Camera");
-        Log.d("Camera", "Bisa dapet file");
-        File image = File.createTempFile(imageFilename,".jpg");
-        Log.d("Camera", image.toString());
-        Toast.makeText(getApplicationContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        Log.d("Camera", storageDir.getAbsolutePath());
-        currentPath = "file:"+image.getAbsolutePath();
-        return image;
-    }
-    private void dispatchTakePicture() {
-        Intent takePict = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
-        Log.d("Camera", "Bisa foto");
-        if (takePict.resolveActivity(this.getPackageManager()) != null) {
-            File photo = null;
-            try {
-                photo = createImageFile();
-                //Toast.makeText(getContext(), currentPath.toString(), Toast.LENGTH_SHORT).show();
-            } catch (IOException ec) {
-                //Toast.makeText(getContext(), ec.getMessage(), Toast.LENGTH_SHORT);
-            }
-            if (photo != null) {
-                takePict.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                startActivityForResult(takePict, TAKE_PHOTOS);
-            }
-        }
-    }
+//    private File createImageFile() throws IOException {
+//        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFilename = "JPEG_"+timestamp;
+//        Log.d("Camera", "Bisa Create");
+//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM+"/Camera");
+//        Log.d("Camera", "Bisa dapet file");
+//        File image = File.createTempFile(imageFilename,".jpg");
+//        Log.d("Camera", image.toString());
+//        Toast.makeText(getApplicationContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+//        Log.d("Camera", storageDir.getAbsolutePath());
+//        currentPath = "file:"+image.getAbsolutePath();
+//        return image;
+//    }
+//    private void dispatchTakePicture() {
+//        Intent takePict = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+//        Log.d("Camera", "Bisa foto");
+//        if (takePict.resolveActivity(this.getPackageManager()) != null) {
+//            File photo = null;
+//            try {
+//                photo = createImageFile();
+//                //Toast.makeText(getContext(), currentPath.toString(), Toast.LENGTH_SHORT).show();
+//            } catch (IOException ec) {
+//                //Toast.makeText(getContext(), ec.getMessage(), Toast.LENGTH_SHORT);
+//            }
+//            if (photo != null) {
+//                takePict.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+//                startActivityForResult(takePict, TAKE_PHOTOS);
+//            }
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

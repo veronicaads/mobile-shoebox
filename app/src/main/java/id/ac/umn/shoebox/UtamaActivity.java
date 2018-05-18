@@ -82,9 +82,6 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -100,21 +97,15 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         Menu();
         }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        AlertDialog.Builder phoneNumberDialog = new AlertDialog.Builder(UtamaActivity.this);
-    }*/
     public void Menu(){
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
+//        setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_reorder_black_24dp));
-        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_notifications_black_24dp));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_add_black_24dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_help_black_24dp));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 

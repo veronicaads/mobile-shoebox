@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,6 +54,7 @@ import static android.support.constraint.Constraints.TAG;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -124,16 +126,16 @@ public class HomeFragment extends Fragment {
         mUsername = sharedPrefManager.getName();
         mPhoneNumber = sharedPrefManager.getpNumber();
         mFullNameTextView.setText(mUsername);
-        mEmailTextView.setText(mEmail);
-        mPhoneNumberView.setText(mPhoneNumber);
+        //mEmailTextView.setText(mEmail);
+        //mPhoneNumberView.setText(mPhoneNumber);
         String uri = sharedPrefManager.getPhoto();
         Uri mPhotoUri = Uri.parse(uri);
 
-        Picasso.with(getContext())
-                .load(mPhotoUri)
+       Picasso.with(getContext())
+               .load(mPhotoUri)
                 .placeholder(android.R.drawable.sym_def_app_icon)
-                .error(android.R.drawable.sym_def_app_icon)
-                .into(photo);
+               .error(android.R.drawable.sym_def_app_icon)
+               .into(photo);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
                 .child(Utils.encodeEmail(mEmail)).child("orders");
@@ -187,22 +189,9 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-
-//        String[] array = new String[] {"U001","U002"};
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,array);
-//        listView.setAdapter(arrayAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent();
-//                intent.setClass(getActivity(), DetailActivity.class);
-//                //intent.putExtra("position", i);
-//                //intent.putExtra("id", id);
-//                startActivity(intent);
-//            }
-//        });
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.navigate);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
-        
         return view;
     }
 

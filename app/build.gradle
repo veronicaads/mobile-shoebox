@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "id.ac.umn.shoebox"
         //minSdkVersion 22 //tadinya 24 biar bisa jalan di hp miqdude
-        minSdkVersion 24
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -24,7 +24,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:support-vector-drawable:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
-    api 'com.google.firebase:firebase-messaging:15.0.2'
+    implementation 'com.google.firebase:firebase-messaging:15.0.2'
 
     // dari gradlenya bilang "configurations compile is obsolete"
     // jadi harus diganti sm imlementation atau api
