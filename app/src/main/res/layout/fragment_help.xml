@@ -39,14 +39,13 @@
                     android:layout_marginBottom="30dp"/>
             </TableRow>
 
-            <TableRow>
-            <ListView
-                android:id="@+id/listhelp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
-            </ListView>
-            </TableRow>
     </TableLayout>
+
+    <ListView
+        android:id="@+id/listhelp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+    </ListView>
 
 </LinearLayout>
