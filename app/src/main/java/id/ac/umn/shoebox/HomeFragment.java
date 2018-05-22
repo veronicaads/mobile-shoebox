@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,6 +39,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +69,22 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView mFullNameTextView, mEmailTextView,mPhoneNumberView;
+    private TextView mFullNameTextView;
     private String mUsername, mEmail,mPhoneNumber;
     //private CircleImageView mProfileImageView;
+
+
+    Runnable runnable = new Runnable() {
+        public void run() {
+            if (myCustomPagerAdapter.getCount() == page) {
+                page = 0;
+            } else {
+                page++;
+            }
+            viewPager.setCurrentItem(page, true);
+            handler.postDelayed(this, delay);
+        }
+    };
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,9 +97,19 @@ public class HomeFragment extends Fragment {
     private ListView listViewOrders;
     private List<String> orderList;
 
+
+    int images[] = {R.drawable.slider1, R.drawable.slider2, R.drawable.slider3};
+    CustomPagerAdapter myCustomPagerAdapter;
+
     public HomeFragment() {
         // Required empty public constructor
     }
+
+    private Handler handler;
+    private int delay = 5000;
+    private int page = 0;
+    ViewPager viewPager;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -116,11 +144,10 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mFullNameTextView = getView().findViewById(R.id.nama_user);
-        mEmailTextView = getView().findViewById(R.id.email_user);
-        mPhoneNumberView = getView().findViewById(R.id.notlp_user);
+
         final com.github.siyamed.shapeimageview.CircularImageView photo = (com.github.siyamed.shapeimageview.CircularImageView) getView().findViewById(R.id.photo);
         //mProfileImageView = (CircleImageView) getView().findViewById(R.id.photo);
+        mFullNameTextView = getView().findViewById(R.id.nama_user);
         sharedPrefManager = new SharedPrefManager(getContext());
         mEmail = sharedPrefManager.getUserEmail();
         mUsername = sharedPrefManager.getName();
@@ -139,6 +166,34 @@ public class HomeFragment extends Fragment {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
                 .child(Utils.encodeEmail(mEmail)).child("orders");
+
+
+
+
+
+        handler = new Handler();
+        viewPager = getView().findViewById(R.id.viewPager);
+        myCustomPagerAdapter = new CustomPagerAdapter(getActivity(),images);
+        viewPager.setAdapter(myCustomPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                page = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+
 
         //
         //ambil list order dari fragment_home
@@ -196,6 +251,7 @@ public class HomeFragment extends Fragment {
     }
 
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -208,10 +264,34 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable,delay);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
+    /*@Override
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable, delay);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+    }*/
 
 
     /**
