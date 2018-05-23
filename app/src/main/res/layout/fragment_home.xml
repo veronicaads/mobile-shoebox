@@ -40,7 +40,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_width="45dip"
+                    android:layout_width="55dip"
                     android:layout_height="wrap_content"
                     android:text="Hai,"
                     android:textColor="@color/black"
@@ -55,49 +55,30 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="20sp" />
+                <TextView
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lihat progres sepatumu di sini."
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
             </LinearLayout>
-
         </LinearLayout>
-        <TextView
-            android:layout_marginLeft="85dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lihat progres sepatumu di sini."
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
+            >
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="180dp" />
+        </LinearLayout>
 
 
 
 
 
-        <TextView
-            android:id="@+id/email_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/notlp_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-
-            android:paddingBottom="10dp"
-            android:layout_marginBottom="10dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="10dp"
-            android:text="Order List"
-            android:textSize="25sp" />
 
         <!--<ScrollView-->
             <!--android:layout_width="fill_parent"-->
