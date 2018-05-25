@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="10sp"
-    android:id="@+id/label">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:elevation="3dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardCornerRadius="5dp"
+    android:layout_marginBottom="10dp"
+    android:paddingBottom="20dp">
 
-</TextView>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="15dp"
+                android:scaleType="fitXY" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    >
+                    <TextView
+                        android:id="@+id/service"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/grey"
+                        android:textSize="8sp" />
+                </TableRow>
+
+
+            </TableLayout>
+
+        </TableRow>
+
+    </TableLayout>
+</android.support.v7.widget.CardView>
