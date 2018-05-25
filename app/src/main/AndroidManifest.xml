@@ -21,7 +21,8 @@
         android:label=""
         android:roundIcon="@mipmap/shoebox_ic_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -93,8 +93,9 @@ public class FirebaseDb{
     }
 
     private void sendOrder2(Order order, String key){
-        mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toLowerCase()
+        mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toUpperCase()
         .replaceAll("\\s+",""));
+//        Log.d("Cabang :", order.getCabang());
 
         //format ulang key
         key = String.format("%04d",Integer.parseInt(key)+1);
