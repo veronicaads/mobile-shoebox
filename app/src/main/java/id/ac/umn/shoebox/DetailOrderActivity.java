@@ -1,28 +1,28 @@
 package id.ac.umn.shoebox;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.app.Activity;
-        import android.support.v7.app.AppCompatActivity;
-        import android.view.Menu;
-        import android.view.MenuInflater;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.view.View.OnClickListener;
-        import android.widget.Button;
-        import android.widget.ImageView;
-        import android.widget.PopupMenu;
-        import android.widget.TextView;
-        import android.widget.Toast;
-
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
-        import com.google.firebase.database.DatabaseReference;
-        import com.google.firebase.database.FirebaseDatabase;
-        import com.google.firebase.database.ValueEventListener;
-
-        import java.util.ArrayList;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DetailOrderActivity extends AppCompatActivity {
     Button ganti_status;
@@ -30,6 +30,7 @@ public class DetailOrderActivity extends AppCompatActivity {
     TextView stat, order, lemari, nama, ser, sub_ser, merek;
     DatabaseReference databaseReference;
     ImageView Psepatu;
+
 
 
     @Override
@@ -87,6 +88,30 @@ public class DetailOrderActivity extends AppCompatActivity {
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(DetailOrderActivity.this);
+                        alert.setTitle("Alert");
+                        alert.setMessage("Are you sure to change the status ?");
+
+                        final EditText input = new EditText(DetailOrderActivity.this);
+                        alert.setView(input);
+
+                        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                String value = input.getText().toString();
+                                Log.d("", "Pin Value : "+value);
+                                return;
+                            }
+                        });
+
+                        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+
+
                          if(item.getTitle().equals("Lunas Telah diambil dari Lemari")){
                             stat.setText(item.getTitle());
                         }

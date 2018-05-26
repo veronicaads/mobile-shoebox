@@ -126,42 +126,45 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
         databaseReference = FirebaseDatabase.getInstance().getReference("orders");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                for(DataSnapshot ds : dataSnapshot.getChildren()){
+//
+//                    orderID.add(ds.child("orderId").getValue().toString());
+//                    Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
+//                    if(ds.child("tanggal_keluar").getValue().toString().equals("")){
+//                        Deadline.add("Kosong");
+//                    }
+//                    else Deadline.add(String.format("Deadline: %s", ds.child("tanggal_keluar").getValue().toString()));
+//                    try{
+//                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+//                        Date now = new Date();
+//                        Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
+//                        Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
+//                        long diffInMillies = Math.abs(now.getTime() - firstDate.getTime());
+//                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+//                        long level = 3 - diff;
+//                        if(level<0)level=0;
+//                        Level.add(String.format("Level: %s", Long.toString(level)));
+//                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
+//                        else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
+//                        else gambar.add(R.drawable.icons8_error_40);
+//                    } catch (Exception e) {e.printStackTrace();}
+//                }
+//                try{
+//                    listView.setAdapter(customAdminList);
+//                }catch (Exception e){
+//                    e.getStackTrace();
+//                }
+//            }
 
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-
-                    orderID.add(ds.child("orderId").getValue().toString());
-                    Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
-                    Deadline.add(String.format("Deadline: %s", ds.child("tanggal_keluar").getValue().toString()));
-                    try{
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
-                        Date now = new Date();
-                        Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
-                        Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
-                        long diffInMillies = Math.abs(now.getTime() - firstDate.getTime());
-                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                        long level = 3 - diff;
-                        if(level<0)level=0;
-                        Level.add(String.format("Level: %s", Long.toString(level)));
-                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
-                        else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-                        else gambar.add(R.drawable.icons8_error_40);
-                    } catch (Exception e) {e.printStackTrace();}
-                }
-                try{
-                    listView.setAdapter(customAdminList);
-                }catch (Exception e){
-                    e.getStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
         /*BATAS AKHIR*/
 
 
@@ -170,7 +173,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ListOrderActivity.this, DetailOrderActivity.class);
-                intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
+//                intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
                 startActivity(intent);
             }
         });
