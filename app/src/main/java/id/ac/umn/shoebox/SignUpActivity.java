@@ -21,7 +21,7 @@ import id.ac.umn.shoebox.SharedPrefManager;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText mFullNameEditText, mAddressEditText,mPhoneNumberEditText;
-    private String mUsername,mEmail,mAddress,mPhoneNumber;
+    private String mUsername,mEmail,mAddress,mPhoneNumber, mPriviledge;
 
     DatabaseReference mDatabase;
 
@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAddressEditText = findViewById(R.id.address);
         mPhoneNumberEditText = findViewById(R.id.pNumber);
         sharedPrefManager = new SharedPrefManager(SignUpActivity.this);
+        mPriviledge = sharedPrefManager.getpPrivilege();
         mUsername = sharedPrefManager.getName();
         mEmail = sharedPrefManager.getUserEmail();
         mFullNameEditText.setText(mUsername);
@@ -68,7 +69,12 @@ public class SignUpActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SignUpActivity.this, UtamaActivity.class));
+                if(mPriviledge.equals("admin")){
+                    startActivity(new Intent(SignUpActivity.this, ListOrderActivity.class));
+                }
+                else {
+                    startActivity(new Intent(SignUpActivity.this, UtamaActivity.class));
+                }
                 Toast.makeText(getBaseContext(),"Not Updated", Toast.LENGTH_SHORT).show();
             }
         });

@@ -147,6 +147,7 @@ public class OrderFragment extends Fragment {
 //        return image;
 //    }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

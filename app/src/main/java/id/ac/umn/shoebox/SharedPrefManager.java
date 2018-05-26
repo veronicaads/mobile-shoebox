@@ -80,6 +80,7 @@ public class SharedPrefManager {
         return sharedPreferences.getString("NAME", null);
     }
 
+
     public void savePhoto(Context context, String photo){
         mContext = context;
         sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -101,6 +102,18 @@ public class SharedPrefManager {
         editor.commit();
     }
 
+    public String getpPrivilege(){
+        sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        return sharedPreferences.getString("PRIVILEGE", null);
+    }
+
+    public void savepPrivilege(Context context, String pPriviledge){
+        mContext = context;
+        sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("PRIVILEGE", pPriviledge);
+        editor.commit();
+    }
     public String getPhoto(){
         sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         return sharedPreferences.getString("PHOTO", null);
