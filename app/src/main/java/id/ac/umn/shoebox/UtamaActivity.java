@@ -4,6 +4,7 @@ import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -45,7 +46,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import static android.support.constraint.Constraints.TAG;
 
 
 public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, HomeFragment.OnFragmentInteractionListener, OrderFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener{

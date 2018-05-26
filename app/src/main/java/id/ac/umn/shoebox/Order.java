@@ -19,18 +19,20 @@ public class Order {
     private String merkSepatu;
     private String image;
     private String comment;
-    private HashMap<String,String> tanggal_pesan;
-    private String tanggal_ambil;
+    private String tanggal_masuk;
+    private String tanggal_keluar;
     private String status_service;
     private String status_pembayaran;
     private Integer biaya;
+    private String noLaci;
+    private String buktiPembayaran;
 
     public Order(){}
 
     public Order(String orderid, String userEmail, String cabang, String service,
                  String subService,String merkSepatu,String image, String comment,
-                 HashMap tanggal_pesan, String tanggal_ambil, String status_service,
-                 String status_pembayaran, Integer biaya){
+                 String tanggal_masuk, String tanggal_keluar, String status_service,
+                 String status_pembayaran, Integer biaya, String noLaci, String buktiPembayaran){
         this.orderId = orderid;
         this.userEmail = userEmail;
         this.cabang = cabang;
@@ -39,11 +41,13 @@ public class Order {
         this.comment = comment;
         this.subService = subService;
         this.service = service;
-        //this.tanggal_pesan = tanggal_pesan;
-        this.tanggal_ambil = tanggal_ambil;
+        this.tanggal_masuk = tanggal_masuk;
+        this.tanggal_keluar = tanggal_keluar;
         this.status_service = status_service;
         this.status_pembayaran = status_pembayaran;
         this.biaya = biaya;
+        this.noLaci = noLaci;
+        this.buktiPembayaran = buktiPembayaran;
     }
 
     public String getOrderId(){return orderId;}
@@ -54,11 +58,13 @@ public class Order {
     public String getMerkSepatu(){return merkSepatu;}
     public String getImage(){return image;}
     public String getComment(){return comment;}
-    //public HashMap<String, String> getTanggal_pesan(){return tanggal_pesan;}
-    public String getTanggal_ambil(){return tanggal_ambil;}
+    public String getTanggal_masuk(){return tanggal_masuk;}
+    public String getTanggal_keluar(){return tanggal_keluar;}
     public String getStatus_service(){return status_service;}
     public String getStatus_pembayaran(){return status_pembayaran;}
     public Integer getBiaya(){return biaya;}
+    public String getNoLaci(){return noLaci;}
+    public String getBuktiPembayaran(){return buktiPembayaran;}
 
     public void setOrderId(String id){this.orderId = id;}
 }

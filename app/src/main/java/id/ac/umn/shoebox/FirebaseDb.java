@@ -3,6 +3,7 @@ package id.ac.umn.shoebox;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -39,25 +40,46 @@ public class FirebaseDb{
 
     public void sendOrder(final Order order, final Context context){
 
-        //ambil key terakir dari order_keys
-        mydb = FirebaseDatabase.getInstance().getReference("order_keys");
+        //ambil nomor laci dan keys
+        mydb = FirebaseDatabase.getInstance().getReference(order.
+                getCabang().replaceAll("\\s+","").toLowerCase());
 
-        com.google.firebase.database.Query query = mydb.orderByKey()
-                .equalTo(order.getCabang().replaceAll("\\s+","").toLowerCase());
+        //ambil nomor laci
+        mydb.child("laci").orderByValue().equalTo("free").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String tmp = "";
+                        for(DataSnapshot snap : dataSnapshot.getChildren()){
+                            Log.d(TAG, "nomor laci "+snap.getValue() + " " + snap.getKey());
+                        }
+//                        Log.d(TAG, "nomor laci"+dataSnapshot.getValue().toString());
+                    }
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+
+        Log.d(TAG, "this is executed");
+
+        //ambil key terakhir
+        mydb.orderByChild("key").limitToFirst(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String temp = null;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         //Map<String, String> order_keys = (Map<String, String>) snapshot.getValue();
                         temp = snapshot.getValue(String.class);
-                        //String wow = snapshot.getKey();
+                        //temp = snapshot.getKey();
                         //Toast.makeText(context,wow).show();
                         //Log.d(TAG, "onDataChange: 12313"+wow);
                     }
                 order_key = temp;
-                Log.d(TAG, "onDataChange: "+temp);
+                //Log.d(TAG, "key: "+temp);
 
                 sendOrder2(order,temp);
             }
@@ -67,34 +89,11 @@ public class FirebaseDb{
 
             }
         });
-
-        Log.d(TAG, order_key+" 123213");
-
-//        //update order_keys/<nama_cabang>
-//        mydb.setValue(Integer.toString(Integer.parseInt(order_key)+1));
-//
-//        //ubah order_id order menjadi yang format custom
-//        order.setOrderId(order.getCabang().toLowerCase().charAt(0)+order_key);
-//
-//
-//        //Untuk mengirim data ke orders
-//        mydb = FirebaseDatabase.getInstance().getReference("orders");
-//
-//        //tukar kuncinya dengan kunci dari firebase
-//        order.setOrderId(mydb.push().getKey());
-//
-//        //kirim data
-//        mydb.child(order.getOrderId()).setValue(order);
-//
-//        //tambahkan order ke data usernya
-//        mydb= FirebaseDatabase.getInstance().getReference("users");
-//        mydb.child(Utils.encodeEmail(order.getUserEmail())).child("orders").push().setValue(order.getOrderId());
-//        Log.d(TAG, "sendOrder: ljydgakjyfdkuyfadkuayfdka");
     }
 
     private void sendOrder2(Order order, String key){
-        mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toLowerCase()
-        .replaceAll("\\s+",""));
+        mydb = FirebaseDatabase.getInstance().getReference(order.getCabang()
+                .replaceAll("\\s+","").toLowerCase()).child("key");
 
         //format ulang key
         key = String.format("%04d",Integer.parseInt(key)+1);

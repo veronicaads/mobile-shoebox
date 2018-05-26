@@ -13,11 +13,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -53,6 +55,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -174,6 +177,7 @@ public class OrderFragment extends Fragment {
 
         Button order_but = (Button) view.findViewById(R.id.order_btn);
         order_but.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 progressDialog.setMessage("Uploading ....");
@@ -212,16 +216,16 @@ public class OrderFragment extends Fragment {
 
                 Log.d(TAG, "onClick: ordered");
 
-                HashMap<String,Object> tanggal_pesan = new HashMap<>();
-                tanggal_pesan.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, com.google.firebase.database.ServerValue.TIMESTAMP);
-
+                // ambil tanggal masuk
+                Date d = new Date();
+                String tgl_pesan = String.format("%d-%d-%d", d.getDate(), d.getMonth(), d.getYear()-100);
 
                 //
                 //kirim order baru
                 //
                 Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
-                        imagePath,comment, tanggal_pesan,"",
-                        "pending","belum lunas",000);
+                        imagePath,comment, tgl_pesan,"",
+                        "pending","belum lunas",000,"","");
 
                 firebaseDb.sendOrder(od,getContext());
 
