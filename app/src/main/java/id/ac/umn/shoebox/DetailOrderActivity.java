@@ -11,19 +11,72 @@ package id.ac.umn.shoebox;
         import android.view.View;
         import android.view.View.OnClickListener;
         import android.widget.Button;
+        import android.widget.ImageView;
         import android.widget.PopupMenu;
+        import android.widget.TextView;
         import android.widget.Toast;
+
+        import com.google.firebase.database.DataSnapshot;
+        import com.google.firebase.database.DatabaseError;
+        import com.google.firebase.database.DatabaseReference;
+        import com.google.firebase.database.FirebaseDatabase;
+        import com.google.firebase.database.ValueEventListener;
+
+        import java.util.ArrayList;
 
 public class DetailOrderActivity extends AppCompatActivity {
     Button button1;
+
+    TextView stat, order, lemari, nama, ser, sub_ser, merek;
+    DatabaseReference databaseReference;
+    ImageView Psepatu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_order);
         button1 = (Button) findViewById(R.id.status_btn);
-        button1.setOnClickListener(new OnClickListener() {
+        stat = findViewById(R.id.status);
+        order = findViewById(R.id.no_order);
+        lemari = findViewById(R.id.nolemari);
+        nama = findViewById(R.id.user_name);
+        ser = findViewById(R.id.service);
+        sub_ser = findViewById(R.id.subservice);
+        merek = findViewById(R.id.merk);
+        Psepatu = findViewById(R.id.sepatu);
 
+
+
+        Intent a = getIntent();
+        final String order_id = a.getStringExtra("OrderID");
+        Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                order.setText(order_id);
+//                Psepatu.setImageURI(dataSnapshot.child("orders").child(order_id).child("image").getValue());
+                lemari.setText(dataSnapshot.child("orders").child(order_id).child("noLaci").getValue().toString());
+                stat.setText(dataSnapshot.child("orders").child(order_id).child("status_service").getValue().toString());
+                String email = dataSnapshot.child("orders").child(order_id).child("userEmail").getValue().toString();
+                String namaLengkap = dataSnapshot.child("users").child(email.replace(".", ",")).child("fullName").getValue().toString();
+                nama.setText(namaLengkap);
+                ser.setText(dataSnapshot.child("orders").child(order_id).child("service").getValue().toString());
+                sub_ser.setText(dataSnapshot.child("orders").child(order_id).child("subService").getValue().toString());
+                merek.setText(dataSnapshot.child("orders").child(order_id).child("merkSepatu").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        button1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Creating the instance of PopupMenu
@@ -34,6 +87,18 @@ public class DetailOrderActivity extends AppCompatActivity {
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
+                         if(item.getTitle().equals("Lunas Telah diambil dari Lemari")){
+                            stat.setText(item.getTitle());
+                        }
+                        else if(item.getTitle().equals("Sepatu berada di showroom")){
+                            stat.setText(item.getTitle());
+                        }
+                        else if(item.getTitle().equals("Sedang di Cuci")){
+                            stat.setText(item.getTitle());
+                        }
+                        else if(item.getTitle().equals("Selesai")){
+                            stat.setText(item.getTitle());
+                        }
                         Toast.makeText(DetailOrderActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }

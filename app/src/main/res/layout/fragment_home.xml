@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     tools:context="id.ac.umn.shoebox.HomeFragment"
     android:background="@drawable/background">
-<!--<ScrollView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content">-->
+
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,20 +74,10 @@
         </LinearLayout>
 
 
-
-
-
-
-        <!--<ScrollView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="fill_parent">-->
             <ListView
                 android:id="@+id/list_order"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 ></ListView>
-        <!--</ScrollView>-->
     </LinearLayout>
-
-<!--</ScrollView>-->
 </RelativeLayout>
