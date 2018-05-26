@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private String photo;
     private Uri photoUri;
     private SignInButton mSignInButton;
-    private String pNumber;
+    private String pNumber, pPriviledge;
     private String address;
 
     private FirebaseDatabase mDatabase;
@@ -251,22 +251,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                                     User getuserdata = dataSnapshot.getValue(User.class);
                                     privilege_flag = getuserdata.getPrivilege();
+                                    //pPriviledge=privilege_flag;
                                     pNumber = getuserdata.getpNumber();
                                     sharedPrefManager.savepNumber(mContext,pNumber);
                                     Log.d(TAG,"MESSAGE" +privilege_flag);
                                     if (privilege_flag.toString().equals("admin")){
+                                        sharedPrefManager.savepPrivilege(mContext,privilege_flag);
+//                                        Toast.makeText(LoginActivity.this, sharedPrefManager.getpPrivilege(), Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(LoginActivity.this,ListOrderActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                         finish();
                                     }
                                     else if (privilege_flag.toString().equals("user") && pNumber.toString().equals("null")){
+                                        sharedPrefManager.savepPrivilege(mContext,privilege_flag);
                                         Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                         finish();
                                     }
                                     else {
+                                        sharedPrefManager.savepPrivilege(mContext,"user");
                                         Intent intent = new Intent(LoginActivity.this,UtamaActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
