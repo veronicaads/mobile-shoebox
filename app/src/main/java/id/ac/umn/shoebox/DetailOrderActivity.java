@@ -25,7 +25,7 @@ package id.ac.umn.shoebox;
         import java.util.ArrayList;
 
 public class DetailOrderActivity extends AppCompatActivity {
-    Button button1;
+    Button ganti_status;
 
     TextView stat, order, lemari, nama, ser, sub_ser, merek;
     DatabaseReference databaseReference;
@@ -36,7 +36,7 @@ public class DetailOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_order);
-        button1 = (Button) findViewById(R.id.status_btn);
+        ganti_status = (Button) findViewById(R.id.status_btn);
         stat = findViewById(R.id.status);
         order = findViewById(R.id.no_order);
         lemari = findViewById(R.id.nolemari);
@@ -76,11 +76,11 @@ public class DetailOrderActivity extends AppCompatActivity {
             }
         });
 
-        button1.setOnClickListener(new OnClickListener() {
+        ganti_status.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(DetailOrderActivity.this, button1);
+                PopupMenu popup = new PopupMenu(DetailOrderActivity.this, ganti_status);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.status, popup.getMenu());
 

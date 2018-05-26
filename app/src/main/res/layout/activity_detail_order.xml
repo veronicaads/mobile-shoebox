@@ -153,8 +153,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:id="@+id/merk"
-                    android:text="-"
-                    android:layout_marginTop="10dp"/>
+                    android:text="-"/>
             </TableRow>
             <TableRow
                 android:paddingTop="15dp">
