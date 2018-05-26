@@ -1,55 +1,49 @@
 package id.ac.umn.shoebox;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 
 
-
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import id.ac.umn.shoebox.SharedPrefManager;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,7 +67,6 @@ public class HomeFragment extends Fragment {
     private String mUsername, mEmail,mPhoneNumber;
     //private CircleImageView mProfileImageView;
 
-
     Runnable runnable = new Runnable() {
         public void run() {
             if (myCustomPagerAdapter.getCount() == page) {
@@ -92,11 +85,14 @@ public class HomeFragment extends Fragment {
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
 
-
     private DatabaseReference databaseReference;
     private ListView listViewOrders;
-    private List<String> orderList;
-
+    private static  List orderList;
+    private static List cabangList;
+    private static List serviceList;
+    private static List inDateList;
+    private static List outDateList;
+    private static List statuslist;
 
     int images[] = {R.drawable.slider1, R.drawable.slider2, R.drawable.slider3};
     CustomPagerAdapter myCustomPagerAdapter;
@@ -109,7 +105,8 @@ public class HomeFragment extends Fragment {
     private int delay = 5000;
     private int page = 0;
     ViewPager viewPager;
-
+    private OrderAdapter orderAdapter;
+    private ArrayList<OrderModel> models;
 
     /**
      * Use this factory method to create a new instance of
@@ -136,41 +133,84 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+       cabangList = new ArrayList<>();
         orderList = new ArrayList<>();
+        serviceList = new ArrayList();
+        inDateList = new ArrayList();
+        outDateList = new ArrayList();
+        statuslist = new ArrayList();
+    }
+
+    public static String StringToDate(String date){
+        String date1 = date;
+        String replacestring = date1.replace('-','/');
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date estDate, esDateadd = null;
+        try {
+            estDate = df.parse(replacestring);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(estDate);
+            cal.add(Calendar.DATE,3);
+            esDateadd = cal.getTime();
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+        }
+        Format format = new SimpleDateFormat("dd-MM-yyyy");
+        String estdate_final = format.format(esDateadd);
+        return estdate_final;
+    }
+
+    public static ArrayList<OrderModel> getList(){
+        ArrayList<OrderModel> listorder = new ArrayList<>();
+        System.out.println(orderList.size());
+        for (int i = 0; i < orderList.size();i++){
+            String od = (String) orderList.get(i);
+            String order = od.substring(1,5);
+            String cabang = (String) cabangList.get(i);
+            String service = (String) serviceList.get(i);
+            String status = (String) statuslist.get(i);
+            String tglmasuk = (String) inDateList.get(i);
+            String estdate = StringToDate(tglmasuk);
+            if (status.equals("pending")){
+                listorder.add(new OrderModel(R.drawable.pending,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"PENDING - Kami akan segera melayani permintaan anda"));
+            }
+            else if (status.equals("progress")){
+                listorder.add(new OrderModel(R.drawable.progress,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"PROSES - Kami sedang mempersiapkan yang terbaik"));
+            }
+            else if (status.equals("done")){
+                listorder.add(new OrderModel(R.drawable.done,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"SELESAI - Sepatu kesayanganmu sudah dapat diambil"));
+            }
+        }
+        return listorder;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        orderList.clear();
+        cabangList.clear();
+        serviceList.clear();
+        inDateList.clear();
+        outDateList.clear();
 
-
-        final com.github.siyamed.shapeimageview.CircularImageView photo = (com.github.siyamed.shapeimageview.CircularImageView) getView().findViewById(R.id.photo);
-        //mProfileImageView = (CircleImageView) getView().findViewById(R.id.photo);
+        final com.github.siyamed.shapeimageview.CircularImageView photo = getView().findViewById(R.id.photo);
         mFullNameTextView = getView().findViewById(R.id.nama_user);
         sharedPrefManager = new SharedPrefManager(getContext());
         mEmail = sharedPrefManager.getUserEmail();
         mUsername = sharedPrefManager.getName();
         mPhoneNumber = sharedPrefManager.getpNumber();
         mFullNameTextView.setText(mUsername);
-        //mEmailTextView.setText(mEmail);
-        //mPhoneNumberView.setText(mPhoneNumber);
         String uri = sharedPrefManager.getPhoto();
         Uri mPhotoUri = Uri.parse(uri);
 
-       Picasso.with(getContext())
+        Picasso.with(getContext())
                .load(mPhotoUri)
                 .placeholder(android.R.drawable.sym_def_app_icon)
                .error(android.R.drawable.sym_def_app_icon)
                .into(photo);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("users")
-                .child(Utils.encodeEmail(mEmail)).child("orders");
-
-
-
-
-
+        //slider handler & timer
         handler = new Handler();
         viewPager = getView().findViewById(R.id.viewPager);
         myCustomPagerAdapter = new CustomPagerAdapter(getActivity(),images);
@@ -178,63 +218,74 @@ public class HomeFragment extends Fragment {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
                 page = position;
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
-
-
-
-        //
-        //ambil list order dari fragment_home
-        //
+        /** Ambil list order dari fragment_home*/
         listViewOrders = (ListView) getView().findViewById(R.id.list_order);
 
-        //
-        //async listener task untuk update setiap order
-        //baru ditambahkan
-        //
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        /** Query List Order User*/
+        databaseReference = FirebaseDatabase.getInstance().getReference("orders");
+        Query query = databaseReference.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
+        query.addChildEventListener(new ChildEventListener() {
+            String checker = "";
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                orderList.clear();
-
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    String od = ds.getValue(String.class);
-                    orderList.add(od);
-                    Log.d("ds",od);
+                    Order order = dataSnapshot.getValue(Order.class);
+                    String od = order.getOrderId();
+                    if (!checker.equals(od)){
+                        orderList.add(od);
+                        String cabang = order.getCabang();
+                        cabangList.add(cabang);
+                        String servis = order.getService();
+                        serviceList.add(servis);
+                        String status_Servis = order.getStatus_service();
+                        statuslist.add(status_Servis);
+                        String tglmasuk = order.getTanggal_masuk();
+                        inDateList.add(tglmasuk);
+                        checker = od;
+                    }
                 }
-
-                try {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,orderList);
-                    listViewOrders.setAdapter(adapter);
+                try
+                {
+                    models = getList();
+                    orderAdapter = new OrderAdapter(getContext(), models);
+                    listViewOrders.setAdapter(orderAdapter);
                 }
-                catch (Exception io){
-                    io.getStackTrace();
+                catch(Exception error)
+                {
+                    error.printStackTrace();
                 }
             }
-
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
 
         listViewOrders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity(),DetailActivity.class));
+                String orderId = (String) orderList.get(position);
+                Intent i = new Intent(getActivity(),DetailActivity.class);
+                i.putExtra("ORDERID",orderId);
+                startActivity(i);
             }
         });
     }
@@ -242,15 +293,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.navigate);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
+
         return view;
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -280,19 +329,6 @@ public class HomeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-    /*@Override
-    public void onResume() {
-        super.onResume();
-        handler.postDelayed(runnable, delay);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        handler.removeCallbacks(runnable);
-    }*/
-
 
     /**
      * This interface must be implemented by activities that contain this

@@ -226,14 +226,13 @@ public class OrderFragment extends Fragment {
 
                 //
                 //kirim order baru
-                //
+                //belum cek jika gambar belom berisi maka akan gagal
                 Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
                         imagePath,comment, tgl_pesan,"",
                         "pending","belum lunas",000,"","");
-
                 firebaseDb.sendOrder(od,getContext());
-
                 progressDialog.dismiss();
+                Log.d("cabang",cabang);
                 startActivity(new Intent(getActivity(),DetailActivity.class));
             }
         });
@@ -267,7 +266,7 @@ public class OrderFragment extends Fragment {
         TextView tv = (TextView) getActivity().findViewById(R.id.text_view);
         tv.setText(" Keterangan :\n Untuk pemesanan service Repaint ataupun \n Repair akan mendapatkan free service Reclean.");
 
-        cabang_spinner = getActivity().findViewById(R.id.cabang);
+      cabang_spinner = getActivity().findViewById(R.id.cabang);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.listcabang,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -75,8 +75,8 @@ public class HelpFragment extends Fragment {
         helplist.add(new Model(R.drawable.clean,"Reclean"));
         helplist.add(new Model(R.drawable.paint,"Repaint"));
         helplist.add(new Model(R.drawable.repair,"Repair"));
-        helplist.add(new Model(R.drawable.ic_shopping_cart_black_24dp,"How to Order"));
-        helplist.add(new Model(R.drawable.ic_contact_mail_black_24dp,"About Us"));
+        helplist.add(new Model(R.drawable.howtoorder,"How to Order"));
+        helplist.add(new Model(R.drawable.aboutus,"About Us"));
         return helplist;
     }
     private ArrayList<Model> models;

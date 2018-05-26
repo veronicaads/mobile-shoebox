@@ -1,21 +1,24 @@
 package id.ac.umn.shoebox;
 
+import android.util.Log;
+
 /**
  * Created by veronica on 5/23/18.
  */
 
 public class OrderModel {
     private int ImageService;
-    private String Service,Cabang,OrderID,inDate,estDate, status;
+    private String service,cabang,inDate,estDate, status;
+    private String orderID;
 
-    public OrderModel(int imageService, String Service, String Cabang, String OrderID, String inDate, String estDate, String status) {
+    public OrderModel(int imageService, String Service, String Cabang, String OrderID, String InDate, String EstDate, String Status) {
         ImageService = imageService;
-        Service = Service;
-        Cabang = Cabang;
-        OrderID = OrderID;
-        inDate = inDate;
-        estDate = estDate;
-        status = status;
+        service = Service;
+        cabang = Cabang;
+        orderID = OrderID;
+        inDate = InDate;
+        estDate = EstDate;
+        status = Status;
     }
 
     public int getImageService() {
@@ -27,7 +30,7 @@ public class OrderModel {
     }
 
     public String getService() {
-        return Service;
+        return service;
     }
 
     public void setService(String Service) {
@@ -35,7 +38,7 @@ public class OrderModel {
     }
 
     public String getCabang() {
-        return Cabang;
+        return cabang;
     }
 
     public void setCabang(String Cabang) {
@@ -43,7 +46,7 @@ public class OrderModel {
     }
 
     public String getOrderID() {
-        return OrderID;
+        return orderID;
     }
 
     public void setOrderID(String OrderID) {
