@@ -43,7 +43,7 @@ public class FirebaseDb{
         mydb = FirebaseDatabase.getInstance().getReference("order_keys");
 
         com.google.firebase.database.Query query = mydb.orderByKey()
-                .equalTo(order.getCabang().replaceAll("\\s+","").toUpperCase());
+                .equalTo(order.getCabang().replaceAll("\\s+","").toLowerCase());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -93,9 +93,8 @@ public class FirebaseDb{
     }
 
     private void sendOrder2(Order order, String key){
-        mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toUpperCase()
+        mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toLowerCase()
         .replaceAll("\\s+",""));
-//        Log.d("Cabang :", order.getCabang());
 
         //format ulang key
         key = String.format("%04d",Integer.parseInt(key)+1);
