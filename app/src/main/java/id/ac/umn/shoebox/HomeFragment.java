@@ -141,8 +141,9 @@ public class HomeFragment extends Fragment {
         statuslist = new ArrayList();
     }
 
-    public static String StringToDate(String date){
+    public static String StringToDate(String date,String Service){
         String date1 = date;
+        String service1 = Service;
         String replacestring = date1.replace('-','/');
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date estDate, esDateadd = null;
@@ -150,8 +151,23 @@ public class HomeFragment extends Fragment {
             estDate = df.parse(replacestring);
             Calendar cal = Calendar.getInstance();
             cal.setTime(estDate);
-            cal.add(Calendar.DATE,3);
-            esDateadd = cal.getTime();
+            if (service1.equals("Repaint")){
+                cal.add(Calendar.DATE,14);
+                esDateadd = cal.getTime();
+            }
+            else if (service1.equals("Repair")){
+                cal.add(Calendar.DATE,5);
+                esDateadd = cal.getTime();
+            }
+            else if (service1.equals("Reclean")){
+                cal.add(Calendar.DATE,5);
+                esDateadd = cal.getTime();
+            }
+            else {
+                cal.add(Calendar.DATE,14);
+                esDateadd = cal.getTime();
+            }
+
         }
         catch (ParseException e){
             e.printStackTrace();
@@ -171,7 +187,7 @@ public class HomeFragment extends Fragment {
             String service = (String) serviceList.get(i);
             String status = (String) statuslist.get(i);
             String tglmasuk = (String) inDateList.get(i);
-            String estdate = StringToDate(tglmasuk);
+            String estdate = StringToDate(tglmasuk,service);
             if (status.equals("pending")){
                 listorder.add(new OrderModel(R.drawable.pending,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"PENDING - Kami akan segera melayani permintaan anda"));
             }
