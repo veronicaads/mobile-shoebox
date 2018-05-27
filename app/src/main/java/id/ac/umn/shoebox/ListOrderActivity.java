@@ -1,6 +1,8 @@
 package id.ac.umn.shoebox;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.auth.api.Auth;
@@ -41,7 +44,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+
 
 public class ListOrderActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -91,10 +96,10 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 //    String[] orderID = new String[] {"Order ID : U0003","Order ID : U0002","Order ID : U0001","Order ID : U0005"};
 //    Integer[] gambar = new Integer[]{R.drawable.icons8_high_priority_48, R.drawable.icons8_warning_shield_48, R.drawable.icons8_error_40};
 
-    ArrayList<String> Level    = new ArrayList<String>();
     ArrayList<String> Status   = new ArrayList<String>();
     ArrayList<String> Deadline = new ArrayList<String>();
     ArrayList<String> orderID  = new ArrayList<String>();
+    ArrayList<String> Level    = new ArrayList<String>();
     ArrayList<Integer> gambar  = new ArrayList<Integer>();
 
     private DatabaseReference databaseReference;
@@ -126,45 +131,64 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
         databaseReference = FirebaseDatabase.getInstance().getReference("orders");
 
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                for(DataSnapshot ds : dataSnapshot.getChildren()){
-//
-//                    orderID.add(ds.child("orderId").getValue().toString());
-//                    Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
-//                    if(ds.child("tanggal_keluar").getValue().toString().equals("")){
-//                        Deadline.add("Kosong");
-//                    }
-//                    else Deadline.add(String.format("Deadline: %s", ds.child("tanggal_keluar").getValue().toString()));
-//                    try{
-//                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
-//                        Date now = new Date();
-//                        Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
-//                        Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
-//                        long diffInMillies = Math.abs(now.getTime() - firstDate.getTime());
-//                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-//                        long level = 3 - diff;
-//                        if(level<0)level=0;
-//                        Level.add(String.format("Level: %s", Long.toString(level)));
-//                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
-//                        else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-//                        else gambar.add(R.drawable.icons8_error_40);
-//                    } catch (Exception e) {e.printStackTrace();}
-//                }
-//                try{
-//                    listView.setAdapter(customAdminList);
-//                }catch (Exception e){
-//                    e.getStackTrace();
-//                }
-//            }
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    orderID.add(ds.child("orderId").getValue().toString());
+                    Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
+                    if(ds.child("tanggal_masuk").getValue().toString().equals("")){
+                        Deadline.add("Kosong");
+                    }
+                    else {
+                        try{
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                            Date  firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
+                            Calendar now = Calendar.getInstance();
+                            now.setTime(firstDate);
+                            now.add(Calendar.DAY_OF_MONTH, 3);
+                            String selsai = sdf.format(now.getTime());
+
+                            Deadline.add(String.format("Deadline: %s", selsai));
+                        }catch (Exception e){e.printStackTrace();}
+
+                    }
+                    try{
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                        Date now = new Date();
+                        Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
+                        //Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
+
+                        /*Tambahan Hari Keluar*/
+                        Calendar saat = Calendar.getInstance();
+                        saat.setTime(firstDate);
+                        saat.add(Calendar.DAY_OF_MONTH, 3);
+                        Date kelar = saat.getTime();
+
+                        long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
+                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                        long level = 3 - diff;
+                        //long level=3;
+                        if(level<0)level=0;
+                        Level.add(String.format("Level: %s", Long.toString(level)));
+                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
+                        else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
+                        else gambar.add(R.drawable.icons8_error_40);
+                    } catch (Exception e) {e.printStackTrace();}
+                }
+                try{
+                    listView.setAdapter(customAdminList);
+                }catch (Exception e){
+                    e.getStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         /*BATAS AKHIR*/
 
 
@@ -173,7 +197,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ListOrderActivity.this, DetailOrderActivity.class);
-//                intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
+                intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
                 startActivity(intent);
             }
         });
@@ -238,5 +262,19 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    long doubleBack;
+    final int TIME_DELAY = 1500;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBack + TIME_DELAY > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(getBaseContext(), "Press once again to exit!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        doubleBack = System.currentTimeMillis();
     }
 }

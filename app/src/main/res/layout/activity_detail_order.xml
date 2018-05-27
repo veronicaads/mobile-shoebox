@@ -7,60 +7,117 @@
     android:orientation="vertical"
     tools:context="id.ac.umn.shoebox.DetailOrderActivity">
     <ImageView
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:id="@+id/sepatu"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:src="@drawable/shoes" />s
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:src="@drawable/shoes" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
             <TableRow
                 android:padding="5dp"
                 >
                 <TextView
-                    android:text="Nomor Order   :"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nomor Order    "
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textSize="18sp"
                     />
                 <TextView
-                    android:text="-"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:gravity="left"
-                    android:textSize="18sp"
                     android:id="@+id/no_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="-"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
                     />
             </TableRow>
             <TableRow android:padding="5dp">
                 <TextView
-                    android:text="Nomor Lemari :"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nomor Lemari  "
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textSize="18sp"
                     />
                 <TextView
-                    android:text="-"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:gravity="left"
-                    android:textSize="18sp"
                     android:id="@+id/nolemari"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="-"
+                    android:textSize="16sp"
+                    />
+            </TableRow>
+            <TableRow android:padding="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Kunci Gembok  "
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/kunci"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="-"
+                    android:textSize="16sp"
+                    />
+            </TableRow>
+            <TableRow android:padding="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tanggal Masuk "
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tgl_masuk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="-"
+                    android:textSize="16sp"
+                    />
+            </TableRow>
+            <TableRow android:padding="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Deadline             "
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/deadline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="-"
+                    android:textSize="16sp"
                     />
             </TableRow>
             <TableRow
@@ -70,18 +127,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Status               :"
-                    android:textSize="18sp"
+                    android:text="Status                 "
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:gravity="left"
                     android:id="@+id/status"
-                    android:text="-" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="-"
+                    android:textSize="16sp" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -89,17 +146,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nama Pemilik  :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:text="Nama Pemilik    "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
                     android:id="@+id/user_name"
-                    android:text="-" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="16sp" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -107,17 +164,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Service              :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:text="Service                "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
                     android:id="@+id/service"
-                    android:text="-" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="16sp" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -125,17 +182,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Subservice        :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:text="Subservice          "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
                     android:id="@+id/subservice"
-                    android:text="-" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="16sp" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -143,38 +200,39 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Merk Sepatu     :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                    android:text="Merk Sepatu       "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/merk"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:id="@+id/merk"
-                    android:text="-"/>
+                    android:text="-"
+                    android:textSize="16sp"/>
             </TableRow>
             <TableRow
+                android:paddingBottom="20dp"
                 android:paddingTop="15dp">
                 <Button
                     android:id="@+id/status_btn"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Change Status"
-                    android:background="@color/purple"
-                    android:textColor="@color/white"
                     android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/purple"
+                    android:text="Change Status"
+                    android:textColor="@color/white"
                     />
                 <Button
                     android:id="@+id/back_btn"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@color/purple"
                     android:text="Back"
                     android:textColor="@color/white"
-                    android:background="@color/purple"
                     />
             </TableRow>
         </TableLayout>
