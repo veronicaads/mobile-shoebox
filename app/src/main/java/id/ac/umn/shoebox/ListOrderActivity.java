@@ -163,7 +163,10 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                         /*Tambahan Hari Keluar*/
                         Calendar saat = Calendar.getInstance();
                         saat.setTime(firstDate);
-                        saat.add(Calendar.DAY_OF_MONTH, 3);
+                        if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
+                            saat.add(Calendar.DAY_OF_MONTH, 5);
+                        else if(ds.child("service").getValue().toString().equals("Repaint"))
+                            saat.add(Calendar.DAY_OF_MONTH, 5);
                         Date kelar = saat.getTime();
 
                         long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
