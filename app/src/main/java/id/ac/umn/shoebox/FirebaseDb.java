@@ -50,16 +50,13 @@ public class FirebaseDb{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String temp = null;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        //Map<String, String> order_keys = (Map<String, String>) snapshot.getValue();
                         temp = snapshot.getValue(String.class);
-                        //String wow = snapshot.getKey();
-                        //Toast.makeText(context,wow).show();
-                        //Log.d(TAG, "onDataChange: 12313"+wow);
                     }
+
                 order_key = temp;
                 Log.d(TAG, "onDataChange: "+temp);
 
-                sendOrder2(order,temp);
+                getKey(order,temp);
             }
 
             @Override
@@ -67,32 +64,39 @@ public class FirebaseDb{
 
             }
         });
-
-        Log.d(TAG, order_key+" 123213");
-
-//        //update order_keys/<nama_cabang>
-//        mydb.setValue(Integer.toString(Integer.parseInt(order_key)+1));
-//
-//        //ubah order_id order menjadi yang format custom
-//        order.setOrderId(order.getCabang().toLowerCase().charAt(0)+order_key);
-//
-//
-//        //Untuk mengirim data ke orders
-//        mydb = FirebaseDatabase.getInstance().getReference("orders");
-//
-//        //tukar kuncinya dengan kunci dari firebase
-//        order.setOrderId(mydb.push().getKey());
-//
-//        //kirim data
-//        mydb.child(order.getOrderId()).setValue(order);
-//
-//        //tambahkan order ke data usernya
-//        mydb= FirebaseDatabase.getInstance().getReference("users");
-//        mydb.child(Utils.encodeEmail(order.getUserEmail())).child("orders").push().setValue(order.getOrderId());
-//        Log.d(TAG, "sendOrder: ljydgakjyfdkuyfadkuayfdka");
     }
 
-    private void sendOrder2(Order order, String key){
+    private void getKey(final Order order, final String key){
+        mydb = FirebaseDatabase.getInstance().getReference(order.getCabang().toLowerCase()
+        .replaceAll("\\s+",""));
+
+        mydb.child("laci").orderByValue().equalTo("free").limitToFirst(1).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        DataSnapshot ds = (DataSnapshot) dataSnapshot.getChildren();
+
+                        String nmor_laci = "";
+                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+                            nmor_laci = ds.getKey();
+                        }
+
+                        Log.d(TAG, "nomor laci"+nmor_laci);
+
+                        mydb.child("laci").child(nmor_laci).setValue("occupied");
+
+                        sendOrder2(order,key,nmor_laci);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
+    private void sendOrder2(Order order, String key, String laci){
         mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toLowerCase()
         .replaceAll("\\s+",""));
 
@@ -104,6 +108,9 @@ public class FirebaseDb{
 
         //ubah order_id order menjadi yang format custom
         order.setOrderId(order.getCabang().toLowerCase().charAt(0)+key);
+
+        //tambahkan dengan nomor laci baru
+        order.setNoLaci(laci);
 
         //kirim data ke orders
         mydb = FirebaseDatabase.getInstance().getReference("orders");

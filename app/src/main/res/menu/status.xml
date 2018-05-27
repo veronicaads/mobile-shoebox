@@ -3,15 +3,15 @@
 
     <item
         android:id="@+id/diambil"
-        android:title="Lunas Telah diambil dari Lemari" />
+        android:title="Pending (Sepatu belum diambil)" />
     <item
         android:id="@+id/beradaditoko"
-        android:title="Sepatu berada di showroom" />
+        android:title="Pending (Service belum di bayar)" />
     <item
         android:id="@+id/cuci"
-        android:title="Sedang di Cuci" />
+        android:title="On Progress" />
     <item
         android:id="@+id/selesai"
-        android:title="Selesai" />
+        android:title="Done" />
 
 </menu>
