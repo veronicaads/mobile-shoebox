@@ -67,4 +67,5 @@ public class Order {
     public String getBuktiPembayaran(){return buktiPembayaran;}
 
     public void setOrderId(String id){this.orderId = id;}
+    public void setNoLaci(String no){noLaci = no;}
 }
