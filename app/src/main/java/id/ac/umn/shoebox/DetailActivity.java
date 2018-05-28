@@ -1,5 +1,6 @@
 package id.ac.umn.shoebox;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,14 +11,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+
 public class DetailActivity extends AppCompatActivity {
+
+    TextView stat, order, lemari, nama, ser, sub_ser, merk, tgl_order, tgl_deadline, gembok;
+    DatabaseReference databaseReference;
+    ImageView Psepatu;
+    ProgressDialog progressDialog;
+    String order_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        Intent a = getIntent();
+        order_id = a.getStringExtra("ORDERID");
 
         TextView tv= (TextView)findViewById(R.id.text_view);
        // tv.setText(" Silahkan lakukan pembayaran melalui  \n bank CBA ke nomor rekening xxxxxxxx \n Setelah itu, silahkan upload bukti \n transfer  di menu yang telah tersedia");
