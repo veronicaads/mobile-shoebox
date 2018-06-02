@@ -41,8 +41,11 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.ServerValue;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +57,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -133,24 +138,10 @@ public class OrderFragment extends Fragment {
     private ProgressDialog progressDialog;
     private DatabaseReference database;
     String filename, currentPath;
+    String isi="";
+    Uri donlod;
 
-
-
-//    private File createImageFile() throws IOException{
-//        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFilename = "JPEG_"+timestamp;
-//        Log.d("Camera", "Bisa Create");
-//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM+"/Camera");
-//        Log.d("Camera", "Bisa dapet file");
-//        File image = File.createTempFile(imageFilename,".jpg");
-//        Log.d("Camera", image.toString());
-//        Toast.makeText(getContext(), storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-//        Log.d("Camera", storageDir.getAbsolutePath());
-//        currentPath = "file:"+image.getAbsolutePath();
-//        return image;
-//    }
-
-
+    StorageReference storageReference;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -178,7 +169,6 @@ public class OrderFragment extends Fragment {
 
         final String userEmail = new SharedPrefManager(getContext()).getUserEmail();
 
-
         Button order_but = (Button) view.findViewById(R.id.order_btn);
         order_but.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -195,17 +185,19 @@ public class OrderFragment extends Fragment {
                 //
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-                final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
+                //final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
+
+                final Long Path = timestamp.getTime();
+                final String imagePath = "image_shoes/"+Path;
 
                 FirebaseDb firebaseDb = new FirebaseDb();
 
-                StorageReference storageReference = IStorage.child(imagePath);
-                storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                storageReference = IStorage.child(imagePath);
+                storageReference.putFile(imageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        progressDialog.dismiss();
-//                        im[0] = taskSnapshot.getDownloadUrl();
-//                        Toast.makeText(getContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -213,6 +205,10 @@ public class OrderFragment extends Fragment {
                         Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+//                Toast.makeText(getContext(),  storageReference.getDownloadUrl().toString(), Toast.LENGTH_LONG).show();
+//                Log.d("Isinya Isi: ", donlod.toString());
 
                 final String cabang = cabang_spinner.getSelectedItem().toString();
                 final String service = service_spinner.getSelectedItem().toString();
@@ -228,7 +224,7 @@ public class OrderFragment extends Fragment {
                 //kirim order baru
                 //belum cek jika gambar belom berisi maka akan gagal
                 Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
-                        imagePath,comment, tgl_pesan,"",
+                        Path.toString(),comment, tgl_pesan,"",
                         "pending","belum lunas",000,"","");
                 firebaseDb.sendOrder(od,getContext());
                 progressDialog.dismiss();

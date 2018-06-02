@@ -26,6 +26,8 @@ dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.google.firebase:firebase-messaging:15.0.2'
 
+    implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
+
     // dari gradlenya bilang "configurations compile is obsolete"
     // jadi harus diganti sm imlementation atau api
     api 'com.google.android.gms:play-services-auth:15.0.1'
@@ -36,7 +38,8 @@ dependencies {
     implementation group: 'com.squareup.picasso', name: 'picasso', version: '2.5.0'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 
-
+//    implementation 'com.github.bumptech.glide:glide:4.7.1'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
 
 

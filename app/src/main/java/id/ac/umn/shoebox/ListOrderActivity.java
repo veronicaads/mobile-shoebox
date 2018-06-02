@@ -147,7 +147,10 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                             Date  firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
                             Calendar now = Calendar.getInstance();
                             now.setTime(firstDate);
-                            now.add(Calendar.DAY_OF_MONTH, 3);
+                            if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
+                                now.add(Calendar.DAY_OF_MONTH, 5);
+                            else if(ds.child("service").getValue().toString().equals("Repaint"))
+                                now.add(Calendar.DAY_OF_MONTH, 14);
                             String selsai = sdf.format(now.getTime());
 
                             Deadline.add(String.format("Deadline: %s", selsai));
@@ -166,18 +169,24 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                         if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
                             saat.add(Calendar.DAY_OF_MONTH, 5);
                         else if(ds.child("service").getValue().toString().equals("Repaint"))
-                            saat.add(Calendar.DAY_OF_MONTH, 5);
+                            saat.add(Calendar.DAY_OF_MONTH, 14);
                         Date kelar = saat.getTime();
 
-                        long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
-                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                        long level = 3 - diff;
-                        //long level=3;
-                        if(level<0)level=0;
-                        Level.add(String.format("Level: %s", Long.toString(level)));
-                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
-                        else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-                        else gambar.add(R.drawable.icons8_error_40);
+                        if(ds.child("status_service").getValue().toString().equals("Done")){
+                            gambar.add(R.drawable.shoes);
+                        }
+                        else{
+                            long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
+                            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                            long level = 30-diff;
+                            //long level=3;
+                            if(level<0)level=0;
+                            Level.add(String.format("Level: %s", Long.toString(level)));
+                            if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
+                            else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
+                            else gambar.add(R.drawable.icons8_error_40);
+                        }
+
                     } catch (Exception e) {e.printStackTrace();}
                 }
                 try{

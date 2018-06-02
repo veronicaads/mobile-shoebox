@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,12 +21,18 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,7 +45,7 @@ public class DetailOrderActivity extends AppCompatActivity {
     TextView stat, order, lemari, nama, ser, sub_ser, merek, tgl_order, tgl_deadline, gembok;
     DatabaseReference databaseReference;
     ImageView Psepatu;
-    ProgressDialog progressDialog;
+    ProgressDialog progressDialog, waiting;
 
     String order_id;
 
@@ -58,6 +66,8 @@ public class DetailOrderActivity extends AppCompatActivity {
         tgl_deadline=findViewById(R.id.deadline);
         gembok = findViewById(R.id.kunci);
 
+        waiting = new ProgressDialog(this);
+
 
 
         Intent a = getIntent();
@@ -65,13 +75,29 @@ public class DetailOrderActivity extends AppCompatActivity {
 //        Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-
         databaseReference.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 order.setText(order_id.toUpperCase());
-//                Psepatu.setImageURI(dataSnapshot.child("orders").child(order_id).child("image").getValue());
+                try{
+                    if(dataSnapshot.child("orders").child(order_id).child("image").getValue().toString().equals("")){
+                       Psepatu.setImageResource(R.drawable.shoes);
+                        Toast.makeText(DetailOrderActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else {
+                        waiting.setMessage("Load Data..");
+                        waiting.show();
+                        waiting.setCancelable(false);
+                        String gambar = dataSnapshot.child("orders").child(order_id).child("image").getValue().toString();
+                        Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
+                        retrieveGambar(gambar);
+                        waiting.dismiss();
+                    }
+                }catch (Exception e){e.printStackTrace();}
+
                 try{
                     if(dataSnapshot.child("orders").child(order_id).child("noLaci").getValue().toString().equals(""))
                     {
@@ -109,6 +135,7 @@ public class DetailOrderActivity extends AppCompatActivity {
             }
         });
 
+
         ganti_status.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,6 +167,24 @@ public class DetailOrderActivity extends AppCompatActivity {
             }
         });
     }
+    private void retrieveGambar(String gambar){
+
+        StorageReference storage = FirebaseStorage.getInstance().getReference();
+        StorageReference tujuan = storage.child("image_shoes/").child(gambar);
+
+        tujuan.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(DetailOrderActivity.this).load(uri.toString()).into(Psepatu);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //Failed
+            }
+        });
+    }
+
     private void updateData(String orderID, final String isi){
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -195,6 +240,11 @@ public class DetailOrderActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.logout,menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ListOrderActivity.class));
     }
 
 }
