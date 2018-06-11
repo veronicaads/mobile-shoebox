@@ -3,6 +3,7 @@ package id.ac.umn.shoebox;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -39,24 +40,22 @@ public class FirebaseDb{
 
     public void sendOrder(final Order order, final Context context){
 
-        //ambil key terakir dari order_keys
-        mydb = FirebaseDatabase.getInstance().getReference("order_keys");
+        final String cabang = order.getCabang().replaceAll("\\s+","").toLowerCase();
 
-        com.google.firebase.database.Query query = mydb.orderByKey()
-                .equalTo(order.getCabang().replaceAll("\\s+","").toLowerCase());
+        //ambil key terakir dari cabangnya
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        mydb.orderByKey().equalTo("key").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String temp = null;
+                String key = "";
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        temp = snapshot.getValue(String.class);
+                        key = snapshot.getValue(String.class);
                     }
 
-                order_key = temp;
-                Log.d(TAG, "onDataChange: "+temp);
+                Log.d(TAG, "onDataChange: "+key);
 
-                getKey(order,temp);
+                getLaci(order,key, cabang);
             }
 
             @Override
@@ -66,15 +65,14 @@ public class FirebaseDb{
         });
     }
 
-    private void getKey(final Order order, final String key){
-        mydb = FirebaseDatabase.getInstance().getReference(order.getCabang().toLowerCase()
-        .replaceAll("\\s+",""));
+    //ambil nomor laci
+    private void getLaci(final Order order, final String key, final String cabang){
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
         mydb.child("laci").orderByValue().equalTo("free").limitToFirst(1).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-//                        DataSnapshot ds = (DataSnapshot) dataSnapshot.getChildren();
 
                         String nmor_laci = "";
                         for(DataSnapshot ds : dataSnapshot.getChildren()){
@@ -85,7 +83,7 @@ public class FirebaseDb{
 
                         mydb.child("laci").child(nmor_laci).setValue("occupied");
 
-                        sendOrder2(order,key,nmor_laci);
+                        sendOrder2(order,key,nmor_laci,cabang);
                     }
 
                     @Override
@@ -96,15 +94,16 @@ public class FirebaseDb{
         );
     }
 
-    private void sendOrder2(Order order, String key, String laci){
-        mydb = FirebaseDatabase.getInstance().getReference("order_keys/"+order.getCabang().toLowerCase()
-        .replaceAll("\\s+",""));
+    private void sendOrder2(Order order, String key, String laci, String cabang){
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
         //format ulang key
         key = String.format("%04d",Integer.parseInt(key)+1);
 
+        Log.d(TAG, "sendOrder2: "+key);
+
         //update order_keys/<nama_cabang>
-        mydb.setValue(key);
+        mydb.child("key").setValue(key);
 
         //ubah order_id order menjadi yang format custom
         order.setOrderId(order.getCabang().toLowerCase().charAt(0)+key);
@@ -112,15 +111,22 @@ public class FirebaseDb{
         //tambahkan dengan nomor laci baru
         order.setNoLaci(laci);
 
-        //kirim data ke orders
-        mydb = FirebaseDatabase.getInstance().getReference("orders");
+        //kirim data ke <nama_cabang/orders>
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
         //kirim data
-        mydb.child(order.getOrderId()).setValue(order);
+        mydb.child("orders").child(order.getOrderId()).setValue(order);
 
         //tambahkan order ke data usernya
         mydb= FirebaseDatabase.getInstance().getReference("users");
         mydb.child(Utils.encodeEmail(order.getUserEmail())).child("orders").push().setValue(order.getOrderId());
         Log.d(TAG, "sendOrder: ljydgakjyfdkuyfadkuayfdka");
+
+
+        //send message to cabang
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
+        mydb.child("inbox").push().setValue(new PushMessage(
+                order.getService()+ " " + order.getSubService()
+                        + " " + order.getStatus_service()));
     }
 }

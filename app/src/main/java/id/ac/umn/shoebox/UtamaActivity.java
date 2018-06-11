@@ -172,3 +172,10 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+
+//    kodingan push notifications
+//NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+//        .setSmallIcon(R.drawable.notification_icon)
+//        .setContentTitle(textTitle)
+//        .setContentText(textContent)
+//        .setPriority(NotificationCompat.PRIORITY_DEFAULT);

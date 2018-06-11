@@ -218,7 +218,7 @@ public class OrderFragment extends Fragment {
 
                 // ambil tanggal masuk
                 Date d = new Date();
-                String tgl_pesan = String.format("%d-%d-%d", d.getDate(), d.getMonth(), d.getYear()-100);
+                String tgl_pesan = String.format("%d-%d-%d",d.getYear()-100,d.getMonth(),d.getDate());
 
                 //
                 //kirim order baru

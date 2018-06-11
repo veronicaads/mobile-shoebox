@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SignInButton mSignInButton;
     private String pNumber, pPriviledge;
     private String address;
+    private String cabangAdmin;
 
     private FirebaseDatabase mDatabase;
     private String privilege_flag;
@@ -129,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         final String pNumber ="null";
         final String privilege = "user";
         final String address = "null";
+        final String adminCabang = "UMN";
 
         //add listener ke lokasi diatas
         userlocation.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener(){
@@ -140,7 +142,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP,ServerValue.TIMESTAMP);
 
                     //Insert ke firebase database
-                    User newUser = new User(name,photo,encodeEmail,pNumber,address,privilege,timestampJoined);
+                    User newUser = new User(name,photo,encodeEmail,pNumber,address,
+                            privilege,timestampJoined,adminCabang);
                     userlocation.setValue(newUser);
                     Toast.makeText(LoginActivity.this,"Account created", Toast.LENGTH_SHORT).show();
 
@@ -253,10 +256,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     privilege_flag = getuserdata.getPrivilege();
                                     //pPriviledge=privilege_flag;
                                     pNumber = getuserdata.getpNumber();
+
+                                    //ambil cabang admin
+                                    cabangAdmin = getuserdata.getCabangAdmin();
+
                                     sharedPrefManager.savepNumber(mContext,pNumber);
                                     Log.d(TAG,"MESSAGE" +privilege_flag);
+                                    Log.d(TAG,"MESSAGE" +cabangAdmin);
                                     if (privilege_flag.toString().equals("admin")){
                                         sharedPrefManager.savepPrivilege(mContext,privilege_flag);
+                                        sharedPrefManager.saveCabangAdmin(mContext,cabangAdmin);
 //                                        Toast.makeText(LoginActivity.this, sharedPrefManager.getpPrivilege(), Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(LoginActivity.this,ListOrderActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

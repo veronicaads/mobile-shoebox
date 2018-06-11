@@ -114,9 +114,23 @@ public class SharedPrefManager {
         editor.putString("PRIVILEGE", pPriviledge);
         editor.commit();
     }
+
     public String getPhoto(){
         sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         return sharedPreferences.getString("PHOTO", null);
+    }
+
+    public void saveCabangAdmin(Context context, String cabang){
+        mContext = context;
+        sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("cabangAdmin", cabang);
+        editor.commit();
+    }
+
+    public String getCabangAdmin(){
+        sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        return sharedPreferences.getString("cabangAdmin", null);
     }
 
     public void clear(){
