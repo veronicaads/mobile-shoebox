@@ -2,6 +2,9 @@ package id.ac.umn.shoebox;
 
 import android.*;
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
@@ -44,6 +47,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -98,6 +106,40 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utama);
+
+        String namaUser = Utils.encodeEmail(new SharedPrefManager(this).getUserEmail());
+        Log.d(TAG, "onCreate: "+namaUser);
+        DatabaseReference df = FirebaseDatabase.getInstance().getReference("inbox");
+        df.child(namaUser).addChildEventListener(
+                new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        PushMessage pm = dataSnapshot.getValue(PushMessage.class);
+                        Log.d("UtamaActivity", "onChildAdded: "+pm.getMessage());
+                        pushNotification(pm.getMessage());
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
 
         Menu();
         }
@@ -169,8 +211,25 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         );
     }
 
+    private void pushNotification(String msg){
+        Intent intent = new Intent(this, UtamaActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0,intent,0);
+        
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Shoebox")
+                .setContentText(msg)
+                .setSmallIcon(R.drawable.icon)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build();
 
+        NotificationManager notificationManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,notification);
+        Log.d(TAG, "pushNotification: yeyeyey");
     }
+}
 
 
 //    kodingan push notifications

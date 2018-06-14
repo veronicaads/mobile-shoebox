@@ -48,6 +48,7 @@ public class DetailOrderActivity extends AppCompatActivity {
     ProgressDialog progressDialog, waiting;
 
     String order_id;
+    String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     String email = dataSnapshot.child("orders").child(order_id).child("userEmail").getValue().toString();
                     String namaLengkap = dataSnapshot.child("users").child(email.replace(".", ",")).child("fullName").getValue().toString();
                     nama.setText(namaLengkap);
+                    userEmail = email;
                     ser.setText(dataSnapshot.child("orders").child(order_id).child("service").getValue().toString());
                     sub_ser.setText(dataSnapshot.child("orders").child(order_id).child("subService").getValue().toString());
                     merek.setText(dataSnapshot.child("orders").child(order_id).child("merkSepatu").getValue().toString());
@@ -149,7 +151,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         final String tmp = item.getTitle().toString();
-                        alert_dialog(order_id, tmp);
+                        alert_dialog(order_id, tmp, userEmail);
 //                        Toast.makeText(DetailOrderActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }
@@ -185,13 +187,15 @@ public class DetailOrderActivity extends AppCompatActivity {
         });
     }
 
-    private void updateData(String orderID, final String isi){
+    private void updateData(final String orderID, final String isi, final String userEmail){
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        Log.d("detailorder", "updateData: ");
         databaseReference.child("orders").child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSnapshot.getRef().child("status_service").setValue(isi);
+                notifyUser(userEmail, "Order ID "+ orderID + " change status to done" + isi);
             }
 
             @Override
@@ -202,7 +206,7 @@ public class DetailOrderActivity extends AppCompatActivity {
 
     }
 
-    public void alert_dialog(final String orderID, String title){
+    public void alert_dialog(final String orderID, String title, final String userEmail){
         AlertDialog.Builder alert = new AlertDialog.Builder(DetailOrderActivity.this);
         alert.setTitle("Alert");
         alert.setCancelable(true);
@@ -217,10 +221,10 @@ public class DetailOrderActivity extends AppCompatActivity {
                 progressDialog.setMessage("Please Wait");
                 progressDialog.show();
                 progressDialog.setCancelable(false);
-                updateData(orderID, tmp);
+                updateData(orderID, tmp, userEmail);
                 progressDialog.dismiss();
                 stat.setText(tmp);
-
+                Log.d("alert", "onClick: wowowowo");
             }
         });
 
@@ -247,4 +251,10 @@ public class DetailOrderActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListOrderActivity.class));
     }
 
+    private void notifyUser(String userEmail, String tmp){
+        DatabaseReference df = FirebaseDatabase.getInstance().getReference("inbox");
+
+        df.child(Utils.encodeEmail(userEmail)).push().setValue(new PushMessage(tmp));
+        Log.d("notifyuser", "notifyUser: "+userEmail+ " " +tmp);
+    }
 }
