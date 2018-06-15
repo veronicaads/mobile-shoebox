@@ -5,12 +5,15 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="id.ac.umn.shoebox.DetailActivity">
+
         <ImageView
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:id="@+id/sepatu"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
             android:src="@drawable/shoes" />
 
         <TableLayout
@@ -23,7 +26,7 @@
                 android:padding="5dp"
                 >
                 <TextView
-                    android:text="Nomor Order   :"
+                    android:text="Nomor Order    :"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
@@ -31,7 +34,7 @@
                     android:textSize="18sp"
                     />
                 <TextView
-                    android:text="U0001"
+                    android:text=""
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
@@ -41,7 +44,7 @@
             </TableRow>
             <TableRow android:padding="5dp">
                 <TextView
-                    android:text="Nomor Lemari :"
+                    android:text="Nomor Lemari  :"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
@@ -49,7 +52,7 @@
                     android:textSize="18sp"
                     />
                 <TextView
-                    android:text="21"
+                    android:text=""
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
@@ -63,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Status               :"
+                    android:text="Status                 :"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
 
@@ -73,7 +76,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:id="@+id/status"
-                    android:text="Finished" />
+                    android:text="" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -81,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nama Pemilik  :"
+                    android:text="Nama Pemilik   :"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
 
@@ -91,7 +94,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:id="@+id/user_name"
-                    android:text="Stefanus Kurniawan" />
+                    android:text="" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -99,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Service              :"
+                    android:text="Service               :"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
 
@@ -109,7 +112,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:id="@+id/service"
-                    android:text="Reclean" />
+                    android:text="" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -127,7 +130,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:id="@+id/subservice"
-                    android:text="Deep Clean" />
+                    android:text="" />
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -145,7 +148,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:id="@+id/merk"
-                    android:text="Nike"
+                    android:text=""
                     android:layout_marginTop="10dp"/>
             </TableRow>
             <TableRow

@@ -32,7 +32,7 @@ public class User {
      */
     public User(String mFullName, String mPhoneNo, String mEmail,
                 String mPNumber,String mAddress,String mPrivilege
-                ,HashMap<String, Object> timestampJoined, String cabangAdmin) {
+                ,HashMap<String, Object> timestampJoined) {
         this.fullName = mFullName;
         this.photo = mPhoneNo;
         this.email = mEmail;
@@ -40,7 +40,6 @@ public class User {
         this.address = mAddress;
         this.timestampJoined = timestampJoined;
         this.privilege = mPrivilege;
-        this.cabangAdmin = cabangAdmin;
     }
 
 

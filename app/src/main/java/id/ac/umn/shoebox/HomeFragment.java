@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment {
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference_a,databaseReference_u,databaseReference_p,databaseReference_m;
     private ListView listViewOrders;
     private static  List orderList;
     private static List cabangList;
@@ -247,10 +247,151 @@ public class HomeFragment extends Fragment {
         /** Ambil list order dari fragment_home*/
         listViewOrders = (ListView) getView().findViewById(R.id.list_order);
 
-        /** Query List Order User*/
-        databaseReference = FirebaseDatabase.getInstance().getReference("orders");
-        Query query = databaseReference.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
+        /** Query List Order User cabang mercubuana*/
+        databaseReference_m = FirebaseDatabase.getInstance().getReference("mercubuana/orders");
+        Query query = databaseReference_m.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
         query.addChildEventListener(new ChildEventListener() {
+            String checker = "";
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Order order = dataSnapshot.getValue(Order.class);
+                    String od = order.getOrderId();
+                    if (!checker.equals(od)){
+                        orderList.add(od);
+                        String cabang = order.getCabang();
+                        cabangList.add(cabang);
+                        String servis = order.getService();
+                        serviceList.add(servis);
+                        String status_Servis = order.getStatus_service();
+                        statuslist.add(status_Servis);
+                        String tglmasuk = order.getTanggal_masuk();
+                        inDateList.add(tglmasuk);
+                        checker = od;
+                    }
+                }
+                try
+                {
+                    models = getList();
+                    orderAdapter = new OrderAdapter(getContext(), models);
+                    listViewOrders.setAdapter(orderAdapter);
+                }
+                catch(Exception error)
+                {
+                    error.printStackTrace();
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        databaseReference_p = FirebaseDatabase.getInstance().getReference("pertamina/orders");
+        Query query_p = databaseReference_p.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
+        query_p.addChildEventListener(new ChildEventListener() {
+            String checker = "";
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Order order = dataSnapshot.getValue(Order.class);
+                    String od = order.getOrderId();
+                    if (!checker.equals(od)){
+                        orderList.add(od);
+                        String cabang = order.getCabang();
+                        cabangList.add(cabang);
+                        String servis = order.getService();
+                        serviceList.add(servis);
+                        String status_Servis = order.getStatus_service();
+                        statuslist.add(status_Servis);
+                        String tglmasuk = order.getTanggal_masuk();
+                        inDateList.add(tglmasuk);
+                        checker = od;
+                    }
+                }
+                try
+                {
+                    models = getList();
+                    orderAdapter = new OrderAdapter(getContext(), models);
+                    listViewOrders.setAdapter(orderAdapter);
+                }
+                catch(Exception error)
+                {
+                    error.printStackTrace();
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        databaseReference_u = FirebaseDatabase.getInstance().getReference("umn/orders");
+        Query query2 = databaseReference_u.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
+        query2.addChildEventListener(new ChildEventListener() {
+            String checker = "";
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Order order = dataSnapshot.getValue(Order.class);
+                    String od = order.getOrderId();
+                    if (!checker.equals(od)){
+                        orderList.add(od);
+                        String cabang = order.getCabang();
+                        cabangList.add(cabang);
+                        String servis = order.getService();
+                        serviceList.add(servis);
+                        String status_Servis = order.getStatus_service();
+                        statuslist.add(status_Servis);
+                        String tglmasuk = order.getTanggal_masuk();
+                        inDateList.add(tglmasuk);
+                        checker = od;
+                    }
+                }
+                try
+                {
+                    models = getList();
+                    orderAdapter = new OrderAdapter(getContext(), models);
+                    listViewOrders.setAdapter(orderAdapter);
+                }
+                catch(Exception error)
+                {
+                    error.printStackTrace();
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        databaseReference_a = FirebaseDatabase.getInstance().getReference("atmajaya/orders");
+        Query query_a = databaseReference_a.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
+        query_a.addChildEventListener(new ChildEventListener() {
             String checker = "";
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -299,8 +440,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String orderId = (String) orderList.get(position);
+                String cabang = (String) cabangList.get(position);
                 Intent i = new Intent(getActivity(),DetailActivity.class);
                 i.putExtra("ORDERID",orderId);
+                i.putExtra("CABANG",cabang);
                 startActivity(i);
             }
         });

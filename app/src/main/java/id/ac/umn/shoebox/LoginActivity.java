@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -56,7 +57,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private String idToken;
     public SharedPrefManager sharedPrefManager;
     private final Context mContext = this;
-    //public String getStatusCode
 
     private String name, email;
     private String photo;
@@ -85,22 +85,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         configureSignIn();
         progressDialog.dismiss();
 
-
-
-
-
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
-        //proses authentication
+        /** Proses Autentikasi */
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 //mendapatkan id signin user
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-
                 //jika user sign in , maka panggil method untuk save detail user ke Firebase
                 if (user != null){
-
                     createUserInFireBaseHelper();
                     Log.d(TAG,"onAuthStateChange:signed_in" + user.getUid());
 
@@ -110,51 +104,39 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         };
-
-       // com.google.android.gms.common.SignInButton signInBut = findViewById(R.id.sign_in_button);
-       // signInBut.setOnClickListener(new View.OnClickListener() {
-       //     @Override
-       //     public void onClick(View view) {
-      //          startActivity(new Intent(LoginActivity.this, UtamaActivity.class));
-      //      }
-      //  });
-
     }
 
+    /**
     //Method untuk membuat user baru pada firebase database setelah authentication berhasil
     //Menyimpan info user pada sharedpreferences
-    //Utils : class java untuk menangani encodemail karena firebase tidak dapat menerima . karena itu . di replace
+    //Utils : class java untuk menangani encodemail karena firebase tidak dapat menerima . karena itu . di replace */
     private void createUserInFireBaseHelper(){
         final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
         final Firebase userlocation = new Firebase (Constants.FIREBASE_URL_USERS).child(encodeEmail);
         final String pNumber ="null";
         final String privilege = "user";
         final String address = "null";
-        final String adminCabang = "UMN";
 
-        //add listener ke lokasi diatas
+        /** add listener ke lokasi diatas */
         userlocation.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener(){
             @Override
             public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null){
-                    //ambil timestamp dari server masukin ke hashmap
+                    /** ambil timestamp dari server masukin ke hashmap */
                     HashMap<String,Object> timestampJoined = new HashMap<>();
                     timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP,ServerValue.TIMESTAMP);
 
-                    //Insert ke firebase database
+                    /** Insert ke firebase database */
                     User newUser = new User(name,photo,encodeEmail,pNumber,address,
-                            privilege,timestampJoined,adminCabang);
+                            privilege,timestampJoined);
                     userlocation.setValue(newUser);
                     Toast.makeText(LoginActivity.this,"Account created", Toast.LENGTH_SHORT).show();
-
                 }
-
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 if (firebaseError.getCode() == FirebaseError.EMAIL_TAKEN){
-
                 }
                 else {
                     Toast.makeText(LoginActivity.this,firebaseError.getDetails(),Toast.LENGTH_SHORT).show();
@@ -164,13 +146,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void configureSignIn(){
-    // Configure sign-in to request the user's basic profile like name and email
+    /** Konfigurasi sign in untuk mendapatkan email dan nama */
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(LoginActivity.this.getResources().getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
+        /** Build a GoogleApiClient with access to GoogleSignIn.API and the options above. */
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, options)
@@ -178,46 +160,42 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mGoogleApiClient.connect();
     }
 
-    //user pilih account google untuk signin
+    /** user pilih account google untuk signin */
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    // Method yang handle saat button sign in di click dan masukin ke sharedpreference untuk selanjutnya
+    /** Method yang handle saat button sign in di click dan masukin ke sharedpreference untuk selanjutnya */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        /**  Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...); */
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            //Toast.makeText(this,requestCode,Toast.LENGTH_SHORT).show();
-           // Toast.makeText(this,result.toString(),Toast.LENGTH_SHORT).show();
             Log.d(TAG, "handleSignInResult:"  + result.getStatus().toString() + result.isSuccess());
             if (result.isSuccess()) {
-                // Google Sign In was successful, save Token and a state then authenticate with Firebase
+                /**  Google Sign In was successful, save Token and a state then authenticate with Firebase 8*/
                 GoogleSignInAccount account = result.getSignInAccount();
-
                 idToken = account.getIdToken();
                 name = account.getDisplayName();
                 email = account.getEmail();
                 photoUri = account.getPhotoUrl();
                 photo = photoUri.toString();
 
-                // Save Data to SharedPreference
+                /** Save Data to SharedPreference */
                 sharedPrefManager = new SharedPrefManager(mContext);
                 sharedPrefManager.saveIsLoggedIn(mContext, true);
                 sharedPrefManager.saveEmail(mContext, email);
                 sharedPrefManager.saveName(mContext, name);
                 sharedPrefManager.savePhoto(mContext, photo);
                 sharedPrefManager.saveToken(mContext, idToken);
-                //sharedPrefManager.saveIsLoggedIn(mContext, true);
-
                 AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
                 firebaseAuthWithGoogle(credential);
-            } else {
-                // Google Sign In failed, update UI appropriately
+            }
+            else {
+                /** Google Sign In failed, update UI appropriately */
                 Log.e(TAG, "Login Unsuccessful. ");
                 Toast.makeText(this, "Login Unsuccessful", Toast.LENGTH_SHORT)
                         .show();
@@ -225,9 +203,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    //Keamanan layer 2 : firebase auntheticate
+
+
+    /** Keamanan layer 2 : firebase auntheticate */
     private void firebaseAuthWithGoogle(AuthCredential credential){
-        //showProgressDialog();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -239,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }else {
-                            progressDialog.setMessage("Login...");
+                            progressDialog.setMessage("Create Account...");
                             progressDialog.show();
                             progressDialog.setCancelable(false);
                             createUserInFireBaseHelper();
@@ -247,61 +226,55 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             progressDialog.setMessage("Login...");
                             progressDialog.show();
                             final String encodeEmail = Utils.encodeEmail(email.toLowerCase());
+
                             mDatabase = FirebaseDatabase.getInstance();
-                            final DatabaseReference reference = mDatabase.getReference("users").child(encodeEmail);
-                            reference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                                    User getuserdata = dataSnapshot.getValue(User.class);
-                                    privilege_flag = getuserdata.getPrivilege();
-                                    //pPriviledge=privilege_flag;
-                                    pNumber = getuserdata.getpNumber();
-
-                                    //ambil cabang admin
-                                    cabangAdmin = getuserdata.getCabangAdmin();
-
-                                    sharedPrefManager.savepNumber(mContext,pNumber);
-                                    Log.d(TAG,"MESSAGE" +privilege_flag);
-                                    Log.d(TAG,"MESSAGE" +cabangAdmin);
-                                    if (privilege_flag.toString().equals("admin")){
-                                        sharedPrefManager.savepPrivilege(mContext,privilege_flag);
-                                        sharedPrefManager.saveCabangAdmin(mContext,cabangAdmin);
-//                                        Toast.makeText(LoginActivity.this, sharedPrefManager.getpPrivilege(), Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(LoginActivity.this,ListOrderActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
+                                final DatabaseReference reference = mDatabase.getReference("users").child(encodeEmail);
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            Log.d("Tes Loop","Data snapshot already exist");
+                                            User getuserdata = dataSnapshot.getValue(User.class);
+                                            privilege_flag = getuserdata.getPrivilege();
+                                            pNumber = getuserdata.getpNumber();
+                                            cabangAdmin = getuserdata.getCabangAdmin();
+                                            sharedPrefManager.savepNumber(mContext, pNumber);
+                                            if (privilege_flag.toString().equals("admin")) {
+                                                sharedPrefManager.savepPrivilege(mContext, privilege_flag);
+                                                sharedPrefManager.saveCabangAdmin(mContext, cabangAdmin);
+                                                Intent intent = new Intent(LoginActivity.this, ListOrderActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                                finish();
+                                            } else if (privilege_flag.toString().equals("user") && pNumber.toString().equals("null")) {
+                                                sharedPrefManager.savepPrivilege(mContext, privilege_flag);
+                                                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                sharedPrefManager.savepPrivilege(mContext, "user");
+                                                Intent intent = new Intent(LoginActivity.this, UtamaActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                            progressDialog.dismiss();
+                                            Toast.makeText(LoginActivity.this, "Login successful",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.d("Tes Loop","Data snapshot still does not exist");
+                                            progressDialog.dismiss();
+                                            progressDialog.setMessage("Login...");
+                                            progressDialog.show();
+                                        }
                                     }
-                                    else if (privilege_flag.toString().equals("user") && pNumber.toString().equals("null")){
-                                        sharedPrefManager.savepPrivilege(mContext,privilege_flag);
-                                        Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
                                     }
-                                    else {
-                                        sharedPrefManager.savepPrivilege(mContext,"user");
-                                        Intent intent = new Intent(LoginActivity.this,UtamaActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    progressDialog.dismiss();
-                                    Toast.makeText(LoginActivity.this, "Login successful",
-                                            Toast.LENGTH_SHORT).show();
-
-
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
-
+                                });
+                            }
                         }
-                        //hideProgressDialog();
-                    }
                 });
     }
 
