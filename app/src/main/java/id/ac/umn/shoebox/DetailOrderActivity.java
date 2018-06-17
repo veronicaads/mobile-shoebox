@@ -47,7 +47,7 @@ public class DetailOrderActivity extends AppCompatActivity {
     ImageView Psepatu;
     ProgressDialog progressDialog, waiting;
 
-    String order_id;
+    String order_id, cabs;
     String userEmail;
 
     @Override
@@ -73,7 +73,8 @@ public class DetailOrderActivity extends AppCompatActivity {
 
         Intent a = getIntent();
         order_id = a.getStringExtra("OrderID");
-//        Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
+        cabs = a.getStringExtra("CABANG");
+       //Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -83,7 +84,7 @@ public class DetailOrderActivity extends AppCompatActivity {
 
                 order.setText(order_id.toUpperCase());
                 try{
-                    if(dataSnapshot.child("orders").child(order_id).child("image").getValue().toString().equals("")){
+                    if(dataSnapshot.child(cabs+"/orders").child(order_id).child("image").getValue().toString().equals("")){
                        Psepatu.setImageResource(R.drawable.shoes);
                         Toast.makeText(DetailOrderActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
 
@@ -92,32 +93,33 @@ public class DetailOrderActivity extends AppCompatActivity {
                         waiting.setMessage("Load Data..");
                         waiting.show();
                         waiting.setCancelable(false);
-                        String gambar = dataSnapshot.child("orders").child(order_id).child("image").getValue().toString();
-                        Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
+                        String gambar = dataSnapshot.child(cabs+"/orders").child(order_id).child("image").getValue().toString();
+                        //Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
                         retrieveGambar(gambar);
                         waiting.dismiss();
                     }
                 }catch (Exception e){e.printStackTrace();}
 
                 try{
-                    if(dataSnapshot.child("orders").child(order_id).child("noLaci").getValue().toString().equals(""))
+                    if(dataSnapshot.child(cabs+"/orders").child(order_id).child("noLaci").getValue().toString().equals(""))
                     {
                         lemari.setText("Nomor Laci belum ditemukan");
                     }
-                    else lemari.setText(dataSnapshot.child("orders").child(order_id).child("noLaci").getValue().toString());
-                    stat.setText(dataSnapshot.child("orders").child(order_id).child("status_service").getValue().toString());
-                    String email = dataSnapshot.child("orders").child(order_id).child("userEmail").getValue().toString();
+                    else lemari.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("noLaci").getValue().toString());
+
+                    stat.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("status_service").getValue().toString());
+                    String email = dataSnapshot.child(cabs+"/orders").child(order_id).child("userEmail").getValue().toString();
                     String namaLengkap = dataSnapshot.child("users").child(email.replace(".", ",")).child("fullName").getValue().toString();
                     nama.setText(namaLengkap);
                     userEmail = email;
-                    ser.setText(dataSnapshot.child("orders").child(order_id).child("service").getValue().toString());
-                    sub_ser.setText(dataSnapshot.child("orders").child(order_id).child("subService").getValue().toString());
-                    merek.setText(dataSnapshot.child("orders").child(order_id).child("merkSepatu").getValue().toString());
-                    tgl_order.setText(dataSnapshot.child("orders").child(order_id).child("tanggal_masuk").getValue().toString());
+                    ser.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("service").getValue().toString());
+                    sub_ser.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("subService").getValue().toString());
+                    merek.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("merkSepatu").getValue().toString());
+                    tgl_order.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
 
                     try{
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
-                        Date  firstDate = sdf.parse(dataSnapshot.child("orders").child(order_id).child("tanggal_masuk").getValue().toString());
+                        Date  firstDate = sdf.parse(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
                         Calendar now = Calendar.getInstance();
                         now.setTime(firstDate);
                         now.add(Calendar.DAY_OF_MONTH, 3);

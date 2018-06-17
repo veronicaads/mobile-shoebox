@@ -16,9 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,12 @@ import java.util.concurrent.TimeUnit;
 
 
 public class ListOrderActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    ArrayList<String> Status   = new ArrayList<String>();
+    ArrayList<String> Deadline = new ArrayList<String>();
+    ArrayList<String> orderID  = new ArrayList<String>();
+    ArrayList<String> Level    = new ArrayList<String>();
+    ArrayList<Integer> gambar  = new ArrayList<Integer>();
 
     private String cabangAdmin;
 
@@ -79,12 +87,11 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             txt4=viewHolder.findViewById(R.id.levelpriority);
             imv=viewHolder.findViewById(R.id.images);
 
-            //imv.setImageResource(gambar[position]);
             txt1.setText(orderID.get(position));
             txt2.setText(Deadline.get(position));
             txt3.setText(Status.get(position));
-//            txt4.setText(Level.get(position));
-            //imv.setImageResource(gambar.get(position));
+            txt4.setText(Level.get(position));
+            imv.setImageResource(gambar.get(position));
             return viewHolder;
         }
     }
@@ -99,21 +106,135 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 //    String[] orderID = new String[] {"Order ID : U0003","Order ID : U0002","Order ID : U0001","Order ID : U0005"};
 //    Integer[] gambar = new Integer[]{R.drawable.icons8_high_priority_48, R.drawable.icons8_warning_shield_48, R.drawable.icons8_error_40};
 
-    ArrayList<String> Status   = new ArrayList<String>();
-    ArrayList<String> Deadline = new ArrayList<String>();
-    ArrayList<String> orderID  = new ArrayList<String>();
-    ArrayList<String> Level    = new ArrayList<String>();
-    ArrayList<Integer> gambar  = new ArrayList<Integer>();
+
 
     private DatabaseReference databaseReference;
-    private List<String> orderList;
+    private Spinner pili_cabang_spinner;
+    final CustomAdapter customAdminList = new CustomAdapter();
 
+    public void Tampilkan(String cabang){
+        Status.clear();Deadline.clear();orderID.clear(); Level.clear(); gambar.clear();
+        databaseReference = FirebaseDatabase.getInstance().getReference(cabang+"/orders");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    orderID.add(ds.child("orderId").getValue().toString());
+                    Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
+                    if(ds.child("tanggal_masuk").getValue().toString().equals("")){
+                        Deadline.add("Kosong");
+                    }
+                    else {
+                        try{
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                            Date  firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
+                            Calendar now = Calendar.getInstance();
+                            now.setTime(firstDate);
+                            if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
+                                now.add(Calendar.DAY_OF_MONTH, 5);
+                            else if(ds.child("service").getValue().toString().equals("Repaint"))
+                                now.add(Calendar.DAY_OF_MONTH, 14);
+                            String selsai = sdf.format(now.getTime());
+
+                            Deadline.add(String.format("Deadline: %s", selsai));
+                        }catch (Exception e){e.printStackTrace();}
+
+                    }
+                    try{
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                        Date now = new Date();
+                        Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
+                        //Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
+
+                        /*Tambahan Hari Keluar*/
+                        Calendar saat = Calendar.getInstance();
+                        saat.setTime(firstDate);
+                        if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
+                            saat.add(Calendar.DAY_OF_MONTH, 5);
+                        else if(ds.child("service").getValue().toString().equals("Repaint"))
+                            saat.add(Calendar.DAY_OF_MONTH, 14);
+                        Date kelar = saat.getTime();
+
+                        if(ds.child("status_service").getValue().toString().equals("Done")){
+                            gambar.add(R.drawable.icons8_error_40);
+                        }
+                        else{
+                            long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
+                            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                            long level = 30-diff;
+//                            long level=3;
+                            if(level<0)level=0;
+                            Level.add(String.format("Level: %s", Long.toString(level)));
+                            Log.d("Isi level ", Long.toString(level));
+                            if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
+                            else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
+                            else gambar.add(R.drawable.icons8_error_40);
+                        }
+
+                    } catch (Exception e) {e.printStackTrace();}
+                }
+                try{
+                    listView.setAdapter(customAdminList);
+                }catch (Exception e){
+                    e.getStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+    });
+    }
+    String cabang ="";
     @Override
     protected void onStart() {
 
         super.onStart();
 
+        pili_cabang_spinner = this.findViewById(R.id.cabang_sh);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.listcabang,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pili_cabang_spinner.setAdapter(adapter);
 
+        pili_cabang_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i==0){
+                    listView.setAdapter(null);
+                    //Toast.makeText(getApplicationContext(), "umn", Toast.LENGTH_SHORT).show();
+                    Tampilkan("umn");
+                    cabang="umn";
+                }
+                else if(i==1){
+                    listView.setAdapter(null);
+                    //Toast.makeText(getApplicationContext(), "mercubuana", Toast.LENGTH_SHORT).show();
+                    Tampilkan("mercubuana");
+                    cabang="mercubuana";
+                }
+                else if(i==2){
+                    listView.setAdapter(null);
+                   // Toast.makeText(getApplicationContext(), "atmajaya", Toast.LENGTH_SHORT).show();
+                    Tampilkan("atmajaya");
+                    cabang="atmajaya";
+                }
+                else if(i==3){
+                    listView.setAdapter(null);
+                   // Toast.makeText(getApplicationContext(), "pertamina", Toast.LENGTH_SHORT).show();
+                    Tampilkan("pertamina");
+                    cabang="pertamina";
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -171,82 +292,6 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                 }
         );
 
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,array);
-        final CustomAdapter customAdminList = new CustomAdapter();
-        /*COBA*/
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("orders");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    orderID.add(ds.child("orderId").getValue().toString());
-                    Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
-                    if(ds.child("tanggal_masuk").getValue().toString().equals("")){
-                        Deadline.add("Kosong");
-                    }
-                    else {
-                        try{
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
-                            Date  firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
-                            Calendar now = Calendar.getInstance();
-                            now.setTime(firstDate);
-                            if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
-                                now.add(Calendar.DAY_OF_MONTH, 5);
-                            else if(ds.child("service").getValue().toString().equals("Repaint"))
-                                now.add(Calendar.DAY_OF_MONTH, 14);
-                            String selsai = sdf.format(now.getTime());
-
-                            Deadline.add(String.format("Deadline: %s", selsai));
-                        }catch (Exception e){e.printStackTrace();}
-
-                    }
-                    try{
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
-                        Date now = new Date();
-                        Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
-                        //Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
-
-                        /*Tambahan Hari Keluar*/
-                        Calendar saat = Calendar.getInstance();
-                        saat.setTime(firstDate);
-                        if(ds.child("service").getValue().toString().equals("Reclean") || ds.child("service").getValue().toString().equals("Repair"))
-                            saat.add(Calendar.DAY_OF_MONTH, 5);
-                        else if(ds.child("service").getValue().toString().equals("Repaint"))
-                            saat.add(Calendar.DAY_OF_MONTH, 14);
-                        Date kelar = saat.getTime();
-
-                        if(ds.child("status_service").getValue().toString().equals("Done")){
-                            gambar.add(R.drawable.shoes);
-                        }
-                        else{
-                            long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
-                            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                            long level = 30-diff;
-                            //long level=3;
-                            if(level<0)level=0;
-                            Level.add(String.format("Level: %s", Long.toString(level)));
-                            if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
-                            else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-                            else gambar.add(R.drawable.icons8_error_40);
-                        }
-
-                    } catch (Exception e) {e.printStackTrace();}
-                }
-                try{
-                    listView.setAdapter(customAdminList);
-                }catch (Exception e){
-                    e.getStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         /*BATAS AKHIR*/
 
 
@@ -256,6 +301,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ListOrderActivity.this, DetailOrderActivity.class);
                 intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
+                intent.putExtra("CABANG", cabang );
                 startActivity(intent);
             }
         });

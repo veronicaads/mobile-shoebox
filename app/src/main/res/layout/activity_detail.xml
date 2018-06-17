@@ -44,6 +44,24 @@
             </TableRow>
             <TableRow android:padding="5dp">
                 <TextView
+                    android:text="Nomor Gembok :"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    />
+                <TextView
+                    android:text=""
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:textSize="18sp"
+                    android:id="@+id/gembok"
+                    />
+            </TableRow>
+            <TableRow android:padding="5dp">
+                <TextView
                     android:text="Nomor Lemari  :"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -147,9 +165,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="15sp"
-                    android:id="@+id/merk"
-                    android:text=""
-                    android:layout_marginTop="10dp"/>
+                    android:id="@+id/merrk"
+                    android:text="" />
             </TableRow>
             <TableRow
                 android:paddingLeft="60dp"

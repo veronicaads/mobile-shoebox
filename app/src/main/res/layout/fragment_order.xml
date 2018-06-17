@@ -95,13 +95,28 @@
                 android:text="Merk Sepatu"
                 />
             <EditText
-                android:id="@+id/merek_edit"
+                android:id="@+id/merek_edit2"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 />
         </TableRow>
-
+        <TableRow>
+            <TextView
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:textSize="18dp"
+                android:text="Nomor Gembok"
+                />
+            <EditText
+                android:id="@+id/no_gembok_edit"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                />
+        </TableRow>
         <TableRow
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp">

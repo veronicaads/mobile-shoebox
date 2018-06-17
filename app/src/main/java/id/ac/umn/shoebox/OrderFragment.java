@@ -2,8 +2,10 @@ package id.ac.umn.shoebox;
 
 import android.*;
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -140,8 +142,35 @@ public class OrderFragment extends Fragment {
     String filename, currentPath;
     String isi="";
     Uri donlod;
-
+    Integer flag_order=0;
     StorageReference storageReference;
+
+    public void alert_dialog(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Alert");
+        alert.setCancelable(true);
+        alert.setMessage("Are you sure to make an order ?");
+
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d("alert", "onClick: wowowowo");
+                flag_order=1;
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog ale = alert.create();
+        ale.setCanceledOnTouchOutside(true);
+        ale.show();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -162,74 +191,86 @@ public class OrderFragment extends Fragment {
         });
 
 
-        final EditText merek_edit = (EditText) view.findViewById(R.id.merek_edit);
+        final EditText merek_edit = (EditText) view.findViewById(R.id.merek_edit2);
         final EditText comment_edit = (EditText) view.findViewById(R.id.keterangan_edit);
-        final String merek = merek_edit.getText().toString();
-        final String comment = comment_edit.getText().toString();
+        final EditText nomor_gembok = (EditText) view.findViewById(R.id.no_gembok_edit);
+
+
 
         final String userEmail = new SharedPrefManager(getContext()).getUserEmail();
 
         Button order_but = (Button) view.findViewById(R.id.order_btn);
         order_but.setOnClickListener(new View.OnClickListener() {
+
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                progressDialog.setMessage("Uploading ....");
-                progressDialog.show();
-                progressDialog.setCancelable(false);
-                filename = imageUri.getLastPathSegment();
+                alert_dialog();
+                if(flag_order==1){
+                    progressDialog.setMessage("Please Wait ....");
+                    progressDialog.show();
+                    progressDialog.setCancelable(false);
+                    filename = imageUri.getLastPathSegment();
 
 
-                //
-                //kirim gambar
-                //
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    final String merek = merek_edit.getText().toString();
+                    final String comment = comment_edit.getText().toString();
+                    final String gembok = nomor_gembok.getText().toString(); // BELOM DIKIRIM
 
-                //final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
+                    //
+                    //kirim gambar
+                    //
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-                final Long Path = timestamp.getTime();
-                final String imagePath = "image_shoes/"+Path;
+                    //final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
 
-                FirebaseDb firebaseDb = new FirebaseDb();
+                    final Long Path = timestamp.getTime();
+                    final String imagePath = "image_shoes/"+Path;
 
-                storageReference = IStorage.child(imagePath);
-                storageReference.putFile(imageUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    FirebaseDb firebaseDb = new FirebaseDb();
+
+                    storageReference = IStorage.child(imagePath);
+                    storageReference.putFile(imageUri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
 //                Toast.makeText(getContext(),  storageReference.getDownloadUrl().toString(), Toast.LENGTH_LONG).show();
 //                Log.d("Isinya Isi: ", donlod.toString());
 
-                final String cabang = cabang_spinner.getSelectedItem().toString();
-                final String service = service_spinner.getSelectedItem().toString();
-                final String subservice = subservice_spinner.getSelectedItem().toString();
+                    final String cabang = cabang_spinner.getSelectedItem().toString();
+                    final String service = service_spinner.getSelectedItem().toString();
+                    final String subservice = subservice_spinner.getSelectedItem().toString();
 
-                Log.d(TAG, "onClick: ordered");
+                    Log.d(TAG, "onClick: ordered");
 
-                // ambil tanggal masuk
-                Date d = new Date();
-                String tgl_pesan = String.format("%d-%d-%d",d.getYear()-100,d.getMonth(),d.getDate());
+                    // ambil tanggal masuk
+                    Date d = new Date();
+                    String tgl_pesan = String.format("%d-%d-%d",d.getYear()-100,d.getMonth(),d.getDate());
 
-                //
-                //kirim order baru
-                //belum cek jika gambar belom berisi maka akan gagal
-                Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
-                        Path.toString(),comment, tgl_pesan,"",
-                        "pending","belum lunas",000,"","");
-                firebaseDb.sendOrder(od,getContext());
-                progressDialog.dismiss();
-                Log.d("cabang",cabang);
-                startActivity(new Intent(getActivity(),DetailActivity.class));
+                    //
+                    //kirim order baru
+                    //belum cek jika gambar belom berisi maka akan gagal
+                    Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
+                            Path.toString(),comment, tgl_pesan,"",
+                            "pending","belum lunas",000,"","");
+                    //Toast.makeText(getContext(), merek, Toast.LENGTH_SHORT).show();
+                    firebaseDb.sendOrder(od,getContext());
+                    progressDialog.dismiss();
+                    Log.d("cabang",cabang);
+                    Log.d("Merek",merek);
+                    progressDialog.dismiss();
+                    startActivity(new Intent(getActivity(),UtamaActivity.class));
+                }
             }
         });
 

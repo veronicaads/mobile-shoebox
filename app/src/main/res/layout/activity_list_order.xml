@@ -21,6 +21,12 @@
             android:layout_weight="1" />
     </android.support.v7.widget.Toolbar>
 
+    <Spinner
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:id="@+id/cabang_sh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ListView
         android:id="@+id/listorder"

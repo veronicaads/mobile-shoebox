@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -55,8 +56,11 @@ public class DetailActivity extends AppCompatActivity {
         nama_tv = findViewById(R.id.user_name);
         ser_tv = findViewById(R.id.service);
         sub_ser_tv = findViewById(R.id.subservice);
-        merk_tv = findViewById(R.id.merk);
+        merk_tv = findViewById(R.id.merrk);
         Psepatu = findViewById(R.id.sepatu);
+
+        gembok = findViewById(R.id.gembok);
+
         sharedPrefManager = new SharedPrefManager(getBaseContext());
         waiting = new ProgressDialog(this);
 
@@ -79,6 +83,9 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Order order = dataSnapshot.getValue(Order.class);
+                waiting.setMessage("Load Data..");
+                waiting.show();
+                waiting.setCancelable(false);
                 order_tv.setText(order.getOrderId().toUpperCase());
                 lemari_tv.setText(order.getNoLaci());
                 stat_tv.setText(order.getStatus_service());
@@ -86,21 +93,23 @@ public class DetailActivity extends AppCompatActivity {
                 ser_tv.setText(order.getService());
                 sub_ser_tv.setText(order.getSubService());
                 merk_tv.setText(order.getMerkSepatu());
+
+                //----------------------------------
+                //gembok.setText(order_id.getGembok());
+                //----------------------------------
+
                 try{
                     if(order.getImage().toString().equals("")){
                         Psepatu.setImageResource(R.drawable.shoes);
                         Toast.makeText(DetailActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        waiting.setMessage("Load Data..");
-                        waiting.show();
-                        waiting.setCancelable(false);
                         String gambar = order.getImage().toString();
                         Toast.makeText(DetailActivity.this, gambar, Toast.LENGTH_SHORT).show();
                         retrieveGambar(gambar);
-                        waiting.dismiss();
                     }
                 }catch (Exception e){e.printStackTrace();}
+                waiting.dismiss();
             }
 
             @Override
@@ -149,7 +158,7 @@ public class DetailActivity extends AppCompatActivity {
         tujuan.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(DetailActivity.this).load(uri.toString()).into(Psepatu);
+                Glide.with(DetailActivity.this).load(uri.toString()).fitCenter().override(500,500).into(Psepatu);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
