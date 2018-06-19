@@ -65,6 +65,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
@@ -251,6 +252,15 @@ public class OrderFragment extends Fragment {
                     final String service = service_spinner.getSelectedItem().toString();
                     final String subservice = subservice_spinner.getSelectedItem().toString();
 
+                    String price = subservice.replaceAll("[()]","");
+
+                    Log.d(TAG, "onClick: prive "+price);
+
+                    Scanner s = new Scanner(price).useDelimiter("[^0-9]+");
+                    int harga = s.nextInt();
+
+                    Log.d(TAG, "onClick: scanner "+Integer.toString(harga));
+
                     Log.d(TAG, "onClick: ordered");
 
                     // ambil tanggal masuk
@@ -262,7 +272,8 @@ public class OrderFragment extends Fragment {
                     //belum cek jika gambar belom berisi maka akan gagal
                     Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
                             Path.toString(),comment, tgl_pesan,"",
-                            "pending","belum lunas",000,"","");
+                            "pending","belum lunas",harga
+                            ,"","",gembok);
                     //Toast.makeText(getContext(), merek, Toast.LENGTH_SHORT).show();
                     firebaseDb.sendOrder(od,getContext());
                     progressDialog.dismiss();
@@ -303,7 +314,7 @@ public class OrderFragment extends Fragment {
         TextView tv = (TextView) getActivity().findViewById(R.id.text_view);
         tv.setText(" Keterangan :\n Untuk pemesanan service Repaint ataupun \n Repair akan mendapatkan free service Reclean.");
 
-      cabang_spinner = getActivity().findViewById(R.id.cabang);
+        cabang_spinner = getActivity().findViewById(R.id.cabang);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.listcabang,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

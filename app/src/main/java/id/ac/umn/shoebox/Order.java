@@ -26,13 +26,15 @@ public class Order {
     private Integer biaya;
     private String noLaci;
     private String buktiPembayaran;
+    private String kunciGembok;
 
     public Order(){}
 
     public Order(String orderid, String userEmail, String cabang, String service,
                  String subService,String merkSepatu,String image, String comment,
                  String tanggal_masuk, String tanggal_keluar, String status_service,
-                 String status_pembayaran, Integer biaya, String noLaci, String buktiPembayaran){
+                 String status_pembayaran, Integer biaya, String noLaci, String buktiPembayaran,
+                 String kunciGembok){
         this.orderId = orderid;
         this.userEmail = userEmail;
         this.cabang = cabang;
@@ -48,6 +50,7 @@ public class Order {
         this.biaya = biaya;
         this.noLaci = noLaci;
         this.buktiPembayaran = buktiPembayaran;
+        this.kunciGembok = kunciGembok;
     }
 
     public String getOrderId(){return orderId;}
@@ -65,6 +68,7 @@ public class Order {
     public Integer getBiaya(){return biaya;}
     public String getNoLaci(){return noLaci;}
     public String getBuktiPembayaran(){return buktiPembayaran;}
+    public String getKunciGembok(){return kunciGembok;}
 
     public void setOrderId(String id){this.orderId = id;}
     public void setNoLaci(String no){noLaci = no;}
