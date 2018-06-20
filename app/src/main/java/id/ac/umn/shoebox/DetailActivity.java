@@ -137,7 +137,9 @@ public class DetailActivity extends AppCompatActivity {
         pembayaran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DetailActivity.this, BuktiUploadActivity.class));
+                Intent i = new Intent(DetailActivity.this, BuktiUploadActivity.class);
+                i.putExtra("ORDERID", order_id);
+                startActivity(i);
             }
         });
 

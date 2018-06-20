@@ -23,14 +23,30 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.sql.Timestamp;
+
+
 
 public class BuktiUploadActivity extends AppCompatActivity {
+
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    String order_id;
+
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("order_id");
+    //DatabaseReference usersRef = ref.child("orders");
+
     private static final int PICK_IMAGE = 100;
 //    private static final int TAKE_PHOTOS = 50;
     Uri imageUri;
@@ -38,8 +54,15 @@ public class BuktiUploadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         setContentView(R.layout.activity_bukti_upload);
         bukti = (ImageView) findViewById(R.id.buktibayar);
+
+        Intent a = getIntent();
+        order_id = a.getStringExtra("ORDERID");
 
 //        Button camera = (Button) findViewById(R.id.btnTakeImage);
 //        camera.setOnClickListener(new View.OnClickListener() {
@@ -67,20 +90,24 @@ public class BuktiUploadActivity extends AppCompatActivity {
                 progressDialog.show();
                 progressDialog.setCancelable(false);
                 filename = imageUri.getPath();
-                StorageReference storageReference = IStorage.child("bukti_transfer/"+filename);
-                storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                        Uri download = taskSnapshot.getDownloadUrl();
-                        Toast.makeText(getApplicationContext(),"WOI UPLOAD", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+
+                final String imagePath = "bukti_pembayaran/"+filename;
+                FirebaseDb firebaseDb = new FirebaseDb();
+
+                storageReference = IStorage.child(imagePath);
+                storageReference.putFile(imageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getApplicationContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                firebaseDb.kirimBukti(order_id,imagePath);
+
                 startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
                 Toast.makeText(getApplicationContext(), "Upload Selesai", Toast.LENGTH_SHORT).show();
             }

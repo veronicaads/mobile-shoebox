@@ -129,4 +129,10 @@ public class FirebaseDb{
                 order.getService()+ " " + order.getSubService()
                         + " " + order.getStatus_service()));
     }
+
+    public void kirimBukti(String order_id, String imagePath){
+        mydb = FirebaseDatabase.getInstance().getReference("orders");
+        mydb.child(order_id).child("bukti_transfer").setValue(imagePath);
+    }
+
 }
