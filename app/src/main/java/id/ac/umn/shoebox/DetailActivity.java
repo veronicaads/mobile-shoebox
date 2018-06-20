@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     ImageView Psepatu;
     ProgressDialog progressDialog,waiting;
-    String order_id,cabang;
+    String order_id,cabang, tmp;
     SharedPrefManager sharedPrefManager;
 
     @Override
@@ -49,6 +49,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent a = getIntent();
         order_id = a.getStringExtra("ORDERID");
+        tmp=order_id;
         cabang =  a.getStringExtra("CABANG");
         stat_tv = findViewById(R.id.status);
         order_tv = findViewById(R.id.no_order);
@@ -138,7 +139,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(DetailActivity.this, BuktiUploadActivity.class);
-                i.putExtra("ORDERID", order_id);
+                i.putExtra("ORDERID", tmp);
                 startActivity(i);
             }
         });

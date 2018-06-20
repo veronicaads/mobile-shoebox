@@ -64,6 +64,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
         Intent a = getIntent();
         order_id = a.getStringExtra("ORDERID");
 
+        Toast.makeText(getApplicationContext(), order_id, Toast.LENGTH_SHORT).show();
 //        Button camera = (Button) findViewById(R.id.btnTakeImage);
 //        camera.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -84,34 +85,37 @@ public class BuktiUploadActivity extends AppCompatActivity {
 
         Button submit = (Button) findViewById(R.id.btnSubmit);
         submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog.setMessage("Uploading ....");
-                progressDialog.show();
-                progressDialog.setCancelable(false);
-                filename = imageUri.getPath();
+          @Override
+          public void onClick(View view) {
+              progressDialog.setMessage("Uploading ....");
+              progressDialog.show();
+              progressDialog.setCancelable(false);
+              filename = imageUri.getPath();
 
-                final String imagePath = "bukti_pembayaran/"+filename;
-                FirebaseDb firebaseDb = new FirebaseDb();
+              final String imagePath = "bukti_pembayaran/" + filename;
+              FirebaseDb firebaseDb = new FirebaseDb();
 
-                storageReference = IStorage.child(imagePath);
-                storageReference.putFile(imageUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+              storageReference = IStorage.child(imagePath);
+              storageReference.putFile(imageUri)
+                      .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                          @Override
+                          public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
+                          }
+                      }).addOnFailureListener(new OnFailureListener() {
+                  @Override
+                  public void onFailure(@NonNull Exception e) {
+                      Toast.makeText(getApplicationContext(), "Gagal :(", Toast.LENGTH_SHORT).show();
 
-                firebaseDb.kirimBukti(order_id,imagePath);
+                      //firebaseDb.kirimBukti(order_id, imagePath);
 
-                startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
-                Toast.makeText(getApplicationContext(), "Upload Selesai", Toast.LENGTH_SHORT).show();
-            }
-        });
+                      startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
+                      Toast.makeText(getApplicationContext(), "Upload Selesai", Toast.LENGTH_SHORT).show();
+                  }
+              });
+          }
+      });
+
         Button back = (Button) findViewById(R.id.btnBack);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +125,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
             }
         });
     }
+
     String filename, currentPath;
     private StorageReference IStorage;
     ProgressDialog progressDialog;
