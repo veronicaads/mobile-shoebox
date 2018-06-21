@@ -116,7 +116,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     sub_ser.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("subService").getValue().toString());
                     merek.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("merkSepatu").getValue().toString());
                     tgl_order.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
-
+                    gembok.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("kunciGembok").getValue().toString());
                     try{
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
                         Date  firstDate = sdf.parse(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
