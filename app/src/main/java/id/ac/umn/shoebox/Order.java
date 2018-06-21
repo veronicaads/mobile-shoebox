@@ -27,6 +27,7 @@ public class Order {
     private String noLaci;
     private String buktiPembayaran;
     private String kunciGembok;
+    private Integer rating;
 
     public Order(){}
 
@@ -51,6 +52,7 @@ public class Order {
         this.noLaci = noLaci;
         this.buktiPembayaran = buktiPembayaran;
         this.kunciGembok = kunciGembok;
+        this.rating = 0;
     }
 
     public String getOrderId(){return orderId;}
@@ -72,4 +74,5 @@ public class Order {
 
     public void setOrderId(String id){this.orderId = id;}
     public void setNoLaci(String no){noLaci = no;}
+    public void setRating(int rating){this.rating = rating;}
 }
