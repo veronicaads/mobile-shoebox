@@ -131,13 +131,38 @@ public class FirebaseDb{
     }
 
     public void kirimBukti(String cabang, String order_id, String imagePath){
-        mydb = FirebaseDatabase.getInstance().getReference(cabang);
-        mydb.child("orders").child(order_id).setValue(imagePath);
+        if (cabang.equals("Pertamina")){
+            mydb = FirebaseDatabase.getInstance().getReference("pertamina/orders");
+        }
+        else if (cabang.equals("Mercubuana")){
+            mydb = FirebaseDatabase.getInstance().getReference("mercubuana/orders");
+        }
+        else if (cabang.equals("Atma Jaya")){
+            mydb = FirebaseDatabase.getInstance().getReference("atmajaya/orders");
+        }
+        else if (cabang.equals("UMN")){
+            mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
+        }
+        //mydb = FirebaseDatabase.getInstance().getReference(cabang);
+        mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
     /*public void kirimRating(String cabang, String order_id, int rating){
-        mydb = FirebaseDatabase.getInstance().getReference(cabang);
+
+        if (cabang.equals("Pertamina")){
+            mydb = FirebaseDatabase.getInstance().getReference("pertamina/orders");
+        }
+        else if (cabang.equals("Mercubuana")){
+            mydb = FirebaseDatabase.getInstance().getReference("mercubuana/orders");
+        }
+        else if (cabang.equals("Atma Jaya")){
+            mydb = FirebaseDatabase.getInstance().getReference("atmajaya/orders");
+        }
+        else if (cabang.equals("UMN")){
+            mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
+        }
+        //mydb = FirebaseDatabase.getInstance().getReference(cabang);
         mydb.child("orders").child(order_id).setValue(rating);
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }*/
