@@ -136,4 +136,10 @@ public class FirebaseDb{
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
+    /*public void kirimRating(String cabang, String order_id, int rating){
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
+        mydb.child("orders").child(order_id).setValue(rating);
+        //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
+    }*/
+
 }

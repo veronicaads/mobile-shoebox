@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -40,6 +41,7 @@ import java.sql.Timestamp;
 public class BuktiUploadActivity extends AppCompatActivity {
 
     FirebaseStorage storage;
+    private StorageReference IStorage;
     StorageReference storageReference;
     String order_id;
     String cabang;
@@ -56,8 +58,8 @@ public class BuktiUploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        //storage = FirebaseStorage.getInstance();
+        //storageReference = storage.getReference();
 
         setContentView(R.layout.activity_bukti_upload);
         bukti = (ImageView) findViewById(R.id.buktibayar);
@@ -65,8 +67,9 @@ public class BuktiUploadActivity extends AppCompatActivity {
         Intent a = getIntent();
         order_id = a.getStringExtra("ORDERID");
         cabang = a.getStringExtra("CABANG");
+        IStorage = FirebaseStorage.getInstance().getReference();
 
-        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog = new ProgressDialog(BuktiUploadActivity.this);
 
 
         Toast.makeText(getApplicationContext(), order_id, Toast.LENGTH_SHORT).show();
@@ -86,6 +89,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
                 startActivityForResult(intent, PICK_IMAGE);
             }
         });
+
 
 
         Button submit = (Button) findViewById(R.id.btnSubmit);
@@ -135,7 +139,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
     }
 
     String filename, currentPath;
-    private StorageReference IStorage;
+    //private StorageReference IStorage;
     ProgressDialog progressDialog;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
