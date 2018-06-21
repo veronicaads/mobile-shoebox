@@ -42,6 +42,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageReference;
     String order_id;
+    String cabang;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("order_id");
@@ -63,6 +64,8 @@ public class BuktiUploadActivity extends AppCompatActivity {
 
         Intent a = getIntent();
         order_id = a.getStringExtra("ORDERID");
+        cabang = a.getStringExtra("CABANG");
+
 
         Toast.makeText(getApplicationContext(), order_id, Toast.LENGTH_SHORT).show();
 //        Button camera = (Button) findViewById(R.id.btnTakeImage);
@@ -92,8 +95,11 @@ public class BuktiUploadActivity extends AppCompatActivity {
               progressDialog.setCancelable(false);
               filename = imageUri.getPath();
 
-              final String imagePath = "bukti_pembayaran/" + filename;
-              FirebaseDb firebaseDb = new FirebaseDb();
+              final FirebaseDb firebaseDb = new FirebaseDb();
+
+              Timestamp timestamp_buktiBayar = new Timestamp(System.currentTimeMillis());
+              final Long Path_BuktiBayar = timestamp_buktiBayar.getTime();
+              final String imagePath = "bukti_pembayaran/" + Path_BuktiBayar;
 
               storageReference = IStorage.child(imagePath);
               storageReference.putFile(imageUri)
@@ -107,7 +113,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
                   public void onFailure(@NonNull Exception e) {
                       Toast.makeText(getApplicationContext(), "Gagal :(", Toast.LENGTH_SHORT).show();
 
-                      //firebaseDb.kirimBukti(order_id, imagePath);
+                      firebaseDb.kirimBukti(cabang, order_id, Path_BuktiBayar.toString());
 
                       startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
                       Toast.makeText(getApplicationContext(), "Upload Selesai", Toast.LENGTH_SHORT).show();

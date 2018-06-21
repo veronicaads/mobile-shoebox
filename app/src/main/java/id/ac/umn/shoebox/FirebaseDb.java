@@ -130,9 +130,10 @@ public class FirebaseDb{
                         + " " + order.getStatus_service()));
     }
 
-    public void kirimBukti(String order_id, String imagePath){
-        mydb = FirebaseDatabase.getInstance().getReference("orders");
-        mydb.child(order_id).child("bukti_transfer").setValue(imagePath);
+    public void kirimBukti(String cabang, String order_id, String imagePath){
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
+        mydb.child("orders").child(order_id).setValue(imagePath);
+        //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
 }
