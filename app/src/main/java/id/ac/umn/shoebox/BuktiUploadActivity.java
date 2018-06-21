@@ -66,6 +66,8 @@ public class BuktiUploadActivity extends AppCompatActivity {
         order_id = a.getStringExtra("ORDERID");
         cabang = a.getStringExtra("CABANG");
 
+        progressDialog = new ProgressDialog(getApplicationContext());
+
 
         Toast.makeText(getApplicationContext(), order_id, Toast.LENGTH_SHORT).show();
 //        Button camera = (Button) findViewById(R.id.btnTakeImage);
