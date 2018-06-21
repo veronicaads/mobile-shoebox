@@ -120,7 +120,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
                   public void onFailure(@NonNull Exception e) {
                       Toast.makeText(getApplicationContext(), "Gagal :(", Toast.LENGTH_SHORT).show();
 
-                      firebaseDb.kirimBukti(cabang, order_id, Path_BuktiBayar.toString());
+                      //firebaseDb.kirimBukti(cabang, order_id, Path_BuktiBayar.toString());
 
                       startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
                       Toast.makeText(getApplicationContext(), "Upload Selesai", Toast.LENGTH_SHORT).show();
