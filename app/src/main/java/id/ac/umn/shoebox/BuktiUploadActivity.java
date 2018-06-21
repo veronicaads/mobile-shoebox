@@ -112,7 +112,8 @@ public class BuktiUploadActivity extends AppCompatActivity {
                       .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                           @Override
                           public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                              firebaseDb.kirimBukti(cabang, order_id, Path_BuktiBayar.toString());
+                              startActivity(new Intent(BuktiUploadActivity.this, UtamaActivity.class));
                           }
                       }).addOnFailureListener(new OnFailureListener() {
                   @Override
