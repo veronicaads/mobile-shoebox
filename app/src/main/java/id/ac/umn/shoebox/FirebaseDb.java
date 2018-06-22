@@ -163,7 +163,7 @@ public class FirebaseDb{
             mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
         }
         //mydb = FirebaseDatabase.getInstance().getReference(cabang);
-        mydb.child("orders").child(order_id).setValue(rating);
+        mydb.child(order_id).child(rating).setValue(rating);
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }*/
 

@@ -44,7 +44,7 @@ public class DetailOrderActivity extends AppCompatActivity {
 
     TextView stat, order, lemari, nama, ser, sub_ser, merek, tgl_order, tgl_deadline, gembok;
     DatabaseReference databaseReference;
-    ImageView Psepatu;
+    ImageView Psepatu, Pbukti;
     ProgressDialog progressDialog, waiting;
 
     String order_id, cabs;
@@ -63,6 +63,7 @@ public class DetailOrderActivity extends AppCompatActivity {
         sub_ser = findViewById(R.id.subservice);
         merek = findViewById(R.id.merk);
         Psepatu = findViewById(R.id.sepatu);
+        Pbukti = findViewById(R.id.bukti);
         tgl_order = findViewById(R.id.tgl_masuk);
         tgl_deadline=findViewById(R.id.deadline);
         gembok = findViewById(R.id.kunci);
@@ -99,6 +100,24 @@ public class DetailOrderActivity extends AppCompatActivity {
                         waiting.dismiss();
                     }
                 }catch (Exception e){e.printStackTrace();}
+
+                try{
+                    if(dataSnapshot.child(cabs+"/orders").child(order_id).child("buktiPembayaran").getValue().toString().equals("")){
+                        Pbukti.setImageResource(R.drawable.shoes);
+                        Toast.makeText(DetailOrderActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else {
+                        waiting.setMessage("Load Data..");
+                        waiting.show();
+                        waiting.setCancelable(false);
+                        String bukti = dataSnapshot.child(cabs+"/orders").child(order_id).child("buktiPembayaran").getValue().toString();
+                        //Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
+                        retrieveBukti(bukti);
+                        waiting.dismiss();
+                    }
+                }catch (Exception e){e.printStackTrace();}
+
 
                 try{
                     if(dataSnapshot.child(cabs+"/orders").child(order_id).child("noLaci").getValue().toString().equals(""))
@@ -188,6 +207,25 @@ public class DetailOrderActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void retrieveBukti(String buktiGambar){
+
+        StorageReference storage = FirebaseStorage.getInstance().getReference();
+        StorageReference tujuan = storage.child("bukti_pembayaran/").child(buktiGambar);
+
+        tujuan.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(DetailOrderActivity.this).load(uri.toString()).into(Pbukti);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //Failed
+            }
+        });
+    }
+
 
     private void updateData(final String orderID, final String isi, final String userEmail){
         databaseReference = FirebaseDatabase.getInstance().getReference();

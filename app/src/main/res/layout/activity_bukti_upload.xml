@@ -40,23 +40,6 @@
             android:layout_gravity="center"
             android:src="@drawable/upload" />
 
-        <TableRow>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:layout_weight="1"
-                android:text="Comment : "/>
-
-        </TableRow>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/commenttext"
-            android:inputType="textMultiLine"
-            android:layout_marginBottom="20dp"/>
             <!--<Button-->
                 <!--android:id="@+id/btnTakeImage"-->
                 <!--android:layout_width="wrap_content"-->
