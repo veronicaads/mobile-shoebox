@@ -18,7 +18,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/shoebox_ic"
-        android:label=""
+        android:label="Shoebox"
         android:roundIcon="@mipmap/shoebox_ic_round"
         android:supportsRtl="true"
 
