@@ -2,6 +2,7 @@ package id.ac.umn.shoebox;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -148,7 +149,8 @@ public class FirebaseDb{
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
-    /*public void kirimRating(String cabang, String order_id, int rating){
+    public void kirimRating(String cabang, String order_id, int rating){
+
 
         if (cabang.equals("Pertamina")){
             mydb = FirebaseDatabase.getInstance().getReference("pertamina/orders");
@@ -163,8 +165,8 @@ public class FirebaseDb{
             mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
         }
         //mydb = FirebaseDatabase.getInstance().getReference(cabang);
-        mydb.child(order_id).child(rating).setValue(rating);
+        mydb.child(order_id).child("rating").setValue(rating);
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
-    }*/
+    }
 
 }
