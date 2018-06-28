@@ -172,7 +172,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         final String tmp = item.getTitle().toString();
-                        alert_dialog(order_id, tmp, userEmail);
+                        alert_dialog(order_id, cabs,tmp, userEmail);
 //                        Toast.makeText(DetailOrderActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }
@@ -227,26 +227,26 @@ public class DetailOrderActivity extends AppCompatActivity {
     }
 
 
-    private void updateData(final String orderID, final String isi, final String userEmail){
+    private void updateData(final String orderID, final String cabang, final String isi, final String userEmail){
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         Log.d("detailorder", "updateData: ");
-        databaseReference.child("orders").child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dataSnapshot.getRef().child("status_service").setValue(isi);
-                notifyUser(userEmail, "Order ID "+ orderID + " change status to done" + isi);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("User", databaseError.getMessage());
-            }
-        });
-
+//        databaseReference.child("orders").child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                dataSnapshot.getRef().child("status_service").setValue(isi);
+////                notifyUser(userEmail, "Order ID "+ orderID + " change status to done" + isi);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.d("User", databaseError.getMessage());
+//            }
+//        });
+        databaseReference.child(cabang).child("orders").child(orderID).child("status_service").setValue(isi);
     }
 
-    public void alert_dialog(final String orderID, String title, final String userEmail){
+    public void alert_dialog(final String orderID, final String cabang, String title, final String userEmail){
         AlertDialog.Builder alert = new AlertDialog.Builder(DetailOrderActivity.this);
         alert.setTitle("Alert");
         alert.setCancelable(true);
@@ -261,7 +261,8 @@ public class DetailOrderActivity extends AppCompatActivity {
                 progressDialog.setMessage("Please Wait");
                 progressDialog.show();
                 progressDialog.setCancelable(false);
-                updateData(orderID, tmp, userEmail);
+                updateData(orderID, cabang, tmp, userEmail);
+                notifyUser(userEmail, "Order ID "+ orderID + " " + tmp);
                 progressDialog.dismiss();
                 stat.setText(tmp);
                 Log.d("alert", "onClick: wowowowo");

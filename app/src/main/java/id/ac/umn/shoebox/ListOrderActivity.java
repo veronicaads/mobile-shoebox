@@ -90,8 +90,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             txt1.setText(orderID.get(position));
             txt2.setText(Deadline.get(position));
             txt3.setText(Status.get(position));
-            txt4.setText(Level.get(position));
-            imv.setImageResource(gambar.get(position));
+//            txt4.setText(Level.get(position));
+//            imv.setImageResource(gambar.get(position));
             return viewHolder;
         }
     }

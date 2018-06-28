@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -188,13 +189,16 @@ public class HomeFragment extends Fragment {
             String status = (String) statuslist.get(i);
             String tglmasuk = (String) inDateList.get(i);
             String estdate = StringToDate(tglmasuk,service);
+
+            status = status.split(" ")[0].toLowerCase();
+            Log.d("homefragment", "getList: "+status);
             if (status.equals("pending")){
                 listorder.add(new OrderModel(R.drawable.pending,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"PENDING - Kami akan segera melayani permintaan anda"));
             }
-            else if (status.equals("progress")){
+            else if (status.equals("on")){
                 listorder.add(new OrderModel(R.drawable.progress,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"PROSES - Kami sedang mempersiapkan yang terbaik"));
             }
-            else if (status.equals("done")){
+            else if (status.equals("done") || status.equals("bukti")){
                 listorder.add(new OrderModel(R.drawable.done,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"SELESAI - Sepatu kesayanganmu sudah dapat diambil"));
             }
         }
@@ -209,6 +213,11 @@ public class HomeFragment extends Fragment {
         serviceList.clear();
         inDateList.clear();
         outDateList.clear();
+
+        final boolean[] done = new boolean[4];
+        Arrays.fill(done, Boolean.FALSE);
+
+        final ArrayList<String> isiRating = new ArrayList<>();
 
         final com.github.siyamed.shapeimageview.CircularImageView photo = getView().findViewById(R.id.photo);
         mFullNameTextView = getView().findViewById(R.id.nama_user);
@@ -272,6 +281,7 @@ public class HomeFragment extends Fragment {
                 }
                 try
                 {
+                    done[0] = Boolean.TRUE;
                     models = getList();
                     orderAdapter = new OrderAdapter(getContext(), models);
                     listViewOrders.setAdapter(orderAdapter);
@@ -295,6 +305,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //query cabang pertamina
         databaseReference_p = FirebaseDatabase.getInstance().getReference("pertamina/orders");
         Query query_p = databaseReference_p.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
         query_p.addChildEventListener(new ChildEventListener() {
@@ -319,6 +330,7 @@ public class HomeFragment extends Fragment {
                 }
                 try
                 {
+                    done[1] = Boolean.TRUE;
                     models = getList();
                     orderAdapter = new OrderAdapter(getContext(), models);
                     listViewOrders.setAdapter(orderAdapter);
@@ -342,6 +354,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        /** query cabang umn */
         databaseReference_u = FirebaseDatabase.getInstance().getReference("umn/orders");
         Query query2 = databaseReference_u.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
         query2.addChildEventListener(new ChildEventListener() {
@@ -350,8 +363,10 @@ public class HomeFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Order order = dataSnapshot.getValue(Order.class);
+                    Log.d("homefragment", "onChildAdded: "+order.getOrderId());
                     String od = order.getOrderId();
-                    if (!checker.equals(od)){
+                    if (!checker.equals(od) && !(order.getRating().equals(0)
+                            && order.getStatus_service().equals("Done"))){
                         orderList.add(od);
                         String cabang = order.getCabang();
                         cabangList.add(cabang);
@@ -363,9 +378,18 @@ public class HomeFragment extends Fragment {
                         inDateList.add(tglmasuk);
                         checker = od;
                     }
+                    else if(order.getStatus_service().equals("Done") && order.getRating().equals(0)){
+                        Log.d("Homefragment", "this is done "+order.getOrderId());
+                        Intent i = new Intent(getActivity(),RatingActivity.class);
+                        i.putExtra("ORDERID",order.getOrderId());
+                        i.putExtra("CABANG",order.getCabang());
+                        startActivity(i);
+                    }
+                    Log.d("homefragment", "onChildAdded: "+order.getOrderId());
                 }
                 try
                 {
+                    done[2] = Boolean.TRUE;
                     models = getList();
                     orderAdapter = new OrderAdapter(getContext(), models);
                     listViewOrders.setAdapter(orderAdapter);
@@ -389,6 +413,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //query cabang atmajaya
         databaseReference_a = FirebaseDatabase.getInstance().getReference("atmajaya/orders");
         Query query_a = databaseReference_a.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
         query_a.addChildEventListener(new ChildEventListener() {
@@ -413,6 +438,7 @@ public class HomeFragment extends Fragment {
                 }
                 try
                 {
+                    done[3] = Boolean.TRUE;
                     models = getList();
                     orderAdapter = new OrderAdapter(getContext(), models);
                     listViewOrders.setAdapter(orderAdapter);
@@ -449,6 +475,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public Boolean notEmpty(ArrayList a){
+        return a.isEmpty();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

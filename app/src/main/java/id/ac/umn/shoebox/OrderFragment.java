@@ -62,6 +62,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -273,7 +274,7 @@ public class OrderFragment extends Fragment {
                     Order od = new Order("0000",userEmail,cabang,service,subservice,merek,
                             Path.toString(),comment, tgl_pesan,"",
                             "pending","belum lunas",harga
-                            ,"","",gembok);
+                            ,"","",gembok,0);
                     //Toast.makeText(getContext(), merek, Toast.LENGTH_SHORT).show();
                     firebaseDb.sendOrder(od,getContext());
                     progressDialog.dismiss();
