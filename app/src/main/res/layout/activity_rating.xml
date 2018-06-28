@@ -36,7 +36,6 @@
         android:layout_gravity="center"
         android:textSize="15sp"
         android:id="@+id/idorder"
-        android:text="U0001"
         android:layout_marginTop="10dp"/>
 
     <RatingBar
