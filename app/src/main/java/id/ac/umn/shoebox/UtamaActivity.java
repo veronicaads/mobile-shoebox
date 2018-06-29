@@ -206,11 +206,26 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
                     public void onResult(@NonNull Status status) {
                         Intent intent = new Intent(UtamaActivity.this, LoginActivity.class);
                         startActivity(intent);
+//                        finish();
+//                        System.exit(0);
                     }
                 }
         );
     }
 
+    long doubleBack;
+    final int TIME_DELAY = 1500;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBack + TIME_DELAY > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(getBaseContext(), "Press once again to exit!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        doubleBack = System.currentTimeMillis();
+    }
     private void pushNotification(String msg){
         Intent intent = new Intent(this, UtamaActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,

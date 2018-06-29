@@ -90,8 +90,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             txt1.setText(orderID.get(position));
             txt2.setText(Deadline.get(position));
             txt3.setText(Status.get(position));
-//            txt4.setText(Level.get(position));
-//            imv.setImageResource(gambar.get(position));
+            txt4.setText(Level.get(position));
+            imv.setImageResource(gambar.get(position));
             return viewHolder;
         }
     }
@@ -121,6 +121,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if(ds.child("status_service").getValue().toString().toLowerCase().equals("done")){continue;}
                     orderID.add(ds.child("orderId").getValue().toString());
                     Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
                     if(ds.child("tanggal_masuk").getValue().toString().equals("")){
@@ -146,7 +147,6 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
                         Date now = new Date();
                         Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
-                        //Date secondDate = sdf.parse(ds.child("tanggal_keluar").getValue().toString());
 
                         /*Tambahan Hari Keluar*/
                         Calendar saat = Calendar.getInstance();
@@ -157,21 +157,15 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                             saat.add(Calendar.DAY_OF_MONTH, 14);
                         Date kelar = saat.getTime();
 
-                        if(ds.child("status_service").getValue().toString().equals("Done")){
-                            gambar.add(R.drawable.icons8_error_40);
-                        }
-                        else{
-                            long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
-                            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                            long level = 30-diff;
-//                            long level=3;
-                            if(level<0)level=0;
-                            Level.add(String.format("Level: %s", Long.toString(level)));
-                            Log.d("Isi level ", Long.toString(level));
-                            if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
-                            else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-                            else gambar.add(R.drawable.icons8_error_40);
-                        }
+                        long diffInMillies = Math.abs(kelar.getTime() - now.getTime());
+                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                        long level = 30-diff;
+                        if(level<0)level=0;
+                        Level.add(String.format("Level: %s", Long.toString(level)));
+                        Log.d("Isi level ", Long.toString(level));
+                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
+                        else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
+                        else gambar.add(R.drawable.icons8_error_40);
 
                     } catch (Exception e) {e.printStackTrace();}
                 }

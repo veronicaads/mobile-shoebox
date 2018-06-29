@@ -87,7 +87,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                 try{
                     if(dataSnapshot.child(cabs+"/orders").child(order_id).child("image").getValue().toString().equals("")){
                        Psepatu.setImageResource(R.drawable.shoes);
-                        Toast.makeText(DetailOrderActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailOrderActivity.this, "Sepatu Image Load Failed", Toast.LENGTH_SHORT).show();
 
                     }
                     else {
@@ -104,7 +104,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                 try{
                     if(dataSnapshot.child(cabs+"/orders").child(order_id).child("buktiPembayaran").getValue().toString().equals("")){
                         Pbukti.setImageResource(R.drawable.shoes);
-                        Toast.makeText(DetailOrderActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailOrderActivity.this, "Bukti Image Load Failed", Toast.LENGTH_SHORT).show();
 
                     }
                     else {

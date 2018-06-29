@@ -16,7 +16,8 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:padding="10dp">
 
             <TableRow
                 android:paddingTop="10dp"
@@ -27,7 +28,8 @@
                     android:layout_width="165dp"
                     android:layout_height="165dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/shoes"
                     android:scaleType="centerCrop"/>
 
@@ -36,7 +38,8 @@
                     android:layout_width="165dp"
                     android:layout_height="165dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/shoes"
                     android:scaleType="centerCrop"/>
             </TableRow>

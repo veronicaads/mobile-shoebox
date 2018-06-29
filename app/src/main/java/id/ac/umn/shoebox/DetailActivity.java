@@ -96,9 +96,6 @@ public class DetailActivity extends AppCompatActivity {
                 merk_tv.setText(order.getMerkSepatu());
                 gembok_tv.setText(order.getKunciGembok());
 
-                //----------------------------------
-                //gembok.setText(order_id.getGembok());
-                //----------------------------------
 
                 try{
                     if(order.getImage().toString().equals("")){
