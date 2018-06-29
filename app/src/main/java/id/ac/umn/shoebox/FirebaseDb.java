@@ -127,7 +127,7 @@ public class FirebaseDb{
         //send message to cabang
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
         mydb.child("inbox").push().setValue(new PushMessage(
-                order.getService()+ " " + order.getSubService()
+                order.getOrderId()+": "+order.getService()+ " " + order.getSubService()
                         + " " + order.getStatus_service()));
     }
 

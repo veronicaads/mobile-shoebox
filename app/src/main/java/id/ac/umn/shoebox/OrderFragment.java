@@ -274,7 +274,7 @@ public class OrderFragment extends Fragment {
                             ,"","",gembok,0);
                     //Toast.makeText(getContext(), merek, Toast.LENGTH_SHORT).show();
                     firebaseDb.sendOrder(od,getContext());
-                    progressDialog.dismiss();
+
                     Log.d("cabang",cabang);
                     Log.d("Merek",merek);
                     progressDialog.dismiss();

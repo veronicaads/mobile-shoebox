@@ -182,7 +182,6 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             }
     });
     }
-    String cabang ="";
     @Override
     protected void onStart() {
 
@@ -201,25 +200,25 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                     listView.setAdapter(null);
                     //Toast.makeText(getApplicationContext(), "umn", Toast.LENGTH_SHORT).show();
                     Tampilkan("umn");
-                    cabang="umn";
+                    cabangAdmin="umn";
                 }
                 else if(i==1){
                     listView.setAdapter(null);
                     //Toast.makeText(getApplicationContext(), "mercubuana", Toast.LENGTH_SHORT).show();
                     Tampilkan("mercubuana");
-                    cabang="mercubuana";
+                    cabangAdmin="mercubuana";
                 }
                 else if(i==2){
                     listView.setAdapter(null);
                    // Toast.makeText(getApplicationContext(), "atmajaya", Toast.LENGTH_SHORT).show();
                     Tampilkan("atmajaya");
-                    cabang="atmajaya";
+                    cabangAdmin="atmajaya";
                 }
                 else if(i==3){
                     listView.setAdapter(null);
                    // Toast.makeText(getApplicationContext(), "pertamina", Toast.LENGTH_SHORT).show();
                     Tampilkan("pertamina");
-                    cabang="pertamina";
+                    cabangAdmin="pertamina";
                 }
 
             }
@@ -247,7 +246,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
 
         //ambil cabang admin
-        cabangAdmin = new SharedPrefManager(this).getCabangAdmin();
+        cabangAdmin = "umn";
         Log.d("cabang", "onCreate: "+cabangAdmin);
         DatabaseReference popUp = FirebaseDatabase.getInstance().getReference(cabangAdmin);
         popUp.child("inbox").addChildEventListener(
@@ -295,7 +294,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ListOrderActivity.this, DetailOrderActivity.class);
                 intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
-                intent.putExtra("CABANG", cabang );
+                intent.putExtra("CABANG", cabangAdmin );
                 startActivity(intent);
             }
         });
