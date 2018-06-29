@@ -6,40 +6,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="id.ac.umn.shoebox.DetailOrderActivity">
-
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <TableRow
-            android:paddingTop="10dp"
-            android:layout_marginTop="15dp">
-
-            <ImageView
-                android:id="@+id/sepatu"
-                android:layout_width="165dp"
-                android:layout_height="165dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/shoes" />
-
-            <ImageView
-                android:id="@+id/bukti"
-                android:layout_width="165dp"
-                android:layout_height="165dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/shoes" />
-        </TableRow>
-
-    </TableLayout>
-
-
-
-    <ScrollView
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TableRow
+                android:paddingTop="10dp"
+                android:layout_marginTop="15dp">
+
+                <ImageView
+                    android:id="@+id/sepatu"
+                    android:layout_width="165dp"
+                    android:layout_height="165dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/shoes"
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:id="@+id/bukti"
+                    android:layout_width="165dp"
+                    android:layout_height="165dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/shoes"
+                    android:scaleType="centerCrop"/>
+            </TableRow>
+
+        </TableLayout>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -47,6 +49,17 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
+            <TableRow>
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+            </TableRow>
             <TableRow
                 android:padding="5dp"
                 >
@@ -64,10 +77,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="-"
-                    android:textStyle="bold"
+                    android:text=""
                     android:textSize="16sp"
                     />
+            </TableRow>
+            <TableRow
+                    android:padding="5dp">
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="50dp"
+                        android:text=""
+                        android:textSize="16sp" />
+
             </TableRow>
             <TableRow android:padding="5dp">
                 <TextView
@@ -84,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="-"
+                    android:text=""
                     android:textSize="16sp"
                     />
             </TableRow>
@@ -103,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="-"
+                    android:text=""
                     android:textSize="16sp"
                     />
             </TableRow>
@@ -145,43 +169,24 @@
                     android:textSize="16sp"
                     />
             </TableRow>
-            <TableRow
-                android:padding="5dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Status                 "
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="-"
-                    android:textSize="16sp" />
-            </TableRow>
             <TableRow
                 android:padding="5dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nama Pemilik    "
+                    android:text="Merk Sepatu       "
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/merk"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="-"
-                    android:textSize="16sp" />
+                    android:text=""
+                    android:textSize="16sp"/>
             </TableRow>
             <TableRow
                 android:padding="5dp">
@@ -198,45 +203,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="-"
+                    android:text=""
                     android:textSize="16sp" />
             </TableRow>
+
             <TableRow
                 android:padding="5dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Subservice          "
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
                 <TextView
                     android:id="@+id/subservice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="-"
+                    android:text=""
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginStart="50dp"
+                    android:singleLine="true"
                     android:textSize="16sp" />
             </TableRow>
-            <TableRow
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Merk Sepatu       "
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/merk"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="-"
-                    android:textSize="16sp"/>
-            </TableRow>
             <TableRow
                 android:paddingBottom="20dp"
                 android:paddingTop="15dp">
@@ -261,7 +246,7 @@
                     />
             </TableRow>
         </TableLayout>
-    </ScrollView>
-
+    </LinearLayout>
+</ScrollView>
 
 </LinearLayout>

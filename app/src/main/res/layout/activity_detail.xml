@@ -7,191 +7,206 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="id.ac.umn.shoebox.DetailActivity">
-
-        <ImageView
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:id="@+id/sepatu"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/shoes" />
-
-        <TableLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
-            <TableRow
-                android:padding="5dp"
-                >
-                <TextView
-                    android:text="Nomor Order    :"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    />
-                <TextView
-                    android:text=""
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:textSize="18sp"
-                    android:id="@+id/no_order"
-                    />
-            </TableRow>
-            <TableRow android:padding="5dp">
-                <TextView
-                    android:text="Nomor Gembok :"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    />
-                <TextView
-                    android:text=""
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:textSize="18sp"
-                    android:id="@+id/gembok"
-                    />
-            </TableRow>
-            <TableRow android:padding="5dp">
-                <TextView
-                    android:text="Nomor Lemari  :"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    />
-                <TextView
-                    android:text=""
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:textSize="18sp"
-                    android:id="@+id/nolemari"
-                    />
-            </TableRow>
-            <TableRow
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Status                 :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:id="@+id/sepatu"
+                android:layout_width="250dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/shoes" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:id="@+id/status"
-                    android:text="" />
-            </TableRow>
-            <TableRow
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Nama Pemilik   :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+                <TableRow
+                    android:padding="5dp"
+                    >
+                    <TextView
+                        android:text="Nomor Order"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        />
+                    <TextView
+                        android:text=""
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:id="@+id/user_name"
-                    android:text="" />
-            </TableRow>
-            <TableRow
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Service               :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                        android:id="@+id/no_order"
+                        />
+                </TableRow>
+                <TableRow android:padding="5dp">
+                    <TextView
+                        android:text="Nomor Gembok "
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        />
+                    <TextView
+                        android:text=""
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:id="@+id/gembok"
+                        />
+                </TableRow>
+                <TableRow android:padding="5dp">
+                    <TextView
+                        android:text="Nomor Lemari"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        />
+                    <TextView
+                        android:text=""
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:id="@+id/nolemari"
+                        />
+                </TableRow>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:id="@+id/service"
-                    android:text="" />
-            </TableRow>
-            <TableRow
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Subservice        :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                <TableRow
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Service"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:id="@+id/subservice"
-                    android:text="" />
-            </TableRow>
-            <TableRow
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Merk Sepatu     :"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:id="@+id/merrk"
-                    android:text="" />
-            </TableRow>
-            <TableRow
-                android:paddingLeft="60dp"
-                android:paddingRight="40dp"
-                android:paddingTop="15dp">
-                <Button
-                    android:id="@+id/bayar_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Pembayaran"
-                    android:background="@color/purple"
-                    android:textColor="@color/white"
-                    android:layout_marginRight="5dp"
-                    />
-                <Button
-                    android:id="@+id/back_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Back"
-                    android:textColor="@color/white"
-                    android:background="@color/purple"
-                    />
-            </TableRow>
-        </TableLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:id="@+id/service"
+                        android:text="" />
+                </TableRow>
+                <TableRow
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Subservice"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:id="@+id/subservice"
+                        android:text="" />
+                </TableRow>
+                <TableRow
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Merk Sepatu"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:id="@+id/merrk"
+                        android:text="" />
+                </TableRow>
+                <TableRow
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Status"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textSize="18sp"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:layout_marginStart="50dp"
+                        android:id="@+id/status"
+                        android:text="" />
+                </TableRow>
+                <TableRow
+                    android:paddingLeft="60dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="30dp"
+                    android:layout_marginBottom="30dp">
+                    <Button
+                        android:id="@+id/bayar_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pembayaran"
+                        android:background="@color/purple"
+                        android:textColor="@color/white"
+                        android:layout_marginRight="5dp"
+                        />
+                    <Button
+                        android:id="@+id/back_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Back"
+                        android:textColor="@color/white"
+                        android:background="@color/purple"
+                        />
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -215,7 +215,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = new Intent(this, UtamaActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0,intent,0);
-        
+        //Bisa kirim status ke database Read
         Notification notification = new Notification.Builder(this)
                 .setContentTitle("Shoebox")
                 .setContentText(msg)

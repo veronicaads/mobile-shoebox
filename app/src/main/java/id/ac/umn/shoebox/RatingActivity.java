@@ -39,7 +39,7 @@ public class RatingActivity extends AppCompatActivity {
     String order_id, cabang;
     ProgressDialog waiting;
     DatabaseReference databaseReference;
-    TextView order = findViewById(R.id.idorder);
+    TextView order;
     FirebaseDb firebaseDb = new FirebaseDb();
 
     @Override
@@ -50,6 +50,7 @@ public class RatingActivity extends AppCompatActivity {
         addListenerOnButton();
         pSepatu = findViewById(R.id.sepatu);
         Intent a = getIntent();
+        order = (TextView) findViewById(R.id.idorder);
         order_id = a.getStringExtra("OrderID");
         cabang = a.getStringExtra("CABANG");
         waiting = new ProgressDialog(this);

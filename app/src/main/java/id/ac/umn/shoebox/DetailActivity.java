@@ -35,7 +35,7 @@ import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView stat_tv, order_tv, lemari_tv, nama_tv, ser_tv, sub_ser_tv, merk_tv, tgl_order, tgl_deadline, gembok;
+    TextView stat_tv, order_tv, lemari_tv, gembok_tv, ser_tv, sub_ser_tv, merk_tv, tgl_order, tgl_deadline;
     DatabaseReference databaseReference;
     ImageView Psepatu;
     ProgressDialog progressDialog,waiting;
@@ -55,13 +55,12 @@ public class DetailActivity extends AppCompatActivity {
         stat_tv = findViewById(R.id.status);
         order_tv = findViewById(R.id.no_order);
         lemari_tv = findViewById(R.id.nolemari);
-        nama_tv = findViewById(R.id.user_name);
+        gembok_tv = findViewById(R.id.gembok);
         ser_tv = findViewById(R.id.service);
         sub_ser_tv = findViewById(R.id.subservice);
         merk_tv = findViewById(R.id.merrk);
         Psepatu = findViewById(R.id.sepatu);
 
-        gembok = findViewById(R.id.gembok);
 
         sharedPrefManager = new SharedPrefManager(getBaseContext());
         waiting = new ProgressDialog(this);
@@ -91,10 +90,11 @@ public class DetailActivity extends AppCompatActivity {
                 order_tv.setText(order.getOrderId().toUpperCase());
                 lemari_tv.setText(order.getNoLaci());
                 stat_tv.setText(order.getStatus_service());
-                nama_tv.setText(sharedPrefManager.getName());
+                //nama_tv.setText(sharedPrefManager.getName());
                 ser_tv.setText(order.getService());
                 sub_ser_tv.setText(order.getSubService());
                 merk_tv.setText(order.getMerkSepatu());
+                gembok_tv.setText(order.getKunciGembok());
 
                 //----------------------------------
                 //gembok.setText(order_id.getGembok());

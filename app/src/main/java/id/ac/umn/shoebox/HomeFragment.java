@@ -266,7 +266,8 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Order order = dataSnapshot.getValue(Order.class);
                     String od = order.getOrderId();
-                    if (!checker.equals(od)){
+                    if (!checker.equals(od) && order.getRating().equals(0)
+                            && !order.getStatus_service().equals("Done")){
                         orderList.add(od);
                         String cabang = order.getCabang();
                         cabangList.add(cabang);
@@ -277,6 +278,13 @@ public class HomeFragment extends Fragment {
                         String tglmasuk = order.getTanggal_masuk();
                         inDateList.add(tglmasuk);
                         checker = od;
+                    }
+                    else if(order.getStatus_service().equals("Done") && order.getRating().equals(0)){
+                        Log.d("Homefragment", "this is done "+order.getOrderId());
+                        Intent i = new Intent(getActivity(),RatingActivity.class);
+                        i.putExtra("OrderID",order.getOrderId());
+                        i.putExtra("CABANG",order.getCabang());
+                        startActivity(i);
                     }
                 }
                 try
@@ -315,7 +323,8 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Order order = dataSnapshot.getValue(Order.class);
                     String od = order.getOrderId();
-                    if (!checker.equals(od)){
+                    if (!checker.equals(od) && order.getRating().equals(0)
+                            && !order.getStatus_service().equals("Done")){
                         orderList.add(od);
                         String cabang = order.getCabang();
                         cabangList.add(cabang);
@@ -326,6 +335,13 @@ public class HomeFragment extends Fragment {
                         String tglmasuk = order.getTanggal_masuk();
                         inDateList.add(tglmasuk);
                         checker = od;
+                    }
+                    else if(order.getStatus_service().equals("Done") && order.getRating().equals(0)){
+                        Log.d("Homefragment", "this is done "+order.getOrderId());
+                        Intent i = new Intent(getActivity(),RatingActivity.class);
+                        i.putExtra("OrderID",order.getOrderId());
+                        i.putExtra("CABANG",order.getCabang());
+                        startActivity(i);
                     }
                 }
                 try
@@ -365,8 +381,8 @@ public class HomeFragment extends Fragment {
                     Order order = dataSnapshot.getValue(Order.class);
                     Log.d("homefragment", "onChildAdded: "+order.getOrderId());
                     String od = order.getOrderId();
-                    if (!checker.equals(od) && !(order.getRating().equals(0)
-                            && order.getStatus_service().equals("Done"))){
+                    if (!checker.equals(od) && order.getRating().equals(0)
+                            && !order.getStatus_service().equals("Done")){
                         orderList.add(od);
                         String cabang = order.getCabang();
                         cabangList.add(cabang);
@@ -381,7 +397,7 @@ public class HomeFragment extends Fragment {
                     else if(order.getStatus_service().equals("Done") && order.getRating().equals(0)){
                         Log.d("Homefragment", "this is done "+order.getOrderId());
                         Intent i = new Intent(getActivity(),RatingActivity.class);
-                        i.putExtra("ORDERID",order.getOrderId());
+                        i.putExtra("OrderID",order.getOrderId());
                         i.putExtra("CABANG",order.getCabang());
                         startActivity(i);
                     }
@@ -423,7 +439,8 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Order order = dataSnapshot.getValue(Order.class);
                     String od = order.getOrderId();
-                    if (!checker.equals(od)){
+                    if (!checker.equals(od) && order.getRating().equals(0)
+                            && !order.getStatus_service().equals("Done")){
                         orderList.add(od);
                         String cabang = order.getCabang();
                         cabangList.add(cabang);
@@ -434,6 +451,13 @@ public class HomeFragment extends Fragment {
                         String tglmasuk = order.getTanggal_masuk();
                         inDateList.add(tglmasuk);
                         checker = od;
+                    }
+                    else if(order.getStatus_service().equals("Done") && order.getRating().equals(0)){
+                        Log.d("Homefragment", "this is done "+order.getOrderId());
+                        Intent i = new Intent(getActivity(),RatingActivity.class);
+                        i.putExtra("OrderID",order.getOrderId());
+                        i.putExtra("CABANG",order.getCabang());
+                        startActivity(i);
                     }
                 }
                 try
