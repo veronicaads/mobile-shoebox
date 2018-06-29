@@ -131,7 +131,6 @@ public class OrderFragment extends Fragment {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         getActivity().getWindow().setBackgroundDrawableResource(R.drawable.background);
-        //getWindow().setBackgroundDrawableResource(R.drawable.background);
 
     }
 
@@ -224,8 +223,6 @@ public class OrderFragment extends Fragment {
                     //
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-                    //final String imagePath = "image_shoes/"+timestamp.getTime()+filename;
-
                     final Long Path = timestamp.getTime();
                     final String imagePath = "image_shoes/"+Path;
 
@@ -255,7 +252,7 @@ public class OrderFragment extends Fragment {
 
                     String price = subservice.replaceAll("[()]","");
 
-                    Log.d(TAG, "onClick: prive "+price);
+                    Log.d(TAG, "onClick: price "+price);
 
                     Scanner s = new Scanner(price).useDelimiter("[^0-9]+");
                     int harga = s.nextInt();
