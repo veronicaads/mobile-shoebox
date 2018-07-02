@@ -112,6 +112,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
     private Spinner pili_cabang_spinner;
     final CustomAdapter customAdminList = new CustomAdapter();
 
+
+
     public void Tampilkan(String cabang){
         Status.clear();Deadline.clear();orderID.clear(); Level.clear(); gambar.clear();
         databaseReference = FirebaseDatabase.getInstance().getReference(cabang+"/orders");
@@ -129,7 +131,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                     }
                     else {
                         try{
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yy-M-dd", Locale.ROOT);
                             Date  firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
                             Calendar now = Calendar.getInstance();
                             now.setTime(firstDate);
@@ -144,7 +146,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
                     }
                     try{
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yy-M-d", Locale.ROOT);
                         Date now = new Date();
                         Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
 
@@ -163,9 +165,10 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                         if(level<0)level=0;
                         Level.add(String.format("Level: %s", Long.toString(level)));
                         Log.d("Isi level ", Long.toString(level));
-                        if(level >= 3)gambar.add(R.drawable.icons8_high_priority_48);
+                        if(level >= 3) gambar.add(R.drawable.icons8_error_40);
+                        if(level == 0) gambar.add(R.drawable.icons8_error_40);
                         else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-                        else gambar.add(R.drawable.icons8_error_40);
+                        else gambar.add(R.drawable.icons8_high_priority_48);
 
                     } catch (Exception e) {e.printStackTrace();}
                 }
@@ -200,24 +203,28 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                     listView.setAdapter(null);
                     //Toast.makeText(getApplicationContext(), "umn", Toast.LENGTH_SHORT).show();
                     Tampilkan("umn");
+                    notif("umn");
                     cabangAdmin="umn";
                 }
                 else if(i==1){
                     listView.setAdapter(null);
                     //Toast.makeText(getApplicationContext(), "mercubuana", Toast.LENGTH_SHORT).show();
                     Tampilkan("mercubuana");
+                    notif("mercubuana");
                     cabangAdmin="mercubuana";
                 }
                 else if(i==2){
                     listView.setAdapter(null);
                    // Toast.makeText(getApplicationContext(), "atmajaya", Toast.LENGTH_SHORT).show();
                     Tampilkan("atmajaya");
+                    notif("atmajaya");
                     cabangAdmin="atmajaya";
                 }
                 else if(i==3){
                     listView.setAdapter(null);
                    // Toast.makeText(getApplicationContext(), "pertamina", Toast.LENGTH_SHORT).show();
                     Tampilkan("pertamina");
+                    notif("pertamina");
                     cabangAdmin="pertamina";
                 }
 
@@ -230,25 +237,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_order);
-        listView= (ListView) findViewById(R.id.listorder);
-
-        mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
-
-        TextView isi = findViewById(R.id.tanggal);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.ROOT);
-        isi.setText(String.format("Tanggal Hari ini : %s",sdf.format(new Date())));
-        Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
-        setSupportActionBar(toolbar);
-
-
-        //ambil cabang admin
-        cabangAdmin = "umn";
-        Log.d("cabang", "onCreate: "+cabangAdmin);
-        DatabaseReference popUp = FirebaseDatabase.getInstance().getReference(cabangAdmin);
+    public void notif(String cabang){
+        DatabaseReference popUp = FirebaseDatabase.getInstance().getReference(cabang);
         popUp.child("inbox").addChildEventListener(
                 new ChildEventListener() {
                     @Override
@@ -259,7 +249,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 //                        }
                         PushMessage pm = dataSnapshot.getValue(PushMessage.class);
                         Log.d("Push Message", pm.getMessage() + " " + pm.getStatus()
-                            + " " + s);
+                                + " " + s);
                         pushNotification(pm.getMessage());
                     }
 
@@ -284,6 +274,24 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                     }
                 }
         );
+    }
+    int flag=0;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list_order);
+        listView= (ListView) findViewById(R.id.listorder);
+
+        mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+
+        TextView isi = findViewById(R.id.tanggal);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d", Locale.ROOT);
+        isi.setText(String.format("Tanggal Hari ini : %s",sdf.format(new Date())));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
+        setSupportActionBar(toolbar);
+
+        notif("umn");
+
 
         /*BATAS AKHIR*/
 

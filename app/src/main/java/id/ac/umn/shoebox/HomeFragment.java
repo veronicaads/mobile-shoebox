@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment {
         String date1 = date;
         String service1 = Service;
         String replacestring = date1.replace('-','/');
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("yy/M/d");
         Date estDate, esDateadd = null;
         try {
             estDate = df.parse(replacestring);
@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment {
         catch (ParseException e){
             e.printStackTrace();
         }
-        Format format = new SimpleDateFormat("dd-MM-yyyy");
+        Format format = new SimpleDateFormat("yy-M-d");
         String estdate_final = format.format(esDateadd);
         return estdate_final;
     }
@@ -198,8 +198,12 @@ public class HomeFragment extends Fragment {
             else if (status.equals("on")){
                 listorder.add(new OrderModel(R.drawable.progress,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"PROSES - Kami sedang mempersiapkan yang terbaik"));
             }
-            else if (status.equals("done") || status.equals("bukti")){
+            else if (status.equals("done")){
                 listorder.add(new OrderModel(R.drawable.done,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"SELESAI - Sepatu kesayanganmu sudah dapat diambil"));
+            }
+            else if (status.equals("bukti")){
+                listorder.add(new OrderModel(R.drawable.done,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"MAAF - Harap meng-upload kembali bukti pembayaran"));
+
             }
         }
         return listorder;

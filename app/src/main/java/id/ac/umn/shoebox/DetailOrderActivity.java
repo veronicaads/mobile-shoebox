@@ -137,11 +137,16 @@ public class DetailOrderActivity extends AppCompatActivity {
                     tgl_order.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
                     gembok.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("kunciGembok").getValue().toString());
                     try{
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.ROOT);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yy-M-d", Locale.ROOT);
                         Date  firstDate = sdf.parse(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
                         Calendar now = Calendar.getInstance();
+
                         now.setTime(firstDate);
-                        now.add(Calendar.DAY_OF_MONTH, 3);
+                        if(ser.getText().toString().equals("Reclean")||ser.getText().toString().equals("Repair")){
+                            now.add(Calendar.DAY_OF_MONTH, 5);
+                        }
+                        else if(ser.getText().toString().equals("Repaint"))
+                            now.add(Calendar.DAY_OF_MONTH, 14);
                         String selsai = sdf.format(now.getTime());
 
                         tgl_deadline.setText(selsai);
@@ -257,15 +262,29 @@ public class DetailOrderActivity extends AppCompatActivity {
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                progressDialog = new ProgressDialog(DetailOrderActivity.this);
-                progressDialog.setMessage("Please Wait");
-                progressDialog.show();
-                progressDialog.setCancelable(false);
-                updateData(orderID, cabang, tmp, userEmail);
-                notifyUser(userEmail, "Order ID "+ orderID + " " + tmp);
-                progressDialog.dismiss();
-                stat.setText(tmp);
-                Log.d("alert", "onClick: wowowowo");
+                if(tmp.equals("Bukti Pembayaran Non Valid")){
+                    progressDialog = new ProgressDialog(DetailOrderActivity.this);
+                    progressDialog.setMessage("Please Wait");
+                    progressDialog.show();
+                    progressDialog.setCancelable(false);
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    databaseReference.child(cabang).child("orders").child(orderID).child("status_service").setValue(tmp);
+                    databaseReference.child(cabang).child("orders").child(orderID).child("buktiPembayaran").setValue("");
+                    progressDialog.dismiss();
+                    stat.setText(tmp);
+                    Glide.with(DetailOrderActivity.this).load(R.drawable.shoes).into(Pbukti);
+                }
+                else{
+                    progressDialog = new ProgressDialog(DetailOrderActivity.this);
+                    progressDialog.setMessage("Please Wait");
+                    progressDialog.show();
+                    progressDialog.setCancelable(false);
+                    updateData(orderID, cabang, tmp, userEmail);
+                    notifyUser(userEmail, "Order ID "+ orderID + " " + tmp);
+                    progressDialog.dismiss();
+                    stat.setText(tmp);
+                    Log.d("alert", "onClick: wowowowo");
+                }
             }
         });
 

@@ -45,7 +45,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
     StorageReference storageReference;
     String order_id;
     String cabang;
-
+    TextView orders;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("order_id");
     //DatabaseReference usersRef = ref.child("orders");
@@ -63,6 +63,7 @@ public class BuktiUploadActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_bukti_upload);
         bukti = (ImageView) findViewById(R.id.buktibayar);
+        orders= findViewById(R.id.no_order);
 
         Intent a = getIntent();
         order_id = a.getStringExtra("ORDERID");
@@ -70,9 +71,9 @@ public class BuktiUploadActivity extends AppCompatActivity {
         IStorage = FirebaseStorage.getInstance().getReference();
 
         progressDialog = new ProgressDialog(BuktiUploadActivity.this);
+        orders.setText(order_id.toUpperCase());
 
-
-        Toast.makeText(getApplicationContext(), order_id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), order_id, Toast.LENGTH_SHORT).show();
 //        Button camera = (Button) findViewById(R.id.btnTakeImage);
 //        camera.setOnClickListener(new View.OnClickListener() {
 //            @Override

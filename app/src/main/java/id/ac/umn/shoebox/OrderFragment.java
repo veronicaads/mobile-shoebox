@@ -147,29 +147,7 @@ public class OrderFragment extends Fragment {
     StorageReference storageReference;
 
     public void alert_dialog(){
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setTitle("Alert");
-        alert.setCancelable(true);
-        alert.setMessage("Are you sure to make an order ?");
 
-
-        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d("alert", "onClick: wowowowo");
-                flag_order=1;
-            }
-        });
-
-        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-        AlertDialog ale = alert.create();
-        ale.setCanceledOnTouchOutside(true);
-        ale.show();
     }
 
     @Override
@@ -206,7 +184,30 @@ public class OrderFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                alert_dialog();
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("Alert");
+                alert.setCancelable(true);
+                alert.setMessage("Are you sure to make an order ?");
+
+
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.d("alert", "onClick: wowowowo");
+                        flag_order=1;
+                    }
+                });
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                AlertDialog ale = alert.create();
+                ale.setCanceledOnTouchOutside(true);
+                ale.show();
+
                 if(flag_order==1){
                     progressDialog.setMessage("Please Wait ....");
                     progressDialog.show();
@@ -216,7 +217,7 @@ public class OrderFragment extends Fragment {
 
                     final String merek = merek_edit.getText().toString();
                     final String comment = comment_edit.getText().toString();
-                    final String gembok = nomor_gembok.getText().toString(); // BELOM DIKIRIM
+                    final String gembok = nomor_gembok.getText().toString();
 
                     //
                     //kirim gambar
@@ -289,6 +290,7 @@ public class OrderFragment extends Fragment {
             public void onClick(View view) {
                 merek_edit.setText("");
                 comment_edit.setText("");
+                nomor_gembok.setText("");
                 sepatu.setImageResource(R.drawable.ic_image_black_24dp);
             }
         });

@@ -25,7 +25,7 @@
                 android:text="Upload Bukti Transfer" />
             <TextView
                 android:id="@+id/no_order"
-                android:text="U001"
+                android:text=""
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

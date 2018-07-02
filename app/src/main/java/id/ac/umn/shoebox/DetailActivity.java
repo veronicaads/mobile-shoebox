@@ -104,7 +104,7 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     else {
                         String gambar = order.getImage().toString();
-                        Toast.makeText(DetailActivity.this, gambar, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(DetailActivity.this, gambar, Toast.LENGTH_SHORT).show();
                         retrieveGambar(gambar);
                     }
                 }catch (Exception e){e.printStackTrace();}
