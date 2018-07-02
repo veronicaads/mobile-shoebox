@@ -325,7 +325,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         else if(id==R.id.navigation_logout){
             signOut();
             Toast.makeText(getApplicationContext(),"Logout Berhasil",Toast.LENGTH_SHORT).show();
-            finish();
+//            finish();
+            startActivity(new Intent(this, LoginActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
