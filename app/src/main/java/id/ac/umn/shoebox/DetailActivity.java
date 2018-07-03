@@ -65,6 +65,7 @@ public class DetailActivity extends AppCompatActivity {
         sharedPrefManager = new SharedPrefManager(getBaseContext());
         waiting = new ProgressDialog(this);
 
+        /** Ambil path node database sesuai cabang*/
         if (cabang.equals("Pertamina")){
             databaseReference = FirebaseDatabase.getInstance().getReference("pertamina/orders");
         }
@@ -90,13 +91,12 @@ public class DetailActivity extends AppCompatActivity {
                 order_tv.setText(order.getOrderId().toUpperCase());
                 lemari_tv.setText(order.getNoLaci());
                 stat_tv.setText(order.getStatus_service());
-                //nama_tv.setText(sharedPrefManager.getName());
                 ser_tv.setText(order.getService());
                 sub_ser_tv.setText(order.getSubService());
                 merk_tv.setText(order.getMerkSepatu());
                 gembok_tv.setText(order.getKunciGembok());
 
-
+                /** Retrieve Gambar Sepatu*/
                 try{
                     if(order.getImage().toString().equals("")){
                         Psepatu.setImageResource(R.drawable.shoes);
@@ -104,7 +104,6 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     else {
                         String gambar = order.getImage().toString();
-                        //Toast.makeText(DetailActivity.this, gambar, Toast.LENGTH_SHORT).show();
                         retrieveGambar(gambar);
                     }
                 }catch (Exception e){e.printStackTrace();}
@@ -113,22 +112,18 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 

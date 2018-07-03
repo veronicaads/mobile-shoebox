@@ -71,43 +71,38 @@ public class DetailOrderActivity extends AppCompatActivity {
 
         waiting = new ProgressDialog(this);
 
-
-
         Intent a = getIntent();
         order_id = a.getStringExtra("OrderID");
         cabs = a.getStringExtra("CABANG");
         noLaci = a.getStringExtra("LACI");
-        //Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 order.setText(order_id.toUpperCase());
+                /** Ambil gambar sepatu dari storage*/
                 try{
                     if(dataSnapshot.child(cabs+"/orders").child(order_id).child("image").getValue().toString().equals("")){
                        Psepatu.setImageResource(R.drawable.shoes);
                         Toast.makeText(DetailOrderActivity.this, "Sepatu Image Load Failed", Toast.LENGTH_SHORT).show();
-
                     }
                     else {
                         waiting.setMessage("Load Data..");
                         waiting.show();
                         waiting.setCancelable(false);
                         String gambar = dataSnapshot.child(cabs+"/orders").child(order_id).child("image").getValue().toString();
-                        //Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
                         retrieveGambar(gambar);
                         waiting.dismiss();
                     }
                 }catch (Exception e){e.printStackTrace();}
 
+                /** Ambil gambar bukti transfer dari storage*/
                 try{
                     if(dataSnapshot.child(cabs+"/orders").child(order_id).child("buktiPembayaran").getValue().toString().equals("")){
                         Pbukti.setImageResource(R.drawable.shoes);
                         Toast.makeText(DetailOrderActivity.this, "Bukti Image Load Failed", Toast.LENGTH_SHORT).show();
-
                     }
                     else {
                         waiting.setMessage("Load Data..");
@@ -120,7 +115,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     }
                 }catch (Exception e){e.printStackTrace();}
 
-
+                /** Query Nomor Laci dari database*/
                 try{
                     if(dataSnapshot.child(cabs+"/orders").child(order_id).child("noLaci").getValue().toString().equals(""))
                     {
@@ -128,6 +123,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     }
                     else lemari.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("noLaci").getValue().toString());
 
+                    /** Query data dari database dan set text ke text view */
                     stat.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("status_service").getValue().toString());
                     String email = dataSnapshot.child(cabs+"/orders").child(order_id).child("userEmail").getValue().toString();
                     String namaLengkap = dataSnapshot.child("users").child(email.replace(".", ",")).child("fullName").getValue().toString();
@@ -138,6 +134,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     merek.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("merkSepatu").getValue().toString());
                     tgl_order.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
                     gembok.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("kunciGembok").getValue().toString());
+                    /** Menentukan tanggal deadline servis*/
                     try{
                         SimpleDateFormat sdf = new SimpleDateFormat("d-M-yy", Locale.ROOT);
                         Date  firstDate = sdf.parse(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
@@ -150,7 +147,6 @@ public class DetailOrderActivity extends AppCompatActivity {
                         else if(ser.getText().toString().equals("Repaint"))
                             now.add(Calendar.DAY_OF_MONTH, 14);
                         String selsai = sdf.format(now.getTime());
-
                         tgl_deadline.setText(selsai);
 
                     }catch (Exception e){e.printStackTrace();}
@@ -169,24 +165,23 @@ public class DetailOrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String tmp;
-                //Creating the instance of PopupMenu
+                /** Creating the instance of PopupMenu */
                 PopupMenu popup = new PopupMenu(DetailOrderActivity.this, ganti_status);
-                //Inflating the Popup using xml file
+                /** Inflating the Popup using xml file */
                 popup.getMenuInflater().inflate(R.menu.status, popup.getMenu());
 
-                //registering popup with OnMenuItemClickListener
+                /** registering popup with OnMenuItemClickListener */
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         final String tmp = item.getTitle().toString();
                         alert_dialog(order_id, cabs,tmp, userEmail);
-//                        Toast.makeText(DetailOrderActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
 
-                popup.show();//showing popup menu
+                popup.show();
             }
-        });//closing the setOnClickListener method
+        });
 
         Button back_button = findViewById(R.id.back_btn);
         back_button.setOnClickListener(new OnClickListener() {
@@ -196,6 +191,8 @@ public class DetailOrderActivity extends AppCompatActivity {
             }
         });
     }
+
+    /** Function Retrieve Gambar Sepatu untuk Firebase Storage*/
     private void retrieveGambar(String gambar){
 
         StorageReference storage = FirebaseStorage.getInstance().getReference();
@@ -214,6 +211,7 @@ public class DetailOrderActivity extends AppCompatActivity {
         });
     }
 
+    /** Function Retrieve Gambar Bukti Transfer untuk Firebase Storage*/
     private void retrieveBukti(String buktiGambar){
 
         StorageReference storage = FirebaseStorage.getInstance().getReference();
@@ -232,7 +230,7 @@ public class DetailOrderActivity extends AppCompatActivity {
         });
     }
 
-
+    /** Function Update Status ke Database jika Change Status di tekan*/
     private void updateData(final String orderID, final String cabang, final String isi, final String userEmail){
         databaseReference = FirebaseDatabase.getInstance().getReference();
         Log.d("detailorder", "updateData: ");
@@ -250,6 +248,7 @@ public class DetailOrderActivity extends AppCompatActivity {
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                /** Notifikasi jika bukti pembayaran tidak valid untuk user*/
                 if(tmp.equals("Bukti Pembayaran Non Valid")){
                     progressDialog = new ProgressDialog(DetailOrderActivity.this);
                     progressDialog.setMessage("Please Wait");
@@ -262,6 +261,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     stat.setText(tmp);
                     Glide.with(DetailOrderActivity.this).load(R.drawable.shoes).into(Pbukti);
                 }
+                /** Notifikasi user sesuai status yang diganti*/
                 else{
                     progressDialog = new ProgressDialog(DetailOrderActivity.this);
                     progressDialog.setMessage("Please Wait");
@@ -299,13 +299,14 @@ public class DetailOrderActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListOrderActivity.class));
     }
 
+    /** Push Notification Function sesuai message tmp*/
     private void notifyUser(String userEmail, String tmp){
         DatabaseReference df = FirebaseDatabase.getInstance().getReference("inbox");
-
         df.child(Utils.encodeEmail(userEmail)).push().setValue(new PushMessage(tmp));
         Log.d("notifyuser", "notifyUser: "+userEmail+ " " +tmp);
     }
 
+    /** Function untuk memfreekan laci jika sebuah order telah selesai*/
     private void setToDone(int laci, String cabang){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference(cabang);

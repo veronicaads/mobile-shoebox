@@ -7,12 +7,12 @@ import com.firebase.client.ServerValue;
 import java.util.Date;
 
 /**
- * Created by miqdude on 29/05/18.
+ Constructor PushMessage untuk Notification.
  */
 
 public class PushMessage {
-    private String message; //isi pesannya
-    private String status;  //buat check udh di read atau belum
+    private String message; /** isi pesannya*/
+    private String status;  /** buat check udh di read atau belum*/
 
     public PushMessage(){}
 

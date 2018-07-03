@@ -30,9 +30,7 @@ import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
-/**
- * Created by miqdude on 08/05/18.
- */
+
 
 public class FirebaseDb{
     private static DatabaseReference mydb;
@@ -43,7 +41,7 @@ public class FirebaseDb{
 
         final String cabang = order.getCabang().replaceAll("\\s+","").toLowerCase();
 
-        //ambil key terakir dari cabangnya
+        /** ambil key terakir dari cabangnya*/
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
         mydb.orderByKey().equalTo("key").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -66,7 +64,7 @@ public class FirebaseDb{
         });
     }
 
-    //ambil nomor laci
+    /** ambil nomor laci */
     private void getLaci(final Order order, final String key, final String cabang){
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
@@ -98,45 +96,46 @@ public class FirebaseDb{
     private void sendOrder2(Order order, String key, String laci, String cabang){
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
-        //format ulang key
+        /** format ulang key*/
         key = String.format("%04d",Integer.parseInt(key)+1);
 
         Log.d(TAG, "sendOrder2: "+key);
 
-        //update order_keys/<nama_cabang>
+        /**update order_keys/<nama_cabang>*/
         mydb.child("key").setValue(key);
 
-        //ubah order_id order menjadi yang format custom
+        /** ubah order_id order menjadi yang format custom */
         order.setOrderId(order.getCabang().toLowerCase().charAt(0)+key);
 
-        //tambahkan dengan nomor laci baru
+        /** tambahkan dengan nomor laci baru */
         order.setNoLaci(laci);
 
-        //kirim data ke <nama_cabang/orders>
+        /** kirim data ke <nama_cabang/orders>*/
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
 
-        //kirim data
+        /** kirim data*/
         mydb.child("orders").child(order.getOrderId()).setValue(order);
 
-        //tambahkan order ke data usernya
+        /** tambahkan order ke data usernya*/
         mydb= FirebaseDatabase.getInstance().getReference("users");
         mydb.child(Utils.encodeEmail(order.getUserEmail())).child("orders").push().setValue(order.getOrderId());
         Log.d(TAG, "sendOrder: ljydgakjyfdkuyfadkuayfdka");
 
 
-        //send message to cabang
+        /** send message to cabang*/
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
         mydb.child("inbox").push().setValue(new PushMessage(
                 order.getOrderId().toUpperCase()+": "+order.getService()+ " " + order.getSubService()
                         + " " + order.getStatus_service()));
 
-        //send message to user
+        /** send message to user*/
         mydb = FirebaseDatabase.getInstance().getReference("inbox");
         mydb.child(Utils.encodeEmail(order.getUserEmail())).push().setValue(new PushMessage(
                 order.getOrderId().toUpperCase()+": "+order.getService()+ " " + order.getSubService()
                         + " " + order.getStatus_service()));
     }
 
+    /** Function Kirim Bukti Ke Database*/
     public void kirimBukti(String cabang, String order_id, String imagePath){
         if (cabang.equals("Pertamina")){
             mydb = FirebaseDatabase.getInstance().getReference("pertamina/orders");
@@ -150,14 +149,11 @@ public class FirebaseDb{
         else if (cabang.equals("UMN")){
             mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
         }
-        //mydb = FirebaseDatabase.getInstance().getReference(cabang);
         mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
-        //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
+    /** Function Kirim Rating ke Database*/
     public void kirimRating(String cabang, String order_id, int rating){
-
-
         if (cabang.equals("pertamina")){
             mydb = FirebaseDatabase.getInstance().getReference("pertamina/orders");
         }
@@ -170,11 +166,10 @@ public class FirebaseDb{
         else if (cabang.equals("umn")){
             mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
         }
-        //mydb = FirebaseDatabase.getInstance().getReference(cabang);
         mydb.child(order_id).child("rating").setValue(rating);
-        //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
+    /** Buat laci jadi free saat order selesai*/
     public void setFree(String cabang, String noLaci){
         mydb = FirebaseDatabase.getInstance().getReference(cabang);
         mydb.child("laci").child(noLaci).setValue("free");

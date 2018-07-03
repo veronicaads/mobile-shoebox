@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/** Class untuk melakukan Expand List View pada Help*/
 public class ExpendableActivity extends AppCompatActivity {
 
     ExpandableListView expend_list;
@@ -89,7 +90,6 @@ public class ExpendableActivity extends AppCompatActivity {
     private void init_order(){
         list = new ArrayList<>();
         list.add("Set your Order");
-
 
         listHashMap = new HashMap<>();
 

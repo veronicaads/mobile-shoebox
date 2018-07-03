@@ -1,9 +1,6 @@
 package id.ac.umn.shoebox;
 
-/**
- * Created by Stefanus K on 4/26/2018.
- */
-
+/** Constant String yang dipakai untuk Firebase Authentication*/
 public class  Constants {
 
     public static final String FIREBASE_URL = "https://mobile-shoebox.firebaseio.com/";

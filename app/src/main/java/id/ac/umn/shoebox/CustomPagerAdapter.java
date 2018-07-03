@@ -1,8 +1,6 @@
 package id.ac.umn.shoebox;
 
-/**
- * Created by veronica on 5/22/18.
- */
+
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -12,13 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+/** Class untuk handle Pager Utama Activity*/
 public class CustomPagerAdapter extends PagerAdapter{
     Context context;
     int images[];
     LayoutInflater layoutInflater;
-
-
-
 
     public CustomPagerAdapter(Context context, int images[]) {
         this.context = context;
@@ -45,7 +41,6 @@ public class CustomPagerAdapter extends PagerAdapter{
 
         container.addView(itemView);
 
-        //listening to image click
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
