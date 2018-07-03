@@ -101,12 +101,6 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
     ListView listView ;
 
-//    String[] Level = new String[] {"Level Priority : 3","Level Priority : 2","Level Priority : 1","Level Priority : 2"};
-//    String[] Status = new String[] {"Status : Pending","Status : On Progress","Status : Finished","Status : Finished"};
-//    String[] Deadline = new String[] {"Deadline : 25 April 2018","Deadline : 25 April 2018","Deadline : 25 April 2018","Deadline : 25 April 2018"};
-//    String[] orderID = new String[] {"Order ID : U0003","Order ID : U0002","Order ID : U0001","Order ID : U0005"};
-//    Integer[] gambar = new Integer[]{R.drawable.icons8_high_priority_48, R.drawable.icons8_warning_shield_48, R.drawable.icons8_error_40};
-
 
 
     private DatabaseReference databaseReference;

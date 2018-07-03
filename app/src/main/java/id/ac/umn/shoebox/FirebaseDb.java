@@ -129,6 +129,12 @@ public class FirebaseDb{
         mydb.child("inbox").push().setValue(new PushMessage(
                 order.getOrderId().toUpperCase()+": "+order.getService()+ " " + order.getSubService()
                         + " " + order.getStatus_service()));
+
+        //send message to user
+        mydb = FirebaseDatabase.getInstance().getReference("inbox");
+        mydb.child(Utils.encodeEmail(order.getUserEmail())).push().setValue(new PushMessage(
+                order.getOrderId().toUpperCase()+": "+order.getService()+ " " + order.getSubService()
+                        + " " + order.getStatus_service()));
     }
 
     public void kirimBukti(String cabang, String order_id, String imagePath){
@@ -152,16 +158,16 @@ public class FirebaseDb{
     public void kirimRating(String cabang, String order_id, int rating){
 
 
-        if (cabang.equals("Pertamina")){
+        if (cabang.equals("pertamina")){
             mydb = FirebaseDatabase.getInstance().getReference("pertamina/orders");
         }
-        else if (cabang.equals("Mercubuana")){
+        else if (cabang.equals("mercubuana")){
             mydb = FirebaseDatabase.getInstance().getReference("mercubuana/orders");
         }
-        else if (cabang.equals("Atma Jaya")){
+        else if (cabang.equals("atma jaya")){
             mydb = FirebaseDatabase.getInstance().getReference("atmajaya/orders");
         }
-        else if (cabang.equals("UMN")){
+        else if (cabang.equals("umn")){
             mydb = FirebaseDatabase.getInstance().getReference("umn/orders");
         }
         //mydb = FirebaseDatabase.getInstance().getReference(cabang);

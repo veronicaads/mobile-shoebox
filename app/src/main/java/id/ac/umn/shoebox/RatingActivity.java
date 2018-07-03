@@ -34,9 +34,8 @@ public class RatingActivity extends AppCompatActivity {
 
     private RatingBar ratingBar;
     private TextView txtRatingValue;
-    private Button btnSubmit;
-    ImageView pSepatu;
-    String order_id, cabang;
+    Button btnSubmit;
+    ImageView pSepatu;    String order_id, cabang;
     ProgressDialog waiting;
     DatabaseReference databaseReference;
     TextView order;
@@ -47,14 +46,16 @@ public class RatingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
-        addListenerOnRatingBar();
-        addListenerOnButton();
+
         pSepatu = findViewById(R.id.sepatu);
         Intent a = getIntent();
         order = (TextView) findViewById(R.id.idorder);
         order_id = a.getStringExtra("OrderID");
-        cabang = a.getStringExtra("CABANG");
+        cabang = a.getStringExtra("CABANG").toLowerCase();
+        addListenerOnRatingBar();
+//        addListenerOnButton();
         waiting = new ProgressDialog(this);
+        Toast.makeText(RatingActivity.this, cabang, Toast.LENGTH_SHORT).show();
 
         databaseReference  = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -73,7 +74,8 @@ public class RatingActivity extends AppCompatActivity {
                         waiting.setCancelable(false);
                         String gambar = dataSnapshot.child(cabang+"/orders").child(order_id).child("image").getValue().toString();
                         //Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
-                        noLaci = dataSnapshot.child(cabang+"/orders").child(order_id).child("noLaci").getValue().toString();                        retrieveGambar(gambar);
+                        noLaci = dataSnapshot.child(cabang+"/orders").child(order_id).child("noLaci").getValue().toString();
+                        retrieveGambar(gambar);
                         waiting.dismiss();
                     }
                 }catch (Exception e){e.printStackTrace();}
@@ -83,6 +85,27 @@ public class RatingActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+        });
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit2);
+
+        //if click on me, then display the current rating value.
+        btnSubmit.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                float rating = ratingBar.getRating();
+                int ratingSend = Math.round(rating);
+
+                firebaseDb.kirimRating(cabang, order_id, ratingSend);
+                firebaseDb.setFree(cabang,noLaci);
+                startActivity(new Intent(RatingActivity.this, UtamaActivity.class));
+                //Toast.makeText(RatingActivity.this, cabang+" "+order_id+" "+ratingSend+" "+noLaci, Toast.LENGTH_SHORT).show();
+
+            }
+
         });
     }
 
@@ -130,27 +153,7 @@ public class RatingActivity extends AppCompatActivity {
 
     public void addListenerOnButton() {
 
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
 
-        //if click on me, then display the current rating value.
-        btnSubmit.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-               /* Toast.makeText(RatingActivity.this,
-                        String.valueOf(ratingBar.getRating()),
-                        Toast.LENGTH_SHORT).show();*/
-               float rating = ratingBar.getRating();
-               int ratingSend = Math.round(rating);
-
-               firebaseDb.kirimRating(cabang, order_id, ratingSend);
-               firebaseDb.setFree(cabang,noLaci);
-               startActivity(new Intent(RatingActivity.this, UtamaActivity.class));
-            }
-
-        });
 
     }
 

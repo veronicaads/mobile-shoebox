@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment {
         String date1 = date;
         String service1 = Service;
         String replacestring = date1.replace('-','/');
-        DateFormat df = new SimpleDateFormat("d/M/yy");
+        DateFormat df = new SimpleDateFormat("dd/M/yy");
         Date estDate, esDateadd = null;
         try {
             estDate = df.parse(replacestring);
@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment {
         catch (ParseException e){
             e.printStackTrace();
         }
-        Format format = new SimpleDateFormat("d-M-yy");
+        Format format = new SimpleDateFormat("yy-M-d");
         String estdate_final = format.format(esDateadd);
         return estdate_final;
     }
@@ -290,6 +290,7 @@ public class HomeFragment extends Fragment {
                         i.putExtra("CABANG",order.getCabang());
                         startActivity(i);
                     }
+                    else continue;
                 }
                 try
                 {

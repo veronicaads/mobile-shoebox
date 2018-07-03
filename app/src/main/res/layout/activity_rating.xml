@@ -11,8 +11,10 @@
     <ImageView
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:id="@+id/sepatu"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
         android:src="@drawable/shoes" />
     <TextView
         android:layout_width="wrap_content"
@@ -48,7 +50,7 @@
         android:rating="2.0" />
 
     <Button
-        android:id="@+id/btnSubmit"
+        android:id="@+id/btnSubmit2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
