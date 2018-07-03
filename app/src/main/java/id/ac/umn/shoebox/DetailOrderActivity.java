@@ -49,6 +49,7 @@ public class DetailOrderActivity extends AppCompatActivity {
 
     String order_id, cabs;
     String userEmail;
+    String noLaci;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,8 @@ public class DetailOrderActivity extends AppCompatActivity {
         Intent a = getIntent();
         order_id = a.getStringExtra("OrderID");
         cabs = a.getStringExtra("CABANG");
-       //Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
+        noLaci = a.getStringExtra("LACI");
+        //Toast.makeText(DetailOrderActivity.this, order_id, Toast.LENGTH_SHORT).show();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -137,7 +139,7 @@ public class DetailOrderActivity extends AppCompatActivity {
                     tgl_order.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
                     gembok.setText(dataSnapshot.child(cabs+"/orders").child(order_id).child("kunciGembok").getValue().toString());
                     try{
-                        SimpleDateFormat sdf = new SimpleDateFormat("yy-M-d", Locale.ROOT);
+                        SimpleDateFormat sdf = new SimpleDateFormat("d-M-yy", Locale.ROOT);
                         Date  firstDate = sdf.parse(dataSnapshot.child(cabs+"/orders").child(order_id).child("tanggal_masuk").getValue().toString());
                         Calendar now = Calendar.getInstance();
 
@@ -153,7 +155,6 @@ public class DetailOrderActivity extends AppCompatActivity {
 
                     }catch (Exception e){e.printStackTrace();}
 
-//                    gembok.setText();
                 }catch (Exception e){e.printStackTrace();}
             }
 
@@ -234,20 +235,7 @@ public class DetailOrderActivity extends AppCompatActivity {
 
     private void updateData(final String orderID, final String cabang, final String isi, final String userEmail){
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
         Log.d("detailorder", "updateData: ");
-//        databaseReference.child("orders").child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                dataSnapshot.getRef().child("status_service").setValue(isi);
-////                notifyUser(userEmail, "Order ID "+ orderID + " change status to done" + isi);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d("User", databaseError.getMessage());
-//            }
-//        });
         databaseReference.child(cabang).child("orders").child(orderID).child("status_service").setValue(isi);
     }
 
@@ -316,5 +304,11 @@ public class DetailOrderActivity extends AppCompatActivity {
 
         df.child(Utils.encodeEmail(userEmail)).push().setValue(new PushMessage(tmp));
         Log.d("notifyuser", "notifyUser: "+userEmail+ " " +tmp);
+    }
+
+    private void setToDone(int laci, String cabang){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference(cabang);
+        databaseReference.child("laci").child(String.valueOf(laci)).setValue("free");
     }
 }

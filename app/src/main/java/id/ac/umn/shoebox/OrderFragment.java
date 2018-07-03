@@ -248,7 +248,7 @@ public class OrderFragment extends Fragment {
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                                        Toast.makeText(getContext(),"File Updated !", Toast.LENGTH_SHORT).show();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -278,7 +278,8 @@ public class OrderFragment extends Fragment {
 
                         // ambil tanggal masuk
                         Date d = new Date();
-                        String tgl_pesan = String.format("%d-%d-%d",d.getYear()-100,d.getMonth(),d.getDate());
+                        //String tgl_pesan = String.format("%d-%d-%d",d.getDate()-100,d.getMonth(),d.getYear()-100);
+                        String tgl_pesan = String.format("%d-%d-%d",d.getDate(),d.getMonth(),d.getYear()-100);
 
                         //
                         //kirim order baru
@@ -294,6 +295,7 @@ public class OrderFragment extends Fragment {
                         Log.d("Merek",merek);
                         progressDialog.dismiss();
                         startActivity(new Intent(getActivity(),UtamaActivity.class));
+                        flag_order=0;
                     }
                 }
                 else startActivity(new Intent(getActivity(), UtamaActivity.class));

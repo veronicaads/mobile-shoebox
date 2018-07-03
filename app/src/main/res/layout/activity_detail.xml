@@ -190,7 +190,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Pembayaran"
+                        android:text="Payment"
                         android:background="@color/purple"
                         android:textColor="@color/white"
                         android:layout_marginRight="5dp"

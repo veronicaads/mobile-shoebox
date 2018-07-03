@@ -34,11 +34,13 @@
 
         <ImageView
             android:id="@+id/buktibayar"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:scaleType="fitCenter"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:scaleType="fitXY"
             android:layout_gravity="center"
-            android:src="@drawable/upload" />
+            android:src="@drawable/upload"
+            android:padding="10dp"
+            android:layout_margin="10dp"/>
 
             <!--<Button-->
                 <!--android:id="@+id/btnTakeImage"-->

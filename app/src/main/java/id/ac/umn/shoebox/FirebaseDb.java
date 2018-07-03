@@ -169,4 +169,8 @@ public class FirebaseDb{
         //mydb.child(order_id).child("buktiPembayaran").setValue(imagePath);
     }
 
+    public void setFree(String cabang, String noLaci){
+        mydb = FirebaseDatabase.getInstance().getReference(cabang);
+        mydb.child("laci").child(noLaci).setValue("free");
+    }
 }

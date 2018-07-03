@@ -41,6 +41,7 @@ public class RatingActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     TextView order;
     FirebaseDb firebaseDb = new FirebaseDb();
+    private String noLaci;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class RatingActivity extends AppCompatActivity {
                         waiting.setCancelable(false);
                         String gambar = dataSnapshot.child(cabang+"/orders").child(order_id).child("image").getValue().toString();
                         //Toast.makeText(DetailOrderActivity.this, gambar, Toast.LENGTH_SHORT).show();
-                        retrieveGambar(gambar);
+                        noLaci = dataSnapshot.child(cabang+"/orders").child(order_id).child("noLaci").getValue().toString();                        retrieveGambar(gambar);
                         waiting.dismiss();
                     }
                 }catch (Exception e){e.printStackTrace();}
@@ -145,8 +146,8 @@ public class RatingActivity extends AppCompatActivity {
                int ratingSend = Math.round(rating);
 
                firebaseDb.kirimRating(cabang, order_id, ratingSend);
-
-                startActivity(new Intent(RatingActivity.this, UtamaActivity.class));
+               firebaseDb.setFree(cabang,noLaci);
+               startActivity(new Intent(RatingActivity.this, UtamaActivity.class));
             }
 
         });

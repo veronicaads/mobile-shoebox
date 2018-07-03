@@ -146,26 +146,26 @@ public class HomeFragment extends Fragment {
         String date1 = date;
         String service1 = Service;
         String replacestring = date1.replace('-','/');
-        DateFormat df = new SimpleDateFormat("yy/M/d");
+        DateFormat df = new SimpleDateFormat("d/M/yy");
         Date estDate, esDateadd = null;
         try {
             estDate = df.parse(replacestring);
             Calendar cal = Calendar.getInstance();
             cal.setTime(estDate);
             if (service1.equals("Repaint")){
-                cal.add(Calendar.DATE,14);
+                cal.add(Calendar.DAY_OF_MONTH,14);
                 esDateadd = cal.getTime();
             }
             else if (service1.equals("Repair")){
-                cal.add(Calendar.DATE,5);
+                cal.add(Calendar.DAY_OF_MONTH,5);
                 esDateadd = cal.getTime();
             }
             else if (service1.equals("Reclean")){
-                cal.add(Calendar.DATE,5);
+                cal.add(Calendar.DAY_OF_MONTH,5);
                 esDateadd = cal.getTime();
             }
             else {
-                cal.add(Calendar.DATE,14);
+                cal.add(Calendar.DAY_OF_MONTH,14);
                 esDateadd = cal.getTime();
             }
 
@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment {
         catch (ParseException e){
             e.printStackTrace();
         }
-        Format format = new SimpleDateFormat("yy-M-d");
+        Format format = new SimpleDateFormat("d-M-yy");
         String estdate_final = format.format(esDateadd);
         return estdate_final;
     }

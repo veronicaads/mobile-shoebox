@@ -55,6 +55,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
     ArrayList<String> orderID  = new ArrayList<String>();
     ArrayList<String> Level    = new ArrayList<String>();
     ArrayList<Integer> gambar  = new ArrayList<Integer>();
+    ArrayList<String> Laci = new ArrayList<>();
 
     private String cabangAdmin;
 
@@ -125,13 +126,14 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     if(ds.child("status_service").getValue().toString().toLowerCase().equals("done")){continue;}
                     orderID.add(ds.child("orderId").getValue().toString());
+                    Laci.add(ds.child("noLaci").getValue().toString());
                     Status.add(String.format("Status : %s",ds.child("status_service").getValue().toString()));
                     if(ds.child("tanggal_masuk").getValue().toString().equals("")){
                         Deadline.add("Kosong");
                     }
                     else {
                         try{
-                            SimpleDateFormat sdf = new SimpleDateFormat("yy-M-dd", Locale.ROOT);
+                            SimpleDateFormat sdf = new SimpleDateFormat("d-M-yy", Locale.ROOT);
                             Date  firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
                             Calendar now = Calendar.getInstance();
                             now.setTime(firstDate);
@@ -146,7 +148,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
                     }
                     try{
-                        SimpleDateFormat sdf = new SimpleDateFormat("yy-M-d", Locale.ROOT);
+                        SimpleDateFormat sdf = new SimpleDateFormat("d-M-yy", Locale.ROOT);
                         Date now = new Date();
                         Date firstDate = sdf.parse(ds.child("tanggal_masuk").getValue().toString());
 
@@ -166,10 +168,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                         Level.add(String.format("Level: %s", Long.toString(level)));
                         Log.d("Isi level ", Long.toString(level));
                         if(level >= 3) gambar.add(R.drawable.icons8_error_40);
-                        if(level == 0) gambar.add(R.drawable.icons8_error_40);
                         else if(level == 2)gambar.add(R.drawable.icons8_warning_shield_48);
-                        else gambar.add(R.drawable.icons8_high_priority_48);
-
+                        else if(level == 1) gambar.add(R.drawable.icons8_high_priority_48);
                     } catch (Exception e) {e.printStackTrace();}
                 }
                 try{
@@ -275,7 +275,6 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                 }
         );
     }
-    int flag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -285,7 +284,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
         TextView isi = findViewById(R.id.tanggal);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d", Locale.ROOT);
+        SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.ROOT);
         isi.setText(String.format("Tanggal Hari ini : %s",sdf.format(new Date())));
         Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
         setSupportActionBar(toolbar);
@@ -303,6 +302,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
                 Intent intent = new Intent(ListOrderActivity.this, DetailOrderActivity.class);
                 intent.putExtra("OrderID", customAdminList.getItem(i).toString() );
                 intent.putExtra("CABANG", cabangAdmin );
+                intent.putExtra("LACI",Laci);
                 startActivity(intent);
             }
         });
