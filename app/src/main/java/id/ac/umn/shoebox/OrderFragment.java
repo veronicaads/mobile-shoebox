@@ -72,16 +72,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 import static android.view.View.generateViewId;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OrderFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OrderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-
 public class OrderFragment extends Fragment {
     private int PICK_IMAGE_REQUEST = 1;
     // TODO: Rename parameter arguments, choose names that match
@@ -102,14 +92,6 @@ public class OrderFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OrderFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static OrderFragment newInstance(String param1, String param2) {
         OrderFragment fragment = new OrderFragment();
@@ -131,7 +113,6 @@ public class OrderFragment extends Fragment {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         getActivity().getWindow().setBackgroundDrawableResource(R.drawable.background);
-
     }
 
     ImageView sepatu;
@@ -146,7 +127,7 @@ public class OrderFragment extends Fragment {
     Integer flag_order=0;
     StorageReference storageReference;
 
-
+    /** validasi input user*/
     public boolean validate(){
         if(merek_edit.getText().toString().length()<2 || merek_edit.getText().toString().isEmpty()){
             return false;
@@ -176,16 +157,12 @@ public class OrderFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 startActivityForResult(intent, PICK_IMAGE);
-
             }
         });
-
 
        merek_edit = (EditText) view.findViewById(R.id.merek_edit2);
        comment_edit = (EditText) view.findViewById(R.id.keterangan_edit);
        nomor_gembok = (EditText) view.findViewById(R.id.no_gembok_edit);
-
-
 
         final String userEmail = new SharedPrefManager(getContext()).getUserEmail();
 
@@ -201,7 +178,6 @@ public class OrderFragment extends Fragment {
                     alert.setCancelable(true);
                     alert.setMessage("Are you sure to make an order ?");
 
-
                     alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -211,11 +187,9 @@ public class OrderFragment extends Fragment {
                             progressDialog.setCancelable(false);
                             filename = imageUri.getLastPathSegment();
 
-
                             final String merek = merek_edit.getText().toString();
                             final String comment = comment_edit.getText().toString();
                             final String gembok = nomor_gembok.getText().toString();
-
 
                             //
                             //kirim gambar
@@ -227,6 +201,7 @@ public class OrderFragment extends Fragment {
 
                             FirebaseDb firebaseDb = new FirebaseDb();
 
+                            /** Upload gambar pada storage*/
                             storageReference = IStorage.child(imagePath);
                             storageReference.putFile(imageUri)
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -240,7 +215,6 @@ public class OrderFragment extends Fragment {
                                     Toast.makeText(getContext(),"Gagal :(", Toast.LENGTH_SHORT).show();
                                 }
                             });
-
 
                             final String cabang = cabang_spinner.getSelectedItem().toString();
                             final String service = service_spinner.getSelectedItem().toString();
@@ -268,7 +242,6 @@ public class OrderFragment extends Fragment {
                                     Path.toString(),comment, tgl_pesan,"",
                                     "pending","belum lunas",harga
                                     ,"","",gembok,0);
-                            //Toast.makeText(getContext(), merek, Toast.LENGTH_SHORT).show();
                             firebaseDb.sendOrder(od,getContext());
 
                             Log.d("cabang",cabang);
@@ -288,8 +261,6 @@ public class OrderFragment extends Fragment {
                     AlertDialog ale = alert.create();
                     ale.setCanceledOnTouchOutside(true);
                     ale.show();
-
-
                 }
                 else startActivity(new Intent(getActivity(), UtamaActivity.class));
             }

@@ -1,7 +1,7 @@
 package id.ac.umn.shoebox;
 
 /**
- * Created by miqdude on 06/05/18.
+ * Construct untuk Payment
  */
 
 public class Payment {

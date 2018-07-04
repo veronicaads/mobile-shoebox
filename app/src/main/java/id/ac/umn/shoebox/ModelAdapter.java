@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Stefanus K on 5/2/2018.
+ * Adapter untuk model
  */
 
 public class ModelAdapter extends BaseAdapter {

@@ -1,7 +1,7 @@
 package id.ac.umn.shoebox;
 
 /**
- * Created by veronica on 4/27/18.
+ * SharedPreference Manager
  */
 
 import android.content.Context;
@@ -48,7 +48,6 @@ public class SharedPrefManager {
     }
 
     public String getUserToken(){
-        //mContext = context;
         sharedPreferences = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         return sharedPreferences.getString("ID_TOKEN", "");
     }

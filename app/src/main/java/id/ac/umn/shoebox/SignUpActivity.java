@@ -43,8 +43,6 @@ public class SignUpActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
         final String encodeEmail = Utils.encodeEmail(mEmail.toLowerCase());
 
-
-
         Button profileButton = findViewById(R.id.edit_button);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +77,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     @Override
     protected void onStart() {

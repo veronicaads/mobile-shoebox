@@ -3,7 +3,7 @@ package id.ac.umn.shoebox;
 import android.util.Log;
 
 /**
- * Created by veronica on 5/23/18.
+ * Model untuk Order Status Card yang ada di Home Fragment
  */
 
 public class OrderModel {

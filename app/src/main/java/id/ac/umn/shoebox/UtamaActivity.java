@@ -145,11 +145,10 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         Menu();
         }
 
+    /** Menu Pager*/
     public void Menu(){
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.navigate);
-//        setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
@@ -183,7 +182,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
     public void configureSignIn(){
-// Configure sign-in to request the user's basic profile like name and email
+    // Configure sign-in to request the user's basic profile like name and email
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -227,6 +226,7 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
         }
         doubleBack = System.currentTimeMillis();
     }
+    /** Push Notification Function*/
     private void pushNotification(String msg){
         Intent intent = new Intent(this, UtamaActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -247,10 +247,3 @@ public class UtamaActivity extends AppCompatActivity implements GoogleApiClient.
     }
 }
 
-
-//    kodingan push notifications
-//NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//        .setSmallIcon(R.drawable.notification_icon)
-//        .setContentTitle(textTitle)
-//        .setContentText(textContent)
-//        .setPriority(NotificationCompat.PRIORITY_DEFAULT);

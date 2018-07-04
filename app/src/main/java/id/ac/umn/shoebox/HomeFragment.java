@@ -46,18 +46,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -66,7 +56,6 @@ public class HomeFragment extends Fragment {
     private String mParam2;
     private TextView mFullNameTextView;
     private String mUsername, mEmail,mPhoneNumber;
-    //private CircleImageView mProfileImageView;
 
     Runnable runnable = new Runnable() {
         public void run() {
@@ -109,14 +98,6 @@ public class HomeFragment extends Fragment {
     private OrderAdapter orderAdapter;
     private ArrayList<OrderModel> models;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -134,7 +115,7 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-       cabangList = new ArrayList<>();
+        cabangList = new ArrayList<>();
         orderList = new ArrayList<>();
         serviceList = new ArrayList();
         inDateList = new ArrayList();
@@ -142,6 +123,7 @@ public class HomeFragment extends Fragment {
         statuslist = new ArrayList();
     }
 
+    /** Function untuk add estimasi Date*/
     public static String StringToDate(String date,String Service){
         String date1 = date;
         String service1 = Service;
@@ -203,7 +185,6 @@ public class HomeFragment extends Fragment {
             }
             else if (status.equals("bukti")){
                 listorder.add(new OrderModel(R.drawable.done,service.toUpperCase(),cabang.toUpperCase(),order,tglmasuk,estdate,"MAAF - Harap meng-upload kembali bukti pembayaran"));
-
             }
         }
         return listorder;
@@ -239,7 +220,7 @@ public class HomeFragment extends Fragment {
                .error(android.R.drawable.sym_def_app_icon)
                .into(photo);
 
-        //slider handler & timer
+        /** slider handler & timer*/
         handler = new Handler();
         viewPager = getView().findViewById(R.id.viewPager);
         myCustomPagerAdapter = new CustomPagerAdapter(getActivity(),images);
@@ -318,7 +299,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //query cabang pertamina
+        /** Query List Order User cabang pertamina*/
         databaseReference_p = FirebaseDatabase.getInstance().getReference("pertamina/orders");
         Query query_p = databaseReference_p.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
         query_p.addChildEventListener(new ChildEventListener() {
@@ -434,7 +415,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //query cabang atmajaya
+        /** Query List Order User cabang atmajaya*/
         databaseReference_a = FirebaseDatabase.getInstance().getReference("atmajaya/orders");
         Query query_a = databaseReference_a.orderByChild("userEmail").equalTo(sharedPrefManager.getUserEmail().toString());
         query_a.addChildEventListener(new ChildEventListener() {
@@ -514,7 +495,6 @@ public class HomeFragment extends Fragment {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.navigate);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
-
         return view;
     }
 
@@ -547,16 +527,6 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

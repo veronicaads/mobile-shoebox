@@ -1,7 +1,7 @@
 package id.ac.umn.shoebox;
 
 /**
- * Created by veronica on 4/27/18.
+ * Constructor User
  */
 
 

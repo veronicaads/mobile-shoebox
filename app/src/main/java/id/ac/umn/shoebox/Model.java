@@ -1,7 +1,7 @@
 package id.ac.umn.shoebox;
 
 /**
- * Created by Stefanus K on 5/2/2018.
+ * CardView Help
  */
 
 public class Model {

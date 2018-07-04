@@ -97,17 +97,11 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-
-
     ListView listView ;
-
-
 
     private DatabaseReference databaseReference;
     private Spinner pili_cabang_spinner;
     final CustomAdapter customAdminList = new CustomAdapter();
-
-
 
     public void Tampilkan(String cabang){
         Status.clear();Deadline.clear();orderID.clear(); Level.clear(); gambar.clear();
@@ -195,28 +189,24 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0){
                     listView.setAdapter(null);
-                    //Toast.makeText(getApplicationContext(), "umn", Toast.LENGTH_SHORT).show();
                     Tampilkan("umn");
                     notif("umn");
                     cabangAdmin="umn";
                 }
                 else if(i==1){
                     listView.setAdapter(null);
-                    //Toast.makeText(getApplicationContext(), "mercubuana", Toast.LENGTH_SHORT).show();
                     Tampilkan("mercubuana");
                     notif("mercubuana");
                     cabangAdmin="mercubuana";
                 }
                 else if(i==2){
                     listView.setAdapter(null);
-                   // Toast.makeText(getApplicationContext(), "atmajaya", Toast.LENGTH_SHORT).show();
                     Tampilkan("atmajaya");
                     notif("atmajaya");
                     cabangAdmin="atmajaya";
                 }
                 else if(i==3){
                     listView.setAdapter(null);
-                   // Toast.makeText(getApplicationContext(), "pertamina", Toast.LENGTH_SHORT).show();
                     Tampilkan("pertamina");
                     notif("pertamina");
                     cabangAdmin="pertamina";
@@ -231,16 +221,13 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         });
     }
 
+    /** Menampilkan notifikasi terakhir dari suatu cabang*/
     public void notif(String cabang){
         DatabaseReference popUp = FirebaseDatabase.getInstance().getReference(cabang);
         popUp.child("inbox").addChildEventListener(
                 new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                        for(DataSnapshot ds : dataSnapshot.getChildren()){
-//                            PushMessage pm = ds.getValue(PushMessage.class);
-//                            Log.d("Push Message", pm.getMessage() + " " + pm.getStatus());
-//                        }
                         PushMessage pm = dataSnapshot.getValue(PushMessage.class);
                         Log.d("Push Message", pm.getMessage() + " " + pm.getStatus()
                                 + " " + s);
@@ -285,11 +272,10 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
 
         notif("umn");
 
-
         /*BATAS AKHIR*/
 
-
         configureSignIn();
+        /** Untuk pindah ke detail order*/
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -301,6 +287,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -343,10 +330,8 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         );
     }
 
-
-
     public void configureSignIn(){
-// Configure sign-in to request the user's basic profile like name and email
+    // Configure sign-in to request the user's basic profile like name and email
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -403,6 +388,7 @@ public class ListOrderActivity extends AppCompatActivity implements GoogleApiCli
         return cabang[0];
     }
 
+    /** Mengenerate Notifikasi pada Admin*/
     private
     void pushNotification(String text){
         Intent resultIntent = new Intent(this, ListOrderActivity.class);

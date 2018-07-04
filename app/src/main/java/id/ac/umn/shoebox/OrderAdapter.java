@@ -13,7 +13,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 /**
- * Created by veronica on 5/25/18.
+ * Card View untuk Order Adapter
  */
 
 public class OrderAdapter extends BaseAdapter {

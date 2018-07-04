@@ -53,7 +53,6 @@ public class RatingActivity extends AppCompatActivity {
         order_id = a.getStringExtra("OrderID");
         cabang = a.getStringExtra("CABANG").toLowerCase();
         addListenerOnRatingBar();
-//        addListenerOnButton();
         waiting = new ProgressDialog(this);
         Toast.makeText(RatingActivity.this, cabang, Toast.LENGTH_SHORT).show();
 
@@ -66,7 +65,6 @@ public class RatingActivity extends AppCompatActivity {
                     if(dataSnapshot.child(cabang+"/orders").child(order_id).child("image").getValue().toString().equals("")){
                         pSepatu.setImageResource(R.drawable.shoes);
                         Toast.makeText(RatingActivity.this, "Image Load Failed", Toast.LENGTH_SHORT).show();
-
                     }
                     else {
                         waiting.setMessage("Load Data..");
@@ -102,13 +100,12 @@ public class RatingActivity extends AppCompatActivity {
                 firebaseDb.kirimRating(cabang, order_id, ratingSend);
                 firebaseDb.setFree(cabang,noLaci);
                 startActivity(new Intent(RatingActivity.this, UtamaActivity.class));
-                //Toast.makeText(RatingActivity.this, cabang+" "+order_id+" "+ratingSend+" "+noLaci, Toast.LENGTH_SHORT).show();
-
             }
 
         });
     }
 
+    /** Function Retrieve gambar sepatu */
     private void retrieveGambar(String gambar){
 
         StorageReference storage = FirebaseStorage.getInstance().getReference();
